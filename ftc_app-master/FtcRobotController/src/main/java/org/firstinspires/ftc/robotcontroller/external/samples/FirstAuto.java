@@ -33,6 +33,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.robotcontroller.external.samples;
 
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -40,6 +41,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
 
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
@@ -65,8 +67,9 @@ public class FirstAuto extends LinearOpMode {
     DcMotor leftMotor;
     DcMotor rightMotor;
     GyroSensor gyro;
+    ModernRoboticsI2cRangeSensor Range;
 
-    @Override
+
     public void runOpMode(){
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -74,6 +77,7 @@ public class FirstAuto extends LinearOpMode {
         rightMotor=hardwareMap.dcMotor.get("right_drive");
         rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         gyro=hardwareMap.gyroSensor.get("gyro");
+        Range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "sensor_range");
         // Wait for the game to start (driver presses PLAY)
         gyro.calibrate();
         /* eg: Initialize the hardware variables. Note that the strings used here as parameters
@@ -109,7 +113,7 @@ public class FirstAuto extends LinearOpMode {
         while (opModeIsActive()) {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
-
+            telemetry.addData("range", Range.cmUltrasonic());
             // eg: Run wheels in tank mode (note: The joystick goes negative when pushed forwards)
             // leftMotor.setPower(-gamepad1.left_stick_y);
             // rightMotor.setPower(-gamepad1.right_stick_y);
