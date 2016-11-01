@@ -10,6 +10,7 @@
         import com.qualcomm.robotcore.hardware.GyroSensor;
         import com.qualcomm.robotcore.robot.Robot;
         import com.qualcomm.robotcore.util.Range;
+        import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 
 
 public class FirstTele extends OpMode{

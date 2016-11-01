@@ -95,10 +95,11 @@ public class FirstAuto extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
-
+        while(Range.cmUltrasonic()>30){
         rightMotor.setPower(1);
         leftMotor.setPower(1);
-        sleep(5000);
+        sleep(40);
+        }
 
         rightMotor.setPower(0);
         leftMotor.setPower(0);
@@ -111,6 +112,7 @@ public class FirstAuto extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+            sleep(40);
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
             telemetry.addData("range", Range.cmUltrasonic());
