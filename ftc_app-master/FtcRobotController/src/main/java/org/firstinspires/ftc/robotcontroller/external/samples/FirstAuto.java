@@ -95,9 +95,9 @@ public class FirstAuto extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
-        while(Range.cmUltrasonic()>30){
-        rightMotor.setPower(1);
-        leftMotor.setPower(1);
+        //while(Range.cmUltrasonic()>30){
+        rightMotor.setPower(0);
+        leftMotor.setPower(0);
         sleep(40);
         }
 
