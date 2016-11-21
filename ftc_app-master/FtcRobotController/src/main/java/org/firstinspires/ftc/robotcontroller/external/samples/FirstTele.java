@@ -21,6 +21,8 @@ public class FirstTele extends OpMode{
     DcMotor rightMotor;
     Servo rightServo;
     Servo leftServo;
+    boolean RightDown = false;
+    boolean LeftDown = false;
    // GyroSensor gyro;
 
     /*
@@ -72,12 +74,30 @@ public class FirstTele extends OpMode{
         right = -gamepad1.right_stick_y;
         leftMotor.setPower(left);
         rightMotor.setPower(right);
-        if(-gamepad2.dpad_left){
-            leftServo.setPosition(0.75);
+
+        if(gamepad1.dpad_left){
+            if(!LeftDown){
+                leftServo.setPosition((1));
+                LeftDown = true;
+            }else{
+                leftServo.setPosition(1);
+                LeftDown = false;
+            }
         }
-        if(-gamepad2.dpad_right){
-        rightServo.setPosition(-0.75);
+
+        if(gamepad1.dpad_right){
+            if(!RightDown){
+                rightServo.setPosition((1));
+                RightDown = true;
+            }else{
+                rightServo.setPosition(1);
+                RightDown = false;
+            }
+        }
     }
+
+
+
 
     /*
      * Code to run ONCE after the driver hits STOP
