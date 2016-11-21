@@ -8,6 +8,7 @@
         import com.qualcomm.robotcore.hardware.DcMotor;
         import com.qualcomm.robotcore.hardware.DcMotorSimple;
         import com.qualcomm.robotcore.hardware.GyroSensor;
+        import com.qualcomm.robotcore.hardware.Servo;
         import com.qualcomm.robotcore.robot.Robot;
         import com.qualcomm.robotcore.util.Range;
         import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
@@ -18,6 +19,8 @@ public class FirstTele extends OpMode{
     double right;
     DcMotor leftMotor;
     DcMotor rightMotor;
+    Servo rightServo;
+    Servo leftServo;
    // GyroSensor gyro;
 
     /*
@@ -35,6 +38,9 @@ public class FirstTele extends OpMode{
         leftMotor=hardwareMap.dcMotor.get("left_drive");
         rightMotor=hardwareMap.dcMotor.get("right_drive");
         rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftServo=hardwareMap.servo.get("left_servo");
+        rightServo=hardwareMap.servo.get("right_servo");
 /*        gyro=hardwareMap.gyroSensor.get("gyro");
         // Wait for the game to start (driver presses PLAY)
         gyro.calibrate(); */
@@ -66,6 +72,10 @@ public class FirstTele extends OpMode{
         right = -gamepad1.right_stick_y;
         leftMotor.setPower(left);
         rightMotor.setPower(right);
+        left = -gamepad2.left_stick_y;
+        right = -gamepad2.right_stick_y;
+        leftServo.setPosition(0.75);
+        rightServo.setPosition(-0.75);
     }
 
     /*
