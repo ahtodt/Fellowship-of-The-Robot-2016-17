@@ -18,7 +18,7 @@ public class FirstTele extends OpMode{
     double right;
     DcMotor leftMotor;
     DcMotor rightMotor;
-    GyroSensor gyro;
+   // GyroSensor gyro;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -35,9 +35,9 @@ public class FirstTele extends OpMode{
         leftMotor=hardwareMap.dcMotor.get("left_drive");
         rightMotor=hardwareMap.dcMotor.get("right_drive");
         rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        gyro=hardwareMap.gyroSensor.get("gyro");
+/*        gyro=hardwareMap.gyroSensor.get("gyro");
         // Wait for the game to start (driver presses PLAY)
-        gyro.calibrate();
+        gyro.calibrate(); */
 
     }
 
@@ -60,7 +60,7 @@ public class FirstTele extends OpMode{
      */
     @Override
     public void loop() {
-        telemetry.addData("gyro", gyro.getHeading());
+       // telemetry.addData("gyro", gyro.getHeading());
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left = -gamepad1.left_stick_y;
         right = -gamepad1.right_stick_y;
