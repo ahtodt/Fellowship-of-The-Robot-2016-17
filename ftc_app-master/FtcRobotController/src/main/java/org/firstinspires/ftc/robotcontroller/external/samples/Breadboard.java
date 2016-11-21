@@ -6,6 +6,7 @@
         import com.qualcomm.robotcore.hardware.DcMotor;
         import com.qualcomm.robotcore.hardware.DcMotorSimple;
         import com.qualcomm.robotcore.hardware.GyroSensor;
+        import com.qualcomm.robotcore.hardware.Servo;
 
 
         public class Breadboard extends OpMode{
@@ -13,6 +14,8 @@
             double right;
             DcMotor leftMotor;
             DcMotor rightMotor;
+            Servo rightServo;
+            Servo leftServo;
 
             /*
              * Code to run ONCE when the driver hits INIT
@@ -29,6 +32,9 @@
                 leftMotor=hardwareMap.dcMotor.get("left_drive");
                 rightMotor=hardwareMap.dcMotor.get("right_drive");
                 rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+                leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+                leftServo=hardwareMap.servo.get("left_servo");
+                rightServo=hardwareMap.servo.get("right_servo");
                 // Wait for the game to start (driver presses PLAY)
 
             }
@@ -57,6 +63,10 @@
                 right = -gamepad1.right_stick_y;
                 leftMotor.setPower(left);
                 rightMotor.setPower(right);
+                left = -gamepad2.left_stick_y;
+                right = -gamepad2.right_stick_y;
+                leftServo.setPosition(0.75);
+                rightServo.setPosition(-0.75);
             }
 
             /*
