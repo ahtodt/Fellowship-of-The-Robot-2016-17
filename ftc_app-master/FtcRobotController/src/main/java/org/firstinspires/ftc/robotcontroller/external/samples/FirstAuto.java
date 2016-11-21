@@ -57,7 +57,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 public class FirstAuto extends LinearOpMode {
-
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
     // DcMotor leftMotor = null;
