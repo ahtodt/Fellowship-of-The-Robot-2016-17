@@ -72,9 +72,10 @@ public class FirstTele extends OpMode{
         right = -gamepad1.right_stick_y;
         leftMotor.setPower(left);
         rightMotor.setPower(right);
-        left = -gamepad2.left_stick_y;
-        right = -gamepad2.right_stick_y;
-        leftServo.setPosition(0.75);
+        if(-gamepad2.dpad_left){
+            leftServo.setPosition(0.75);
+        }
+        if(-gamepad2.dpad_right){
         rightServo.setPosition(-0.75);
     }
 
