@@ -58,134 +58,58 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-public class FirstAuto extends LinearOpMode {
+public class testMeme extends LinearOpMode {
+
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
     // DcMotor leftMotor = null;
     // DcMotor rightMotor = null;
     double left;
     double right;
-    double turnTolerance = 1;
+    double turnTolerance = 5;
     double newHeading;
     double oneRotation =420;
-    double currentHeading;
-    double driveGain = .007;
-    double directionAdjust;
-    double startHeading;
-    double headingError;
-    double driveSteering;
-    double leftPower;
-    double rightPower;
     DcMotor leftMotor;
     DcMotor rightMotor;
-    //DcMotor shooterMotor;
+    DcMotor shooterMotor;
     GyroSensor gyro;
     ModernRoboticsI2cRangeSensor Range;
     ModernRoboticsI2cRangeSensor rightRangeSensor;
     ColorSensor floorSeeker;
 
-    public void stopMotors(){
-        rightMotor.setPower(0);
-        leftMotor.setPower(0);
-    }
-    public void driveStraight() {
 
-
-
-            currentHeading = gyro.getHeading();
-
-            if (gyro.getHeading() > 180) {
-                currentHeading = currentHeading - 360;
-            }
-
-            if (currentHeading > startHeading) {
-                leftMotor.setPower(.2);
-                rightMotor.setPower(.8);
-            } else if (currentHeading<startHeading ){
+    public void driveStraight(){
+        while(Range.cmUltrasonic()>30){
+            if(gyro.getHeading()>180&&gyro.getHeading()<=360){
                 leftMotor.setPower(.8);
                 rightMotor.setPower(.2);
-            } else if (currentHeading == startHeading) {
+            }else if(gyro.getHeading()>0&&gyro.getHeading()<=180){
+                rightMotor.setPower(.8);
+                leftMotor.setPower(.2);
+            }else if(gyro.getHeading()==0){
                 rightMotor.setPower(.8);
                 leftMotor.setPower(.8);
             }
-
-
+            sleep(10);
+        }
     }
 
     public void wallSense(){
-        while(floorSeeker.green() < 5){
-            if(rightRangeSensor.cmUltrasonic()<20){
-                rightMotor.setPower(.3);
-                leftMotor.setPower(.2);
-            }else if(rightRangeSensor.cmUltrasonic()>=20){
+        while(floorSeeker.green() < 10){
+            if(rightRangeSensor.cmUltrasonic()<15){
+                rightMotor.setPower(.8);
                 leftMotor.setPower(.3);
-                rightMotor.setPower(.2);
+            }else if(rightRangeSensor.cmUltrasonic()>15){
+                leftMotor.setPower(.8);
+                rightMotor.setPower(.3);
             }
-            telemetry.addData("rightRange", rightRangeSensor.cmUltrasonic());
-            telemetry.update();
+            sleep(40);
         }
+
     }
 
-    public void gyroTurn(double desiredAngle) {
 
-        do {
-            currentHeading = gyro.getHeading();
-            if (gyro.getHeading() > 180) {
-                currentHeading = currentHeading - 360;
-            }
-            headingError = desiredAngle - currentHeading;
-            driveSteering = headingError * driveGain;
-
-            leftPower = driveSteering;
-            if(leftPower>.9){
-                leftPower = .9;
-            }else if(leftPower<-.9){
-                leftPower = -.9;
-            }
-
-            rightPower = -driveSteering;
-            if(rightPower>.9){
-                rightPower = .9;
-            }else if(rightPower<-.9){
-                rightPower = -.9;
-            }
-
-            leftMotor.setPower(leftPower);
-            rightMotor.setPower(rightPower);
-
-            telemetry.addData("in turn loop", leftPower);
-
-        } while (Math.abs(currentHeading-desiredAngle)>turnTolerance);
-
-        stopMotors();
-    }
-
-    public void findWhiteLine(){
-        currentHeading = gyro.getHeading();
-        if (gyro.getHeading() > 180) {
-            currentHeading = currentHeading - 360;
-        }
-        startHeading = currentHeading;
-            while(floorSeeker.green()<5){
-                driveStraight();
-            }
-
-
-        stopMotors();
-
-    }
-    public void driveToWall(){
-        currentHeading = gyro.getHeading();
-        if (gyro.getHeading() > 180) {
-            currentHeading = currentHeading - 360;
-        }
-        startHeading = currentHeading;
-        while(Range.cmUltrasonic()>38){
-            driveStraight();
-        }
-    }
-
-    /*public void shoot(int shots){
+    public void shoot(int shots){
         shooterMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         shooterMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shooterMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -203,8 +127,31 @@ public class FirstAuto extends LinearOpMode {
 
 
 
-    }*/
+    }
 
+
+    /*public void gyroTurn(int desiredAngle,double power, String direction) {
+
+         if (direction == "left") {
+
+             while(Math.abs(desiredAngle-newHeading)< turnTolerance){
+                 leftMotor.setPower(midSpeed+adjust);
+                 rightMotor.setPower(midSpeed-adjust);
+             }
+
+
+
+
+         }
+         if (direction == "right") {
+             while (Math.abs(desiredAngle -gyro.getHeading())>5) {
+
+                 leftMotor.setPower(power);
+                 rightMotor.setPower(-power);
+                 telemetry.addData("gyro", gyro.getHeading());
+             }
+         }
+     }*/
     @Override
     public void runOpMode(){
         telemetry.addData("Status", "Initialized");
@@ -212,7 +159,7 @@ public class FirstAuto extends LinearOpMode {
         leftMotor=hardwareMap.dcMotor.get("left_drive");
         rightMotor=hardwareMap.dcMotor.get("right_drive");
         rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        //shooterMotor = hardwareMap.dcMotor.get("shooterMotor");
+        shooterMotor = hardwareMap.dcMotor.get("shooterMotor");
         gyro=hardwareMap.gyroSensor.get("gyro");
         Range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "sensor_range");
         floorSeeker = hardwareMap.colorSensor.get("floorSeeker");
@@ -231,23 +178,23 @@ public class FirstAuto extends LinearOpMode {
          * to 'get' must correspond to the names assigned during the robot configuration
          * step (using the FTC Robot Controller app on the phone).
          */
-                // leftMotor  = hardwareMap.dcMotor.get("left_drive");
-                // rightMotor = hardwareMap.dcMotor.get("right_drive");
+        // leftMotor  = hardwareMap.dcMotor.get("left_drive");
+        // rightMotor = hardwareMap.dcMotor.get("right_drive");
 
-                // eg: Set the drive motor directions:
-                // "Reverse" the motor that runs backwards when connected directly to the battery
-                // leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-                // rightMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+        // eg: Set the drive motor directions:
+        // "Reverse" the motor that runs backwards when connected directly to the battery
+        // leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
+        // rightMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
 
-                // Wait for the game to start (driver presses PLAY)
-                waitForStart();
+        // Wait for the game to start (driver presses PLAY)
+        waitForStart();
         runtime.reset();
 
-        //driveToWall();
-        //gyroTurn(-90);
-        //findWhiteLine();
-        wallSense();
-        //shoot(30);
+        //driveStraight();
+        //gyroTurn(270, .6, "left");
+        // wallSense();
+        shoot(30);
+
         rightMotor.setPower(0);
         leftMotor.setPower(0);
 
