@@ -23,6 +23,8 @@ public class FirstTele extends OpMode{
     Servo leftServo;
     boolean RightDown = false;
     boolean LeftDown = false;
+    boolean rightReset = false;
+    boolean leftReset = false;
    // GyroSensor gyro;
 
     /*
@@ -43,6 +45,8 @@ public class FirstTele extends OpMode{
         leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         leftServo=hardwareMap.servo.get("left_servo");
         rightServo=hardwareMap.servo.get("right_servo");
+        leftServo.setPosition(0);
+        rightServo.setPosition(0);
 /*        gyro=hardwareMap.gyroSensor.get("gyro");
         // Wait for the game to start (driver presses PLAY)
         gyro.calibrate(); */
@@ -75,24 +79,36 @@ public class FirstTele extends OpMode{
         leftMotor.setPower(left);
         rightMotor.setPower(right);
 
-        if(gamepad1.dpad_left){
+        if(gamepad1.x&&!leftReset){
             if(!LeftDown){
                 leftServo.setPosition((1));
                 LeftDown = true;
             }else{
-                leftServo.setPosition(1);
+                leftServo.setPosition(- 1);
                 LeftDown = false;
             }
+            leftReset = true;
         }
 
-        if(gamepad1.dpad_right){
+        if(gamepad1.b&&!rightReset){
             if(!RightDown){
                 rightServo.setPosition((1));
                 RightDown = true;
             }else{
-                rightServo.setPosition(1);
+                rightServo.setPosition(-1);
                 RightDown = false;
             }
+            rightReset=true;
+            
+        }
+
+
+
+        if(!gamepad1.x){
+            leftReset = false;
+        }
+        if(!gamepad1.b){
+            rightReset=false;
         }
     }
 
