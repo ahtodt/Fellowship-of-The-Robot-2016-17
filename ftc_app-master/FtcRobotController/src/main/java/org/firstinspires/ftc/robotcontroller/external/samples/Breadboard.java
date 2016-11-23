@@ -12,8 +12,8 @@
         public class Breadboard extends OpMode{
             double left;
             double right;
-            DcMotor leftMotor;
-            DcMotor rightMotor;
+            DcMotor leftDriveMotor1;
+            DcMotor leftDriveMotor2;
             Servo rightServo;
             Servo leftServo;
 
@@ -29,10 +29,9 @@
 
 
 
-                leftMotor=hardwareMap.dcMotor.get("left_drive");
-                rightMotor=hardwareMap.dcMotor.get("right_drive");
-                rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-                leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+                leftDriveMotor1=hardwareMap.dcMotor.get("left_drive");
+                leftDriveMotor2=hardwareMap.dcMotor.get("right_drive");
+
                 leftServo=hardwareMap.servo.get("left_servo");
                 rightServo=hardwareMap.servo.get("right_servo");
                 // Wait for the game to start (driver presses PLAY)
@@ -61,8 +60,8 @@
                 // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
                 left = -gamepad1.left_stick_y;
                 right = -gamepad1.right_stick_y;
-                leftMotor.setPower(left);
-                rightMotor.setPower(right);
+                leftDriveMotor1.setPower(left);
+                leftDriveMotor2.setPower(right);
                 left = -gamepad2.left_stick_y;
                 right = -gamepad2.right_stick_y;
                 leftServo.setPosition(0.75);
