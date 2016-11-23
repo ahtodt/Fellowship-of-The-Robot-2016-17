@@ -33,7 +33,14 @@ public class FirstTele extends OpMode{
     boolean LeftDown = false;
     boolean rightReset = false;
     boolean leftReset = false;
+    boolean lifting = false;
+    boolean liftReset = false;
+    boolean firing = false;
+    boolean mortarReset = false;
+    boolean collecting = false;
+    boolean particleCollectorReset = false;
    // GyroSensor gyro;
+
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -93,6 +100,8 @@ public class FirstTele extends OpMode{
         right_drive1.setPower(right);
         right_drive2.setPower(right);
 
+        //cap ball mechanism on gamepad 2 stick
+
         if(gamepad1.x&&!leftReset){
             if(!LeftDown){
                 left_beacon.setPosition((1));
@@ -117,6 +126,29 @@ public class FirstTele extends OpMode{
         }
 
 
+        if(gamepad2.a&&!liftReset){
+            if(!lifting){
+                cap_ball_lift.setPower(0.5);
+                lifting = true;
+            }
+            liftReset = true;
+        }
+
+        if(gamepad2.y&&!mortarReset){
+            if(!firing){
+                mortar.setPower(0.5);
+                firing = true;
+            }
+            mortarReset = true;
+        }
+
+        if(gamepad1.y&&!particleCollectorReset){
+            if(!collecting){
+                particle_collector.setPower(0.5);
+                collecting = true;
+            }
+            particleCollectorReset = true
+        }
 
         if(!gamepad1.x){
             leftReset = false;
@@ -124,9 +156,8 @@ public class FirstTele extends OpMode{
         if(!gamepad1.b){
             rightReset=false;
         }
+
     }
-
-
 
 
     /*
