@@ -17,10 +17,18 @@
 public class FirstTele extends OpMode{
     double left;
     double right;
-    DcMotor leftMotor;
-    DcMotor rightMotor;
-    Servo rightServo;
-    Servo leftServo;
+    DcMotor left_drive1;
+    DcMotor left_drive2
+    DcMotor right_drive1;
+    DcMotor right_drive2;
+    DcMotor particle_collector:
+    DcMotor mortar;
+    DcMotor cap_ball_tilt;
+    DcMotor cap_ball_lift
+    Servo particle_collector1;
+    Servo particle_collector2;
+    Servo right_beacon;
+    Servo left_beacon;
     boolean RightDown = false;
     boolean LeftDown = false;
     boolean rightReset = false;
@@ -39,14 +47,22 @@ public class FirstTele extends OpMode{
 
 
 
-        leftMotor=hardwareMap.dcMotor.get("left_drive");
-        rightMotor=hardwareMap.dcMotor.get("right_drive");
-        rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftServo=hardwareMap.servo.get("left_servo");
-        rightServo=hardwareMap.servo.get("right_servo");
-        leftServo.setPosition(0);
-        rightServo.setPosition(0);
+        left_drive1=hardwareMap.dcMotor.get("left_drive1");
+        left_drive2=hardwareMap.dcMotor.get("left_drive2");
+        right_drive1=hardwareMap.dcMotor.get("right_drive1");
+        right_drive2=hardwareMap.dcMotor.get("right_drive2");
+        left_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
+        left_drive2.setDirection(DcMotorSimple.Direction.REVERSE);
+        right_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
+        right_drive2.setDirection(DcMotorSimple.Direction.REVERSE);
+        left_beacon=hardwareMap.servo.get("left_beacon");
+        right_beacon=hardwareMap.servo.get("right_beacon");
+        particle_collector1=hardwareMap.servo.get("particle_collector1");
+        particle_collector2=hardwareMap.servo.get("particle_collector2");
+        left_beacon.setPosition(0);
+        right_beacon.setPosition(0);
+        particle_collector1.setPosition(0);
+        particle_collector2.setPosition(0);
 /*        gyro=hardwareMap.gyroSensor.get("gyro");
         // Wait for the game to start (driver presses PLAY)
         gyro.calibrate(); */
@@ -76,15 +92,17 @@ public class FirstTele extends OpMode{
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left = -gamepad1.left_stick_y;
         right = -gamepad1.right_stick_y;
-        leftMotor.setPower(left);
-        rightMotor.setPower(right);
+        left_drive1.setPower(left);
+        left_drive2.setPower(left);
+        right_drive1.setPower(right);
+        right_drive2.setPower(right);
 
         if(gamepad1.x&&!leftReset){
             if(!LeftDown){
-                leftServo.setPosition((1));
+                left_beacon.setPosition((1));
                 LeftDown = true;
             }else{
-                leftServo.setPosition(- 1);
+                left_beacon.setPosition(- 1);
                 LeftDown = false;
             }
             leftReset = true;
@@ -92,10 +110,10 @@ public class FirstTele extends OpMode{
 
         if(gamepad1.b&&!rightReset){
             if(!RightDown){
-                rightServo.setPosition((1));
+                right_beacon.setPosition((1));
                 RightDown = true;
             }else{
-                rightServo.setPosition(-1);
+                right_beacon.setPosition(-1);
                 RightDown = false;
             }
             rightReset=true;
