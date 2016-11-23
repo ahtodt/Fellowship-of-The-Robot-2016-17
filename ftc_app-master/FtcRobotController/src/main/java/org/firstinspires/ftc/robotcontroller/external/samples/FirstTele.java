@@ -48,13 +48,9 @@ public class FirstTele extends OpMode{
 
 
         left_drive1=hardwareMap.dcMotor.get("left_drive1");
-        left_drive2=hardwareMap.dcMotor.get("left_drive2");
         right_drive1=hardwareMap.dcMotor.get("right_drive1");
-        right_drive2=hardwareMap.dcMotor.get("right_drive2");
         left_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
-        left_drive2.setDirection(DcMotorSimple.Direction.REVERSE);
         right_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
-        right_drive2.setDirection(DcMotorSimple.Direction.REVERSE);
         left_beacon=hardwareMap.servo.get("left_beacon");
         right_beacon=hardwareMap.servo.get("right_beacon");
         particle_collector1=hardwareMap.servo.get("particle_collector1");
