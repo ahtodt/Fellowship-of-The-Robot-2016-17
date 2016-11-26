@@ -243,10 +243,10 @@ public class FirstAuto extends LinearOpMode {
                 waitForStart();
         runtime.reset();
 
-        //driveToWall();
-        //gyroTurn(-90);
-        //findWhiteLine();
-        wallSense();
+        driveToWall();
+        gyroTurn(-90);
+        findWhiteLine();
+        //wallSense();
         //shoot(30);
         rightMotor.setPower(0);
         leftMotor.setPower(0);

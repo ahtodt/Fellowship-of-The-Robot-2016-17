@@ -55,9 +55,15 @@ public class FirstTele extends OpMode{
 
 
         left_drive1=hardwareMap.dcMotor.get("left_drive1");
+        left_drive2=hardwareMap.dcMotor.get("left_drive2");
         right_drive1=hardwareMap.dcMotor.get("right_drive1");
+        right_drive2=hardwareMap.dcMotor.get("right_drive2");
         left_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
         right_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
+        cap_ball_lift = hardwareMap.dcMotor.get("cap_ball_lift");
+        cap_ball_tilt = hardwareMap.dcMotor.get("cap_ball_tilt");
+        particle_collector = hardwareMap.dcMotor.get("particle_collector");
+        mortar = hardwareMap.dcMotor.get("mortar");
         left_beacon=hardwareMap.servo.get("left_beacon");
         right_beacon=hardwareMap.servo.get("right_beacon");
         particle_collector1=hardwareMap.servo.get("particle_collector1");
@@ -158,7 +164,7 @@ public class FirstTele extends OpMode{
             mortarReset = true;
         }
         if(!gamepad1.a){
-            liftReset = false;
+            mortarReset = false;
         }
 
         if(gamepad1.right_bumper&&!particleCollectorReset){
@@ -172,7 +178,7 @@ public class FirstTele extends OpMode{
             particleCollectorReset = true;
         }
         if(!gamepad1.right_bumper){
-            liftReset = false;
+            particleCollectorReset = false;
         }
 
 
