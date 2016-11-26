@@ -18,13 +18,13 @@ public class FirstTele extends OpMode{
     double left;
     double right;
     DcMotor left_drive1;
-    DcMotor left_drive2
+    DcMotor left_drive2;
     DcMotor right_drive1;
     DcMotor right_drive2;
-    DcMotor particle_collector:
+    DcMotor particle_collector;
     DcMotor mortar;
     DcMotor cap_ball_tilt;
-    DcMotor cap_ball_lift
+    DcMotor cap_ball_lift;
     Servo particle_collector1;
     Servo particle_collector2;
     Servo right_beacon;
@@ -147,7 +147,7 @@ public class FirstTele extends OpMode{
                 particle_collector.setPower(0.5);
                 collecting = true;
             }
-            particleCollectorReset = true
+            particleCollectorReset = true;
         }
 
         if(!gamepad1.x){
