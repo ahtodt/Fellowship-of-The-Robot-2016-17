@@ -125,37 +125,56 @@ public class FirstTele extends OpMode{
             
         }
 
-
-        if(gamepad2.a&&!liftReset){
-            if(!lifting){
-                cap_ball_lift.setPower(0.5);
-                lifting = true;
-            }
-            liftReset = true;
-        }
-
-        if(gamepad2.y&&!mortarReset){
-            if(!firing){
-                mortar.setPower(0.5);
-                firing = true;
-            }
-            mortarReset = true;
-        }
-
-        if(gamepad1.y&&!particleCollectorReset){
-            if(!collecting){
-                particle_collector.setPower(0.5);
-                collecting = true;
-            }
-            particleCollectorReset = true;
-        }
-
         if(!gamepad1.x){
             leftReset = false;
         }
         if(!gamepad1.b){
             rightReset=false;
         }
+
+
+        if(gamepad1.y&&!liftReset){
+            if(!lifting){
+                cap_ball_lift.setPower(0.5);
+                lifting = true;
+            }else{
+                cap_ball_lift.setPower(0);
+                lifting = false;
+            }
+            liftReset = true;
+        }
+        if(!gamepad1.y){
+            liftReset = false;
+        }
+
+        if(gamepad1.a&&!mortarReset){
+            if(!firing){
+                mortar.setPower(0.5);
+                firing = true;
+            }else{
+                mortar.setPower(0);
+                firing = false;
+            }
+            mortarReset = true;
+        }
+        if(!gamepad1.a){
+            liftReset = false;
+        }
+
+        if(gamepad1.right_bumper&&!particleCollectorReset){
+            if(!collecting){
+                particle_collector.setPower(0.5);
+                collecting = true;
+            }else{
+                particle_collector.setPower(0);
+                collecting = false;
+            }
+            particleCollectorReset = true;
+        }
+        if(!gamepad1.right_bumper){
+            liftReset = false;
+        }
+
 
     }
 
