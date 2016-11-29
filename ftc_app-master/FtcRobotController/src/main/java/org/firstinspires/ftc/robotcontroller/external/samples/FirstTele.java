@@ -25,8 +25,9 @@ public class FirstTele extends OpMode{
     DcMotor mortar;
     DcMotor cap_ball_tilt;
     DcMotor cap_ball_lift;
-    Servo particle_collector1;
-    Servo particle_collector2;
+    Servo collector_gate;
+    Servo mortar_gate;
+    Servo magazine_cam;
     Servo right_beacon;
     Servo left_beacon;
     boolean RightDown = false;
@@ -66,12 +67,13 @@ public class FirstTele extends OpMode{
         mortar = hardwareMap.dcMotor.get("mortar");
         left_beacon=hardwareMap.servo.get("left_beacon");
         right_beacon=hardwareMap.servo.get("right_beacon");
-        particle_collector1=hardwareMap.servo.get("particle_collector1");
-        particle_collector2=hardwareMap.servo.get("particle_collector2");
+        collector_gate=hardwareMap.servo.get("collector_gate");
+        mortar_gate=hardwareMap.servo.get("mortar_gate");
+        magazine_cam = hardwareMap.servo.get("magazine_cam");
         left_beacon.setPosition(0);
         right_beacon.setPosition(0);
-        particle_collector1.setPosition(0);
-        particle_collector2.setPosition(0);
+        collector_gate.setPosition(0);
+        mortar_gate.setPosition(0);
 /*        gyro=hardwareMap.gyroSensor.get("gyro");
         // Wait for the game to start (driver presses PLAY)
         gyro.calibrate(); */
@@ -89,7 +91,7 @@ public class FirstTele extends OpMode{
      * Code to run ONCE when the driver hits PLAY
      */
     @Override
-    public void start() {
+public void start() {
     }
 
     /*
