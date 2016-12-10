@@ -35,6 +35,8 @@ import com.google.blocks.ftcrobotcontroller.runtime.BlocksOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
 import com.qualcomm.robotcore.eventloop.opmode.AnnotatedOpModeRegistrar;
+
+import org.firstinspires.ftc.robotcontroller.external.samples.Beacon;
 import org.firstinspires.ftc.robotcontroller.external.samples.ConceptNullOp;
 import org.firstinspires.ftc.robotcontroller.external.samples.FirstAuto;
 import org.firstinspires.ftc.robotcontroller.external.samples.FirstTele;
@@ -83,5 +85,6 @@ public class FtcOpModeRegister implements OpModeRegister {
         manager.register("Tele", FirstTele.class);
         manager.register("auto", FirstAuto.class);
         manager.register("test", testMeme.class);
+        manager.register("Beacon", Beacon.class);
     }
 }

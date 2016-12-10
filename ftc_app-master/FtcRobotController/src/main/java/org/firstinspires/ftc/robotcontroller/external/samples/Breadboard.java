@@ -64,6 +64,7 @@
                 leftDriveMotor2.setPower(right);
                 left = -gamepad2.left_stick_y;
                 right = -gamepad2.right_stick_y;
+
                 leftServo.setPosition(0.75);
                 rightServo.setPosition(-0.75);
             }

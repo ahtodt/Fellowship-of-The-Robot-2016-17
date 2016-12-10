@@ -90,8 +90,6 @@ public class FirstAuto extends LinearOpMode {
     }
     public void driveStraight() {
 
-
-
             currentHeading = gyro.getHeading();
 
             if (gyro.getHeading() > 180) {
@@ -108,8 +106,6 @@ public class FirstAuto extends LinearOpMode {
                 rightMotor.setPower(.8);
                 leftMotor.setPower(.8);
             }
-
-
     }
 
     public void wallSense(){
@@ -246,7 +242,7 @@ public class FirstAuto extends LinearOpMode {
         driveToWall();
         gyroTurn(-90);
         findWhiteLine();
-        //wallSense();
+        wallSense();
         //shoot(30);
         rightMotor.setPower(0);
         leftMotor.setPower(0);

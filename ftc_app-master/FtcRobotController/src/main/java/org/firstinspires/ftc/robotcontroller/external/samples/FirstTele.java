@@ -30,6 +30,9 @@ public class FirstTele extends OpMode{
     Servo magazine_cam;
     Servo right_beacon;
     Servo left_beacon;
+    double baselinePower = .2;
+    double powerCoefficient = .0001;
+    double mortarPower;
     boolean RightDown = false;
     boolean LeftDown = false;
     boolean rightReset = false;
@@ -40,8 +43,28 @@ public class FirstTele extends OpMode{
     boolean mortarReset = false;
     boolean collecting = false;
     boolean particleCollectorReset = false;
+
    // GyroSensor gyro;
 
+   public void shoot(){
+       mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       mortar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+       if(1680>mortar.getCurrentPosition()){
+
+           mortarPower = baselinePower + powerCoefficient*(1680 - mortar.getCurrentPosition());
+           mortar.setPower(mortarPower);
+
+       }
+        mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+           mortar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+       //}
+
+
+
+   }
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -52,8 +75,6 @@ public class FirstTele extends OpMode{
     /* Initialize the hardware variables.
      * The init() method of the hardware class does all the work here
      */
-
-
 
         left_drive1=hardwareMap.dcMotor.get("left_drive1");
         left_drive2=hardwareMap.dcMotor.get("left_drive2");
@@ -99,6 +120,7 @@ public void start() {
      */
     @Override
     public void loop() {
+        //mortar.setPower(1);
        // telemetry.addData("gyro", gyro.getHeading());
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left = -gamepad1.left_stick_y;
@@ -156,14 +178,9 @@ public void start() {
         }
 
         if(gamepad1.a&&!mortarReset){
-            if(!firing){
-                mortar.setPower(0.5);
-                firing = true;
-            }else{
-                mortar.setPower(0);
-                firing = false;
-            }
             mortarReset = true;
+            shoot();
+
         }
         if(!gamepad1.a){
             mortarReset = false;
