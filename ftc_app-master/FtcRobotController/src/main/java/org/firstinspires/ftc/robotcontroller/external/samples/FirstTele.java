@@ -49,16 +49,16 @@ public class FirstTele extends OpMode{
    public void shoot(){
        mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
        mortar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+       mortar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        mortar.setPower(.3);
+        mortar.setTargetPosition(1440);
+        mortar.setPower(0);
 
-       if(1680>mortar.getCurrentPosition()){
-
-           mortarPower = baselinePower + powerCoefficient*(1680 - mortar.getCurrentPosition());
-           mortar.setPower(mortarPower);
-
-       }
         mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
            mortar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+       mortar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
 
        //}
 
