@@ -197,7 +197,8 @@ public void start() {
             particleCollectorReset = true;
         }
         if(!gamepad1.right_bumper){
-            particleCollectorReset = false;
+            particleCollectorReset = fals
+            e;
         }
 
 

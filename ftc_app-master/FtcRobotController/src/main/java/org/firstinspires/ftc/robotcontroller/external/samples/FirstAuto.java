@@ -251,7 +251,7 @@ public class FirstAuto extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
 //        while (opModeIsActive()) {
-for int i=1;i<100000;i++ {
+for (int i=1;i<100000;i++) {
 //            telemetry.addData("Status", "Run Time: " + runtime.toString());
 //            telemetry.update();
             telemetry.addData("range blah", Range.cmUltrasonic());
