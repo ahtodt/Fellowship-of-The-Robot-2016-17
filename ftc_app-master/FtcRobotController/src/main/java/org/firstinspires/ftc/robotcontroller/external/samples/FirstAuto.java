@@ -83,7 +83,7 @@ public class FirstAuto extends LinearOpMode {
     ModernRoboticsI2cRangeSensor Range;
     ModernRoboticsI2cRangeSensor rightRangeSensor;
     ColorSensor floorSeeker;
-/*
+
     public void stopMotors(){
         rightMotor.setPower(0);
         leftMotor.setPower(0);
@@ -240,24 +240,24 @@ public class FirstAuto extends LinearOpMode {
         runtime.reset();
 
 
- //       driveToWall();
-        //     gyroTurn(-90);
-   //     findWhiteLine();
-        // wallSense();
+        driveToWall();
+             gyroTurn(-90);
+        findWhiteLine();
+        wallSense();
         //shoot(30);
-//        rightMotor.setPower(0);
-//        leftMotor.setPower(0);
+        rightMotor.setPower(0);
+        leftMotor.setPower(0);
 
 
-        // run until the end of the match (driver presses STOP)
-//        while (opModeIsActive()) {
+        //run until the end of the match (driver presses STOP)
+        //while (opModeIsActive()) {
 for (int i=1;i<100000;i++) {
-//            telemetry.addData("Status", "Run Time: " + runtime.toString());
-//            telemetry.update();
+//          telemetry.addData("Status", "Run Time: " + runtime.toString());
+//          telemetry.update();
             telemetry.addData("range blah", Range.cmUltrasonic());
             telemetry.update();
             sleep(20);
- //           telemetry.addData("gyro", gyro.getHeading());
+            // telemetry.addData("gyro", gyro.getHeading());
             // eg: Run wheels in tank mode (note: The joystick goes negative when pushed forwards)
             // leftMotor.setPower(-gamepad1.left_stick_y);
             // rightMotor.setPower(-gamepad1.right_stick_y);

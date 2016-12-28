@@ -15,8 +15,8 @@
             DcMotor left_drive2;
             DcMotor right_drive1;
             DcMotor right_drive2;
-            /*DcMotor particle_collector;
-            DcMotor mortar;
+            DcMotor particle_collector;
+            /*DcMotor mortar;
             DcMotor cap_ball_tilt;
             DcMotor cap_ball_lift;
             Servo collector_gate;
@@ -74,9 +74,9 @@
                 left_drive2.setDirection(DcMotorSimple.Direction.REVERSE);
                 right_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
                 /*cap_ball_lift = hardwareMap.dcMotor.get("cap_ball_lift");
-                cap_ball_tilt = hardwareMap.dcMotor.get("cap_ball_tilt");
+                cap_ball_tilt = hardwareMap.dcMotor.get("cap_ball_tilt");*/
                 particle_collector = hardwareMap.dcMotor.get("particle_collector");
-                mortar = hardwareMap.dcMotor.get("mortar");
+                /*mortar = hardwareMap.dcMotor.get("mortar");
                 left_beacon=hardwareMap.servo.get("left_beacon");
                 right_beacon=hardwareMap.servo.get("right_beacon");
                 collector_gate=hardwareMap.servo.get("collector_gate");
@@ -175,7 +175,7 @@
                 }
                 if(!gamepad1.a){
                     mortarReset = false;
-                }
+                }*/
 
                 if(gamepad1.right_bumper&&!particleCollectorReset){
                     if(!collecting){
@@ -189,7 +189,7 @@
                 }
                 if(!gamepad1.right_bumper){
                     particleCollectorReset = false;
-                }*/
+                }
 
 
             }
@@ -198,9 +198,9 @@
             /*
              * Code to run ONCE after the driver hits STOP
              */
-                //@Override
-                /*public void stop() {
-                } */
+                @Override
+                public void stop() {
+                }
 
             }
 
