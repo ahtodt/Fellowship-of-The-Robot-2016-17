@@ -17,10 +17,10 @@
 public class FirstTele extends OpMode{
     double left;
     double right;
-    DcMotor left_drive1;
-    DcMotor left_drive2;
-    DcMotor right_drive1;
-    DcMotor right_drive2;
+    //DcMotor left_drive1;
+    //DcMotor left_drive2;
+    //DcMotor right_drive1;
+    //DcMotor right_drive2;
     DcMotor particle_collector;
     DcMotor mortar;
     DcMotor cap_ball_tilt;
@@ -76,12 +76,12 @@ public class FirstTele extends OpMode{
      * The init() method of the hardware class does all the work here
      */
 
-        left_drive1=hardwareMap.dcMotor.get("left_drive1");
-        left_drive2=hardwareMap.dcMotor.get("left_drive2");
-        right_drive1=hardwareMap.dcMotor.get("right_drive1");
-        right_drive2=hardwareMap.dcMotor.get("right_drive2");
-        left_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
-        right_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
+        //left_drive1=hardwareMap.dcMotor.get("left_drive1");
+        //left_drive2=hardwareMap.dcMotor.get("left_drive2");
+        //right_drive1=hardwareMap.dcMotor.get("right_drive1");
+        //right_drive2=hardwareMap.dcMotor.get("right_drive2");
+        //left_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
+        //right_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
         cap_ball_lift = hardwareMap.dcMotor.get("cap_ball_lift");
         cap_ball_tilt = hardwareMap.dcMotor.get("cap_ball_tilt");
         particle_collector = hardwareMap.dcMotor.get("particle_collector");
@@ -125,10 +125,10 @@ public void start() {
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left = -gamepad1.left_stick_y;
         right = -gamepad1.right_stick_y;
-        left_drive1.setPower(left);
-        left_drive2.setPower(left);
-        right_drive1.setPower(right);
-        right_drive2.setPower(right);
+        //left_drive1.setPower(left);
+        //left_drive2.setPower(left);
+        //right_drive1.setPower(right);
+        //right_drive2.setPower(right);
 
         //cap ball mechanism on gamepad 2 stick
 

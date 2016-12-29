@@ -95,8 +95,13 @@ public class  Beacon extends OpMode {
         float left = throttle + direction;
         right = com.qualcomm.robotcore.util.Range.clip(right, -1, 1);
         left = com.qualcomm.robotcore.util.Range.clip(left, -1, 1);
-        leftMotor.setPower(left);
-        rightMotor.setPower(right);
+
+
+        //right = (float) scaleInput(right);
+        //left = (float) scaleInput(left);
+        //motorRight.setPower(left);
+        //motorLeft.setPower(right);
+
         telemetry.addData("red", beaconSeeker.red());
         telemetry.addData("blue", beaconSeeker.blue());
         if (beaconSeeker.red() > 1.5) {
