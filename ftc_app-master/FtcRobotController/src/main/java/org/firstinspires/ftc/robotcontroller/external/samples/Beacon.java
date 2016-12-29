@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -84,7 +85,7 @@ public class  Beacon extends OpMode {
 
 
         if(gamepad1.a){
-            armServo.setPosition(.1496259351620948);
+            armServo.setPosition(.15);
         }else{
             armServo.setPosition(0);
         }
@@ -94,10 +95,8 @@ public class  Beacon extends OpMode {
         float left = throttle + direction;
         right = com.qualcomm.robotcore.util.Range.clip(right, -1, 1);
         left = com.qualcomm.robotcore.util.Range.clip(left, -1, 1);
-        right = (float) scaleInput(right);
-        left = (float) scaleInput(left);
-        motorRight.setPower(left);
-        motorLeft.setPower(right);
+        leftMotor.setPower(left);
+        rightMotor.setPower(right);
         telemetry.addData("red", beaconSeeker.red());
         telemetry.addData("blue", beaconSeeker.blue());
         if (beaconSeeker.red() > 1.5) {
