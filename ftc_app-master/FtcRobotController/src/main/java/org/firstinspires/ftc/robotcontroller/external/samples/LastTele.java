@@ -5,17 +5,18 @@
         import com.qualcomm.robotcore.eventloop.opmode.OpMode;
         import com.qualcomm.robotcore.hardware.DcMotor;
         import com.qualcomm.robotcore.hardware.DcMotorSimple;
+        import com.qualcomm.robotcore.hardware.GyroSensor;
         import com.qualcomm.robotcore.hardware.Servo;
 
 
         public class LastTele extends OpMode {
             double left;
             double right;
-            //DcMotor left_drive1;
-            //DcMotor left_drive2;
-            //DcMotor right_drive1;
-            //DcMotor right_drive2;
-            DcMotor particle_collector;
+            DcMotor left_drive1;
+            DcMotor left_drive2;
+            DcMotor right_drive1;
+            DcMotor right_drive2;
+            //DcMotor particle_collector;
             /*DcMotor mortar;
             DcMotor cap_ball_tilt;
             DcMotor cap_ball_lift;
@@ -38,7 +39,7 @@
             boolean collecting = false;
             boolean particleCollectorReset = false;
 
-            //GyroSensor gyro;
+            GyroSensor gyro;
 
             /*public void shoot(){
                mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -67,15 +68,15 @@
              * The init() method of the hardware class does all the work here
              */
 
-               /* left_drive1 = hardwareMap.dcMotor.get("left_drive1");
+                left_drive1 = hardwareMap.dcMotor.get("left_drive1");
                 left_drive2 = hardwareMap.dcMotor.get("left_drive2");
                 right_drive1 = hardwareMap.dcMotor.get("right_drive1");
                 right_drive2 = hardwareMap.dcMotor.get("right_drive2");
                 left_drive2.setDirection(DcMotorSimple.Direction.REVERSE);
-                right_drive1.setDirection(DcMotorSimple.Direction.REVERSE);*/
+                right_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
                 /*cap_ball_lift = hardwareMap.dcMotor.get("cap_ball_lift");
                 cap_ball_tilt = hardwareMap.dcMotor.get("cap_ball_tilt");*/
-                particle_collector = hardwareMap.dcMotor.get("particle_collector");
+                //particle_collector = hardwareMap.dcMotor.get("particle_collector");
                // particle_collector.setDirection(DcMotorSimple.Direction.REVERSE);
                 /*mortar = hardwareMap.dcMotor.get("mortar");
                 left_beacon=hardwareMap.servo.get("left_beacon");
@@ -112,15 +113,15 @@
              */
             @Override
             public void loop() {
-                //mortar.setPower(1);
+                // mortar.setPower(1);
                 // telemetry.addData("gyro", gyro.getHeading());
                 // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
                 left = -gamepad1.left_stick_y;
                 right = -gamepad1.right_stick_y;
-               /* left_drive1.setPower(left * 0.5);
+                left_drive1.setPower(left * 0.5);
                 left_drive2.setPower(left * 0.5);
                 right_drive1.setPower(right * 0.5);
-                right_drive2.setPower(right * 0.5);*/
+                right_drive2.setPower(right * 0.5);
 
                 //cap ball mechanism on gamepad 2 stick
 
@@ -178,7 +179,7 @@
                     mortarReset = false;
                 }*/
 
-                if(gamepad1.right_bumper&&!particleCollectorReset){
+                /*if(gamepad1.right_bumper&&!particleCollectorReset){
                     if(!collecting){
                         particle_collector.setPower(1);
                         collecting = true;
@@ -190,7 +191,7 @@
                 }
                 if(!gamepad1.right_bumper){
                     particleCollectorReset = false;
-                }
+                }*/
 
 
             }
