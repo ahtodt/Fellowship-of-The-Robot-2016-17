@@ -14,7 +14,7 @@
         import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 
 
-public class FirstTele extends OpMode{
+public class FirstTele extends OpMode {
     double left;
     double right;
     //DcMotor left_drive1;
@@ -26,46 +26,135 @@ public class FirstTele extends OpMode{
     DcMotor cap_ball_tilt;
     DcMotor cap_ball_lift;
     Servo collector_gate;
-    Servo mortar_gate;
-    Servo magazine_cam;
-    Servo right_beacon;
-    Servo left_beacon;
-    double baselinePower = .2;
-    double powerCoefficient = .0001;
-    double mortarPower;
-    boolean RightDown = false;
-    boolean LeftDown = false;
-    boolean rightReset = false;
-    boolean leftReset = false;
-    boolean lifting = false;
+     Servo mortar_gate;
+     Servo magazine_cam;
+     Servo right_beacon;
+     Servo left_beacon;
+     double baselinePower = .2;
+     double powerCoefficient = .0001;
+     double mortarPower;
+     boolean RightDown = false;
+     boolean LeftDown = false;
+     boolean rightReset = false;
+     boolean leftReset = false;
+     boolean lifting = false;
     boolean liftReset = false;
+    boolean posA = false;
+    boolean posB = false;
+    boolean posC = false;
+    boolean posD = false;
+    boolean posE = false;
     boolean firing = false;
     boolean mortarReset = false;
     boolean collecting = false;
     boolean particleCollectorReset = false;
 
-   // GyroSensor gyro;
+    // GyroSensor gyro;
 
-   public void shoot(){
+   public void shoot() {
        mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
        mortar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
        mortar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        mortar.setPower(.3);
-        mortar.setTargetPosition(1440);
-        mortar.setPower(0);
+       mortar.setPower(.3);
+       mortar.setTargetPosition(1440);
+       mortar.setPower(0);
 
-        mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-           mortar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+       mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       mortar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
        mortar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+}
 
-       //}
+    public void posA() {
+        // drive
+        // drop cam before slide goes down
+        posA = true;
+        cap_ball_tilt.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        cap_ball_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        cap_ball_tilt.setPower(0.3);
+        cap_ball_tilt.setTargetPosition(80);
 
 
+    }
 
-   }
+    public void posB() {
+        // scoop
+        posB = true;
+        cap_ball_tilt.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        cap_ball_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        cap_ball_tilt.setPower(0.3);
+        cap_ball_tilt.setTargetPosition(400);
+    }
+
+    public void posC(){
+        // hold
+        posC = true;
+        cap_ball_tilt.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        cap_ball_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        cap_ball_tilt.setPower(0.3);
+        cap_ball_tilt.setTargetPosition(300);
+    }
+
+    public void posD(){
+        // raised
+        posD = true;
+        cap_ball_tilt.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        cap_ball_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        cap_ball_tilt.setPower(0.3);
+        cap_ball_tilt.setTargetPosition(350);
+    }
+
+    public void posE(){
+        // drop
+        cap_ball_tilt.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        cap_ball_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        cap_ball_tilt.setPower(0.3);
+        cap_ball_tilt.setTargetPosition(480);
+    }
+
+    public void posReset(){
+        posA = false;
+        posB = false;
+        posC = false;
+        posD = false;
+        posE = false;
+    }
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -112,7 +201,7 @@ public class FirstTele extends OpMode{
      * Code to run ONCE when the driver hits PLAY
      */
     @Override
-public void start() {
+    public void start() {
     }
 
     /*
@@ -120,8 +209,8 @@ public void start() {
      */
     @Override
     public void loop() {
-        //mortar.setPower(1);
-       // telemetry.addData("gyro", gyro.getHeading());
+        mortar.setPower(1);
+        // telemetry.addData("gyro", gyro.getHeading());
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left = -gamepad1.left_stick_y;
         right = -gamepad1.right_stick_y;
@@ -177,6 +266,34 @@ public void start() {
             liftReset = false;
         }
 
+        if(gamepad2.b){
+            if(posA){
+                posA = true;
+            } else {
+                posA();
+            }
+            if(posB){
+                posB = true;
+            } else {
+                posB();
+            }
+            if(posC){
+                posC = true;
+            } else {
+                posC();
+            }
+            if(posD){
+                posD = true;
+            } else {
+                posD();
+            }
+            if(posE){
+                posE = true;
+            } else {
+                posE();
+            }
+
+        }
         if(gamepad1.a&&!mortarReset){
             mortarReset = true;
             shoot();
@@ -207,9 +324,9 @@ public void start() {
     /*
      * Code to run ONCE after the driver hits STOP
      */
-    @Override
-    public void stop() {
-    }
+        @Override
+        public void stop () {
+        }
 
-}
+    }
 
