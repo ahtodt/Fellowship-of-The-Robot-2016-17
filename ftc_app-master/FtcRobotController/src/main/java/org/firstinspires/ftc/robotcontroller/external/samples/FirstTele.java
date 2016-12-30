@@ -209,7 +209,7 @@ public class FirstTele extends OpMode {
      */
     @Override
     public void loop() {
-        mortar.setPower(1);
+        // mortar.setPower(1);
         // telemetry.addData("gyro", gyro.getHeading());
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left = -gamepad1.left_stick_y;
