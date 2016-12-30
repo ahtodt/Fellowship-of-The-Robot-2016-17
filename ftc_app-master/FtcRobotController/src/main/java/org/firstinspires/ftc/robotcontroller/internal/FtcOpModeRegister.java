@@ -40,6 +40,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.Beacon;
 import org.firstinspires.ftc.robotcontroller.external.samples.ConceptNullOp;
 import org.firstinspires.ftc.robotcontroller.external.samples.FirstAuto;
 import org.firstinspires.ftc.robotcontroller.external.samples.FirstTele;
+import org.firstinspires.ftc.robotcontroller.external.samples.ParticleCollector;
 import org.firstinspires.ftc.robotcontroller.external.samples.mortar;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.LastTele;
@@ -87,10 +88,11 @@ public class FtcOpModeRegister implements OpModeRegister {
          * Any manual OpMode class registrations should go here.
          */
         manager.register("Tele", FirstTele.class);
-        manager.register("auto", FirstAuto.class);
-        manager.register("test", testMeme.class);
+        manager.register("Auto", FirstAuto.class);
+        manager.register("Test", testMeme.class);
         manager.register("Beacon", Beacon.class);
         manager.register("Mortar", mortar.class);
         manager.register("LastTele", LastTele.class);
+        manager.register("ParticleCollector", ParticleCollector.class);
     }
 }

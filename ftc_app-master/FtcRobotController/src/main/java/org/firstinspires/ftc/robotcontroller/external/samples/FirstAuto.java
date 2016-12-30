@@ -87,7 +87,7 @@ public class FirstAuto extends LinearOpMode {
     ModernRoboticsI2cRangeSensor left_range;
     ColorSensor floor_seeker;
     ColorSensor left_beacon;
-    ColorSensor right_beacon;
+    //ColorSensor right_beacon;
 
     public void stopMotors(){
         right_drive1.setPower(0);
@@ -104,24 +104,24 @@ public class FirstAuto extends LinearOpMode {
             }
 
             if (currentHeading > startHeading) {
-                left_drive1.setPower(.2);
-                left_drive2.setPower(.2);
-                right_drive1.setPower(.8);
-                right_drive2.setPower(.8);
-            } else if (currentHeading<startHeading ){
-                left_drive1.setPower(.8);
-                left_drive2.setPower(.8);
+                left_drive1.setPower(.1);
+                left_drive2.setPower(.1);
                 right_drive1.setPower(.2);
                 right_drive2.setPower(.2);
+            } else if (currentHeading<startHeading ){
+                left_drive1.setPower(.2);
+                left_drive2.setPower(.2);
+                right_drive1.setPower(.1);
+                right_drive2.setPower(.1);
             } else if (currentHeading == startHeading) {
-                left_drive1.setPower(.8);
-                left_drive2.setPower(.8);
-                right_drive1.setPower(.8);
-                right_drive2.setPower(.8);
+                left_drive1.setPower(.2);
+                left_drive2.setPower(.2);
+                right_drive1.setPower(.2);
+                right_drive2.setPower(.2);
             }
     }
 
-    public void wallSense(){
+    /*public void wallSense(){
         while(floor_seeker.green() < 5){
             if(right_range.cmUltrasonic()<20){
                 right_drive1.setPower(.3);
@@ -137,9 +137,9 @@ public class FirstAuto extends LinearOpMode {
             telemetry.addData("rightRange", right_range.cmUltrasonic());
             telemetry.update();
         }
-    }
+    }*/
 
-    public void gyroTurn(double desiredAngle) {
+    /*public void gyroTurn(double desiredAngle) {
 
         do {
             currentHeading = gyro.getHeading();
@@ -173,9 +173,9 @@ public class FirstAuto extends LinearOpMode {
         } while (Math.abs(currentHeading-desiredAngle)>turnTolerance);
 
         stopMotors();
-    }
+    }*/
 
-    public void findWhiteLine(){
+    /*public void findWhiteLine(){
         currentHeading = gyro.getHeading();
         if (gyro.getHeading() > 180) {
             currentHeading = currentHeading - 360;
@@ -188,8 +188,8 @@ public class FirstAuto extends LinearOpMode {
 
         stopMotors();
 
-    }
-    public void driveToWall(){
+    }*/
+   /* public void driveToWall(){
         currentHeading = gyro.getHeading();
         if (gyro.getHeading() > 180) {
             currentHeading = currentHeading - 360;
@@ -198,7 +198,7 @@ public class FirstAuto extends LinearOpMode {
         while(front_range.cmUltrasonic()>38){
             driveStraight();
         }
-    }
+    }*/
 
     /*public void shoot(int shots){
         shooterMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -229,7 +229,7 @@ public class FirstAuto extends LinearOpMode {
         right_drive1=hardwareMap.dcMotor.get("right_drive1");
         right_drive2=hardwareMap.dcMotor.get("right_drive2");
         right_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
-        right_drive2.setDirection(DcMotorSimple.Direction.REVERSE);
+        left_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
         //shooterMotor = hardwareMap.dcMotor.get("shooterMotor");
         gyro=hardwareMap.gyroSensor.get("gyro");
         front_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "front_range");
@@ -258,25 +258,26 @@ public class FirstAuto extends LinearOpMode {
                 // rightMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
 
                 // Wait for the game to start (driver presses PLAY)
-                waitForStart();
+        waitForStart();
         runtime.reset();
 
 
-        driveToWall();
-             gyroTurn(-90);
-        findWhiteLine();
-        wallSense();
+        driveStraight();
+        //driveToWall();
+          //   gyroTurn(-90);
+        //findWhiteLine();
+        //wallSense();
         //shoot(30);
-        right_drive1.setPower(0);
-        right_drive2.setPower(0);
-        left_drive1.setPower(0);
-        left_drive2.setPower(0);
+        //right_drive1.setPower(0);
+        //right_drive2.setPower(0);
+        //left_drive1.setPower(0);
+        //left_drive2.setPower(0);
 
 
 
         //run until the end of the match (driver presses STOP)
         //while (opModeIsActive()) {
-for (int i=1;i<100000;i++) {
+        for (int i=1;i<100000;i++) {
 //          telemetry.addData("Status", "Run Time: " + runtime.toString());
 //          telemetry.update();
             telemetry.addData("range blah", front_range.cmUltrasonic());
