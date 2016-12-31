@@ -36,9 +36,9 @@ public class mortar extends OpMode{
     double firingSpeed = .9;
     double cockingSpeed = .5;
     double engagePower =.2;
-    int mortarFreeState = 1290;
+    int mortarFreeState;
     int mortarEngagedState = 300;
-    int mortarReadyState = 1290;
+    int mortarReadyState;
     int lastError=0;
     int shooterCount = 0;
     int shots = 0;
@@ -63,6 +63,13 @@ public class mortar extends OpMode{
     // GyroSensor gyro;
 
     public void shootingSequence(){
+        if(shots>1){
+            mortarFreeState = 1305;
+            mortarReadyState = 1305;
+        }else{
+            mortarFreeState = 1290;
+            mortarReadyState = 1290;
+        }
         if(shots<shooterCount) {
             if (mortar.getCurrentPosition() < mortarFreeState && !waitStarted) {
                 mortar.setPower(firingSpeed);
@@ -182,7 +189,7 @@ public class mortar extends OpMode{
         right_drive2.setPower(right);*/
 
         //cap ball mechanism on gamepad 2 stick
-        if(gamepad2.x){
+       /* if(gamepad2.x){
             buttonPressed = true;
         }
         if(buttonPressed&&!gamepad2.x){
@@ -195,7 +202,11 @@ public class mortar extends OpMode{
         }
         if(startFiring){
             shootingSequence();
-        }
+        }*/
+        if(gamepad2.a){
+            mortar.setPower(1);
+
+        }mortar.setPower(0);
     }
 
 
