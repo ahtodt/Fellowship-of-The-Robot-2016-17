@@ -76,10 +76,18 @@ public class FirstAuto extends LinearOpMode {
     double driveSteering;
     double leftPower;
     double rightPower;
+    double engagePower =.2;
+    double firingSpeed = .9;
+    double cockingSpeed = .5;
+    int mortarFreeState = 1290;
+    int mortarReadyState = 1290;
+    int mortarEngagedState = 300;
+    int driveDistance = (560);
     DcMotor left_drive1;
     DcMotor right_drive1;
     DcMotor left_drive2;
     DcMotor right_drive2;
+    DcMotor mortar;
     //DcMotor shooterMotor;
     GyroSensor gyro;
     ModernRoboticsI2cRangeSensor front_range;
@@ -94,6 +102,36 @@ public class FirstAuto extends LinearOpMode {
         left_drive1.setPower(0);
         right_drive2.setPower(0);
         left_drive2.setPower(0);
+    }
+    public void setPowerLeft(double power){
+        left_drive1.setPower(power);
+        left_drive2.setPower(power);
+    }
+    public void setPowerRight(double power){
+        right_drive1.setPower(power);
+        right_drive2.setPower(power);
+    }
+    public void positionToShoot(){
+        right_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        left_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        right_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        left_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        while(right_drive1.getCurrentPosition()<driveDistance&&left_drive2.getCurrentPosition()<driveDistance) {
+
+            setPowerLeft(.05);
+            setPowerRight(.05);
+        }
+        stopMotors();
+    }
+    public void shootBall(){
+        mortar.setPower(firingSpeed);
+        mortar.setTargetPosition(mortarFreeState);
+        sleep(1000);
+        mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        mortar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        mortar.setPower(cockingSpeed);
+        mortar.setTargetPosition(mortarEngagedState);
+
     }
     public void driveStraight() {
 
@@ -231,16 +269,21 @@ public class FirstAuto extends LinearOpMode {
         right_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
         left_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
         //shooterMotor = hardwareMap.dcMotor.get("shooterMotor");
-        gyro=hardwareMap.gyroSensor.get("gyro");
+        /*gyro=hardwareMap.gyroSensor.get("gyro");
         front_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "front_range");
         floor_seeker = hardwareMap.colorSensor.get("floor_seeker");
-        right_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "right_range");
-
+        right_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "right_range");*/
+        mortar = hardwareMap.dcMotor.get("mortar");
+        mortar.setDirection(DcMotorSimple.Direction.REVERSE);
+        mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        mortar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        mortar.setPower(engagePower);
+        mortar.setTargetPosition(mortarEngagedState);
         // Wait for the game to start (driver presses PLAY)
-        gyro.calibrate();
+        /*gyro.calibrate();
         while(gyro.isCalibrating()){
             sleep(40);
-        }
+        }*/
 
 
 
@@ -261,8 +304,9 @@ public class FirstAuto extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-
-        driveStraight();
+        positionToShoot();
+        shootBall();
+        //driveStraight();
         //driveToWall();
           //   gyroTurn(-90);
         //findWhiteLine();
@@ -272,22 +316,6 @@ public class FirstAuto extends LinearOpMode {
         //right_drive2.setPower(0);
         //left_drive1.setPower(0);
         //left_drive2.setPower(0);
-
-
-
-        //run until the end of the match (driver presses STOP)
-        //while (opModeIsActive()) {
-        for (int i=1;i<100000;i++) {
-//          telemetry.addData("Status", "Run Time: " + runtime.toString());
-//          telemetry.update();
-            telemetry.addData("range blah", front_range.cmUltrasonic());
-            telemetry.update();
-            sleep(20);
-            // telemetry.addData("gyro", gyro.getHeading());
-            // eg: Run wheels in tank mode (note: The joystick goes negative when pushed forwards)
-            // leftMotor.setPower(-gamepad1.left_stick_y);
-            // rightMotor.setPower(-gamepad1.right_stick_y);
-        }
     }
 }
 
