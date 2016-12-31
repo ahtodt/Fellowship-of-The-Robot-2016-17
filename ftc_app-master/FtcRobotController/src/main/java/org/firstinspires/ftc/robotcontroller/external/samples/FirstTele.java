@@ -40,6 +40,8 @@ public class FirstTele extends OpMode {
     // boolean lifting = false;
    // boolean liftReset = false;
     int posCounter = 0;
+    boolean isPressed = false;
+    boolean isPressed2 = false;
    // boolean firing = false;
    // boolean mortarReset = false;
    // boolean collecting = false;
@@ -65,67 +67,30 @@ public class FirstTele extends OpMode {
     public void posA() {
         // drive
         // drop cam before slide goes down
-        posCounter = posCounter + 1;
-        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
         cap_ball_tilt.setPower(0.3);
         cap_ball_tilt.setTargetPosition(80);
-
-
     }
 
     public void posB() {
         // scoop
-        posCounter = posCounter + 1;
-        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
         cap_ball_tilt.setPower(0.3);
         cap_ball_tilt.setTargetPosition(400);
     }
 
     public void posC(){
         // hold
-        posCounter = posCounter + 1;
-        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
         cap_ball_tilt.setPower(0.3);
         cap_ball_tilt.setTargetPosition(300);
     }
 
     public void posD(){
         // raised
-        posCounter = posCounter + 1;
-        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
         cap_ball_tilt.setPower(0.3);
         cap_ball_tilt.setTargetPosition(350);
     }
 
     public void posE(){
         // drop
-        posCounter = posCounter + 1;
-        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
         cap_ball_tilt.setPower(0.3);
         cap_ball_tilt.setTargetPosition(480);
     }
@@ -134,57 +99,27 @@ public class FirstTele extends OpMode {
         posCounter = posCounter - 4;
     }
 
-    public void reverse(){
+    public void posCheck(){
+        if(posCounter == 0){
+            posA();
+        }
         if(posCounter == 1){
-            cap_ball_tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-            cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            cap_ball_tilt.setTargetPosition(-80);
+            posB();
         }
-
         if(posCounter == 2){
-            cap_ball_tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-            cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            cap_ball_tilt.setTargetPosition(-400);
+            posC();
         }
-
         if(posCounter == 3){
-            cap_ball_tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-            cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            cap_ball_tilt.setTargetPosition(-300);
+            posD();
         }
-
         if(posCounter == 4){
-            cap_ball_tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-           cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-           cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            cap_ball_tilt.setTargetPosition(-350);
+            posE();
         }
-
-        if(posCounter == 5){
-            cap_ball_tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-           cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-           cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            cap_ball_tilt.setTargetPosition(-480);
+        if(posCounter == 5) {
+            posReset();
         }
     }
+
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -205,6 +140,8 @@ public class FirstTele extends OpMode {
         cap_ball_tilt = hardwareMap.dcMotor.get("cap_ball_tilt");
         cap_ball_tilt.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         cap_ball_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
       /*  particle_collector = hardwareMap.dcMotor.get("particle_collector");
         mortar = hardwareMap.dcMotor.get("mortar");
         left_beacon=hardwareMap.servo.get("left_beacon");
@@ -299,29 +236,22 @@ public class FirstTele extends OpMode {
         } */
 
         if(gamepad2.b){
-            if(posCounter == 0){
-                posA();
-            }
-            if(posCounter == 1){
-                reverse();
-                posB();
-            }
-            if(posCounter == 2){
-                reverse();
-                posC();
-            }
-            if(posCounter == 3){
-                reverse();
-                posD();
-            }
-            if(posCounter == 4){
-                reverse();
-                posE();
-            }
-            if(posCounter == 5){
-                reverse();
-                posReset();
-            }
+            isPressed = true;
+        }
+        if(isPressed&&!gamepad2.b){
+            posCounter ++;
+            isPressed = false;
+            posCheck();
+        }
+
+        if(gamepad2.x){
+            isPressed2 = true;
+        }
+        if(isPressed2&&!gamepad2.x){
+            posCounter --;
+            isPressed2 = false;
+            posCheck();
+        }
 
         }
      /*   if(gamepad1.a&&!mortarReset){
@@ -348,7 +278,7 @@ public class FirstTele extends OpMode {
         }
 */
 
-    }
+//    }
 
 
     /*
