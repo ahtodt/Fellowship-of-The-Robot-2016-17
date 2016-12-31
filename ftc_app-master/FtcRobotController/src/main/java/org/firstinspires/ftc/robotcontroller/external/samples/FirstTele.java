@@ -14,58 +14,177 @@
         import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 
 
-public class FirstTele extends OpMode{
+public class FirstTele extends OpMode {
     double left;
     double right;
     //DcMotor left_drive1;
     //DcMotor left_drive2;
     //DcMotor right_drive1;
     //DcMotor right_drive2;
-    DcMotor particle_collector;
-    DcMotor mortar;
+ //   DcMotor particle_collector;
+   // DcMotor mortar;
     DcMotor cap_ball_tilt;
     DcMotor cap_ball_lift;
-    Servo collector_gate;
-    Servo mortar_gate;
-    Servo magazine_cam;
-    Servo right_beacon;
-    Servo left_beacon;
-    double baselinePower = .2;
-    double powerCoefficient = .0001;
-    double mortarPower;
-    boolean RightDown = false;
-    boolean LeftDown = false;
-    boolean rightReset = false;
-    boolean leftReset = false;
-    boolean lifting = false;
-    boolean liftReset = false;
-    boolean firing = false;
-    boolean mortarReset = false;
-    boolean collecting = false;
-    boolean particleCollectorReset = false;
+   // Servo collector_gate;
+    // Servo mortar_gate;
+    // Servo magazine_cam;
+    // Servo right_beacon;
+    // Servo left_beacon;
+     double baselinePower = .2;
+     double powerCoefficient = .0001;
+     double mortarPower;
+  //   boolean RightDown = false;
+    // boolean LeftDown = false;
+    // boolean rightReset = false;
+    // boolean leftReset = false;
+    // boolean lifting = false;
+   // boolean liftReset = false;
+    int posCounter = 0;
+   // boolean firing = false;
+   // boolean mortarReset = false;
+   // boolean collecting = false;
+   // boolean particleCollectorReset = false;
 
-   // GyroSensor gyro;
+    // GyroSensor gyro;
 
-   public void shoot(){
+  /* public void shoot() {
        mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
        mortar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
        mortar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        mortar.setPower(.3);
-        mortar.setTargetPosition(1440);
-        mortar.setPower(0);
+       mortar.setPower(.3);
+       mortar.setTargetPosition(1440);
+       mortar.setPower(0);
 
-        mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-           mortar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+       mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       mortar.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
        mortar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+} */
 
-       //}
+    public void posA() {
+        // drive
+        // drop cam before slide goes down
+        posCounter = posCounter + 1;
+        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        cap_ball_tilt.setPower(0.3);
+        cap_ball_tilt.setTargetPosition(80);
 
 
+    }
 
-   }
+    public void posB() {
+        // scoop
+        posCounter = posCounter + 1;
+        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        cap_ball_tilt.setPower(0.3);
+        cap_ball_tilt.setTargetPosition(400);
+    }
+
+    public void posC(){
+        // hold
+        posCounter = posCounter + 1;
+        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        cap_ball_tilt.setPower(0.3);
+        cap_ball_tilt.setTargetPosition(300);
+    }
+
+    public void posD(){
+        // raised
+        posCounter = posCounter + 1;
+        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        cap_ball_tilt.setPower(0.3);
+        cap_ball_tilt.setTargetPosition(350);
+    }
+
+    public void posE(){
+        // drop
+        posCounter = posCounter + 1;
+        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        cap_ball_tilt.setPower(0.3);
+        cap_ball_tilt.setTargetPosition(480);
+    }
+
+    public void posReset(){
+        posCounter = posCounter - 4;
+    }
+
+    public void reverse(){
+        if(posCounter == 1){
+            cap_ball_tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            cap_ball_tilt.setTargetPosition(-80);
+        }
+
+        if(posCounter == 2){
+            cap_ball_tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            cap_ball_tilt.setTargetPosition(-400);
+        }
+
+        if(posCounter == 3){
+            cap_ball_tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            cap_ball_tilt.setTargetPosition(-300);
+        }
+
+        if(posCounter == 4){
+            cap_ball_tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+           cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+           cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            cap_ball_tilt.setTargetPosition(-350);
+        }
+
+        if(posCounter == 5){
+            cap_ball_tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+           cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+           cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            cap_ball_tilt.setTargetPosition(-480);
+        }
+    }
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -84,7 +203,9 @@ public class FirstTele extends OpMode{
         //right_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
         cap_ball_lift = hardwareMap.dcMotor.get("cap_ball_lift");
         cap_ball_tilt = hardwareMap.dcMotor.get("cap_ball_tilt");
-        particle_collector = hardwareMap.dcMotor.get("particle_collector");
+        cap_ball_tilt.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        cap_ball_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+      /*  particle_collector = hardwareMap.dcMotor.get("particle_collector");
         mortar = hardwareMap.dcMotor.get("mortar");
         left_beacon=hardwareMap.servo.get("left_beacon");
         right_beacon=hardwareMap.servo.get("right_beacon");
@@ -94,7 +215,7 @@ public class FirstTele extends OpMode{
         left_beacon.setPosition(0);
         right_beacon.setPosition(0);
         collector_gate.setPosition(0);
-        mortar_gate.setPosition(0);
+        mortar_gate.setPosition(0); */
 /*        gyro=hardwareMap.gyroSensor.get("gyro");
         // Wait for the game to start (driver presses PLAY)
         gyro.calibrate(); */
@@ -112,7 +233,7 @@ public class FirstTele extends OpMode{
      * Code to run ONCE when the driver hits PLAY
      */
     @Override
-public void start() {
+    public void start() {
     }
 
     /*
@@ -120,8 +241,8 @@ public void start() {
      */
     @Override
     public void loop() {
-        //mortar.setPower(1);
-       // telemetry.addData("gyro", gyro.getHeading());
+        // mortar.setPower(1);
+        // telemetry.addData("gyro", gyro.getHeading());
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         left = -gamepad1.left_stick_y;
         right = -gamepad1.right_stick_y;
@@ -132,7 +253,7 @@ public void start() {
 
         //cap ball mechanism on gamepad 2 stick
 
-        if(gamepad1.x&&!leftReset){
+       /* if(gamepad1.x&&!leftReset){
             if(!LeftDown){
                 left_beacon.setPosition((1));
                 LeftDown = true;
@@ -175,9 +296,35 @@ public void start() {
         }
         if(!gamepad1.y){
             liftReset = false;
-        }
+        } */
 
-        if(gamepad1.a&&!mortarReset){
+        if(gamepad2.b){
+            if(posCounter == 0){
+                posA();
+            }
+            if(posCounter == 1){
+                reverse();
+                posB();
+            }
+            if(posCounter == 2){
+                reverse();
+                posC();
+            }
+            if(posCounter == 3){
+                reverse();
+                posD();
+            }
+            if(posCounter == 4){
+                reverse();
+                posE();
+            }
+            if(posCounter == 5){
+                reverse();
+                posReset();
+            }
+
+        }
+     /*   if(gamepad1.a&&!mortarReset){
             mortarReset = true;
             shoot();
 
@@ -199,7 +346,7 @@ public void start() {
         if(!gamepad1.right_bumper){
             particleCollectorReset = false;
         }
-
+*/
 
     }
 
@@ -207,9 +354,9 @@ public void start() {
     /*
      * Code to run ONCE after the driver hits STOP
      */
-    @Override
-    public void stop() {
-    }
+        @Override
+        public void stop () {
+        }
 
-}
+    }
 
