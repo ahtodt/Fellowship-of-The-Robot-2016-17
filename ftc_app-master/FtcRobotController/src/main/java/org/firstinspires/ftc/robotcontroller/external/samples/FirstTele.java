@@ -68,7 +68,7 @@ public class FirstTele extends OpMode {
         // drive
         // drop cam before slide goes down
         cap_ball_tilt.setPower(0.3);
-        cap_ball_tilt.setTargetPosition(80);
+        cap_ball_tilt.setTargetPosition(40);
     }
 
     public void posB() {
@@ -86,17 +86,18 @@ public class FirstTele extends OpMode {
     public void posD(){
         // raised
         cap_ball_tilt.setPower(0.3);
-        cap_ball_tilt.setTargetPosition(350);
+        cap_ball_tilt.setTargetPosition(300);
     }
 
     public void posE(){
         // drop
         cap_ball_tilt.setPower(0.3);
-        cap_ball_tilt.setTargetPosition(480);
+        cap_ball_tilt.setTargetPosition(400);
     }
 
     public void posReset(){
-        posCounter = posCounter - 4;
+        // posCounter set one below because of incrementing when button pressed
+        posCounter = -1;
     }
 
     public void posCheck(){
@@ -239,21 +240,29 @@ public class FirstTele extends OpMode {
             isPressed = true;
         }
         if(isPressed&&!gamepad2.b){
-            posCounter ++;
             isPressed = false;
+            telemetry.addData("Position",posCounter);
             posCheck();
+            posCounter ++;
+            if(posCounter > 6){
+                posCounter = 0;
+            }
         }
 
         if(gamepad2.x){
             isPressed2 = true;
         }
         if(isPressed2&&!gamepad2.x){
-            posCounter --;
             isPressed2 = false;
+            telemetry.addData("Position",posCounter);
             posCheck();
+            posCounter --;
+            if(posCounter < -1){
+                posCounter = -1;
+            }
         }
 
-        }
+
      /*   if(gamepad1.a&&!mortarReset){
             mortarReset = true;
             shoot();
@@ -278,7 +287,7 @@ public class FirstTele extends OpMode {
         }
 */
 
-//    }
+   }
 
 
     /*
