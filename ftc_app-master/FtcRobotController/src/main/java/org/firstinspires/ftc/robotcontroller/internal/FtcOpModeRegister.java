@@ -38,6 +38,7 @@ import com.qualcomm.robotcore.eventloop.opmode.AnnotatedOpModeRegistrar;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.Beacon;
 import org.firstinspires.ftc.robotcontroller.external.samples.ConceptNullOp;
+import org.firstinspires.ftc.robotcontroller.external.samples.DrivingPractice;
 import org.firstinspires.ftc.robotcontroller.external.samples.FirstAuto;
 import org.firstinspires.ftc.robotcontroller.external.samples.FirstTele;
 import org.firstinspires.ftc.robotcontroller.external.samples.ParticleCollector;
@@ -94,5 +95,6 @@ public class FtcOpModeRegister implements OpModeRegister {
         manager.register("Mortar", mortar.class);
         manager.register("LastTele", LastTele.class);
         manager.register("ParticleCollector", ParticleCollector.class);
+        manager.register("DrivingPractice", DrivingPractice.class);
     }
 }

@@ -77,10 +77,18 @@ public class FirstAuto extends LinearOpMode {
     double driveSteering;
     double leftPower;
     double rightPower;
+    double engagePower =.2;
+    double firingSpeed = .9;
+    double cockingSpeed = .5;
+    int mortarFreeState = 1290;
+    int mortarReadyState = 1290;
+    int mortarEngagedState = 300;
+    int driveDistance = (560);
     DcMotor left_drive1;
     DcMotor right_drive1;
     DcMotor left_drive2;
     DcMotor right_drive2;
+    DcMotor mortar;
     //DcMotor shooterMotor;
     GyroSensor gyro;
     //ModernRoboticsI2cRangeSensor front_range;
@@ -97,6 +105,36 @@ public class FirstAuto extends LinearOpMode {
         left_drive1.setPower(0);
         right_drive2.setPower(0);
         left_drive2.setPower(0);
+    }
+    public void setPowerLeft(double power){
+        left_drive1.setPower(power);
+        left_drive2.setPower(power);
+    }
+    public void setPowerRight(double power){
+        right_drive1.setPower(power);
+        right_drive2.setPower(power);
+    }
+    public void positionToShoot(){
+        right_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        left_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        right_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        left_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        while(right_drive1.getCurrentPosition()<driveDistance&&left_drive2.getCurrentPosition()<driveDistance) {
+
+            setPowerLeft(.05);
+            setPowerRight(.05);
+        }
+        stopMotors();
+    }
+    public void shootBall(){
+        mortar.setPower(firingSpeed);
+        mortar.setTargetPosition(mortarFreeState);
+        sleep(1000);
+        mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        mortar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        mortar.setPower(cockingSpeed);
+        mortar.setTargetPosition(mortarEngagedState);
+
     }
     public void driveStraight() {
 
@@ -133,27 +171,29 @@ public class FirstAuto extends LinearOpMode {
             double velocity = right_drive1.getMaxSpeed();
             double rightWheelVelocity = velocity + differential;
             double leftWheelVelocity = velocity - differential;
+            int rightWheelVelocityInt = (int)Math.round(rightWheelVelocity);
+            int leftWheelVelocityInt = (int)Math.round(leftWheelVelocity);
             //figure out how to round right/leftWheelVelocity to produce an int
 
 
             if(distance < target){
                 //must have an int for velocity, can have either for power (can't have 2.54 encoder ticks)
                 right_drive1.setPower(rightWheelVelocity);
-                right_drive2.setMaxSpeed(rightWheelVelocity);
-                left_drive1.setMaxSpeed(leftWheelVelocity);
-                left_drive2.setMaxSpeed(leftWheelVelocity);
+                right_drive2.setMaxSpeed(rightWheelVelocityInt);
+                left_drive1.setMaxSpeed(leftWheelVelocityInt);
+                left_drive2.setMaxSpeed(leftWheelVelocityInt);
             }
             else if(distance > target){
-                left_drive1.setMaxSpeed(leftWheelVelocity);
-                left_drive2.setMaxSpeed(leftWheelVelocity);
-                right_drive1.setMaxSpeed(rightWheelVelocity);
-                right_drive2.setMaxSpeed(rightWheelVelocity);
+                left_drive1.setMaxSpeed(leftWheelVelocityInt);
+                left_drive2.setMaxSpeed(leftWheelVelocityInt);
+                right_drive1.setMaxSpeed(rightWheelVelocityInt);
+                right_drive2.setMaxSpeed(rightWheelVelocityInt);
             }
             else if(distance == target){
-                left_drive1.setMaxSpeed(leftWheelVelocity);
-                left_drive2.setMaxSpeed(leftWheelVelocity);
-                right_drive1.setMaxSpeed(rightWheelVelocity);
-                right_drive2.setMaxSpeed(rightWheelVelocity);
+                left_drive1.setMaxSpeed(leftWheelVelocityInt);
+                left_drive2.setMaxSpeed(leftWheelVelocityInt);
+                right_drive1.setMaxSpeed(rightWheelVelocityInt);
+                right_drive2.setMaxSpeed(rightWheelVelocityInt);
             }
             telemetry.addData("rightRange", right_range.cmUltrasonic());
             telemetry.update();
@@ -253,16 +293,23 @@ public class FirstAuto extends LinearOpMode {
         right_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
         left_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
         //shooterMotor = hardwareMap.dcMotor.get("shooterMotor");
-        gyro=hardwareMap.gyroSensor.get("gyro");
+        // gyro=hardwareMap.gyroSensor.get("gyro");
         //front_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "front_range");
+        /*gyro=hardwareMap.gyroSensor.get("gyro");
+        front_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "front_range");
         floor_seeker = hardwareMap.colorSensor.get("floor_seeker");
-        right_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "right_range");
-
+        right_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "right_range");*/
+        mortar = hardwareMap.dcMotor.get("mortar");
+        mortar.setDirection(DcMotorSimple.Direction.REVERSE);
+        mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        mortar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        mortar.setPower(engagePower);
+        mortar.setTargetPosition(mortarEngagedState);
         // Wait for the game to start (driver presses PLAY)
-        gyro.calibrate();
+        /*gyro.calibrate();
         while(gyro.isCalibrating()){
             sleep(40);
-        }
+        }*/
 
 
 
@@ -283,7 +330,8 @@ public class FirstAuto extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-
+        positionToShoot();
+        shootBall();
         //driveStraight();
         //driveToWall();
              //gyroTurn(-90);
@@ -310,6 +358,12 @@ public class FirstAuto extends LinearOpMode {
             // leftMotor.setPower(-gamepad1.left_stick_y);
             // rightMotor.setPower(-gamepad1.right_stick_y);
         }
+
+        //right_drive1.setPower(0);
+        //right_drive2.setPower(0);
+        //left_drive1.setPower(0);
+        //left_drive2.setPower(0);
+
     }
 }
 

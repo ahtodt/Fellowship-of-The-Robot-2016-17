@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 
 
-public class mortar extends OpMode{
+public class gates extends OpMode{
     double left;
     double right;
     /*DcMotor left_drive1;
@@ -36,6 +36,10 @@ public class mortar extends OpMode{
     double firingSpeed = .9;
     double cockingSpeed = .5;
     double engagePower =.2;
+    final double triggerCutoff = .2;
+    double up = 1;
+    double mid = .5;
+    double down = 0;
     int mortarFreeState;
     int mortarEngagedState = 300;
     int mortarReadyState;
@@ -61,7 +65,14 @@ public class mortar extends OpMode{
     boolean encoderReset = false;
     boolean startFiring = false;
     // GyroSensor gyro;
+    public void vibrateCam(){
 
+        if(magazine_cam.getPosition()==up){
+            magazine_cam.setPosition(up-.1);
+        }else if(magazine_cam.getPosition()<=(up-.1)){
+            magazine_cam.setPosition(up);
+        }
+    }
     public void shootingSequence(){
         if(shots>1){
             mortarFreeState = 1305;
@@ -77,6 +88,7 @@ public class mortar extends OpMode{
             }
             if (mortar.getCurrentPosition() >= mortarFreeState && !waitFinished) {
                 if (!waitStarted) {
+                    mortar_gate.setPosition(up);
                     resetStartTime();
                     waitStarted = true;
                 }
@@ -87,6 +99,7 @@ public class mortar extends OpMode{
                 }
             }
             if(waitFinished){
+                mortar_gate.setPosition(down);
                 mortar.setTargetPosition(mortarReadyState);
             }
             if (waitFinished && !encoderReset&&mortar.getCurrentPosition()>=mortarFreeState) {
@@ -140,20 +153,20 @@ public class mortar extends OpMode{
         mortar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         mortar.setPower(engagePower);
         mortar.setTargetPosition(mortarEngagedState);
+
         left_beacon=hardwareMap.servo.get("left_beacon");
         right_beacon=hardwareMap.servo.get("right_beacon");
         right_beacon.setDirection(Servo.Direction.REVERSE);
-        /*collector_gate=hardwareMap.servo.get("collector_gate");
+        collector_gate=hardwareMap.servo.get("collector_gate");
         mortar_gate=hardwareMap.servo.get("mortar_gate");
         magazine_cam = hardwareMap.servo.get("magazine_cam");
-        */left_beacon.setPosition(0.1);
+        left_beacon.setPosition(0.1);
         right_beacon.setPosition(0.1);
-        /*collector_gate.setPosition(0);
-        mortar_gate.setPosition(0);*/
+        collector_gate.setPosition(down);
 /*        gyro=hardwareMap.gyroSensor.get("gyro");
         // Wait for the game to start (driver presses PLAY)
         gyro.calibrate(); */
-
+        mortar_gate.setPosition(down);
     }
 
     /*
@@ -207,8 +220,28 @@ public class mortar extends OpMode{
             mortar.setPower(1);
 
         }mortar.setPower(0);
-    }
 
+        if(gamepad2.right_trigger>triggerCutoff){
+        //collecting mode
+            particle_collector.setPower(1);
+            collector_gate.setPosition(up);
+            mortar_gate.setPosition(up);
+            magazine_cam.setPosition(mid);
+    }
+    else if(gamepad2.left_trigger > triggerCutoff){
+        //ejecting mode
+            particle_collector.setPower(-1);
+        collector_gate.setPosition(down);
+        mortar_gate.setPosition(down);
+        magazine_cam.setPosition(mid);
+    }else{
+          //drive/fire sequence
+            particle_collector.setPower(0);
+            collector_gate.setPosition(down); // +vibrate
+            mortar_gate.setPosition(up); //sequenced with motor
+            vibrateCam(); // + vibrate
+        }
+    }
 
     /*
      * Code to run ONCE after the driver hits STOP
