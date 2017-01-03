@@ -88,7 +88,7 @@ public class FirstAuto extends LinearOpMode {
     DcMotor right_drive1;
     DcMotor left_drive2;
     DcMotor right_drive2;
-    DcMotor mortar;
+    //DcMotor mortar;
     //DcMotor shooterMotor;
     GyroSensor gyro;
     //ModernRoboticsI2cRangeSensor front_range;
@@ -126,7 +126,7 @@ public class FirstAuto extends LinearOpMode {
         }
         stopMotors();
     }
-    public void shootBall(){
+    /*public void shootBall(){
         mortar.setPower(firingSpeed);
         mortar.setTargetPosition(mortarFreeState);
         sleep(1000);
@@ -135,7 +135,7 @@ public class FirstAuto extends LinearOpMode {
         mortar.setPower(cockingSpeed);
         mortar.setTargetPosition(mortarEngagedState);
 
-    }
+    }*/
     public void driveStraight() {
 
             currentHeading = gyro.getHeading();
@@ -169,8 +169,8 @@ public class FirstAuto extends LinearOpMode {
             double error = distance - target;
             double differential = error * 0.1;
             double velocity = right_drive1.getMaxSpeed();
-            double rightWheelVelocity = velocity + differential;
-            double leftWheelVelocity = velocity - differential;
+            double leftWheelVelocity = velocity + differential;
+            double rightWheelVelocity = velocity - differential;
             int rightWheelVelocityInt = (int)Math.round(rightWheelVelocity);
             int leftWheelVelocityInt = (int)Math.round(leftWheelVelocity);
             //figure out how to round right/leftWheelVelocity to produce an int
@@ -299,12 +299,12 @@ public class FirstAuto extends LinearOpMode {
         front_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "front_range");
         floor_seeker = hardwareMap.colorSensor.get("floor_seeker");
         right_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "right_range");*/
-        mortar = hardwareMap.dcMotor.get("mortar");
+        /*mortar = hardwareMap.dcMotor.get("mortar");
         mortar.setDirection(DcMotorSimple.Direction.REVERSE);
         mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         mortar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         mortar.setPower(engagePower);
-        mortar.setTargetPosition(mortarEngagedState);
+        mortar.setTargetPosition(mortarEngagedState);*/
         // Wait for the game to start (driver presses PLAY)
         /*gyro.calibrate();
         while(gyro.isCalibrating()){
@@ -331,7 +331,7 @@ public class FirstAuto extends LinearOpMode {
         runtime.reset();
 
         positionToShoot();
-        shootBall();
+        //shootBall();
         //driveStraight();
         //driveToWall();
              //gyroTurn(-90);
