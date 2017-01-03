@@ -69,6 +69,8 @@ public class FirstTele extends OpMode {
         // drop cam before slide goes down
         cap_ball_tilt.setPower(0.3);
         cap_ball_tilt.setTargetPosition(40);
+        cap_ball_lift.setPower(0.2);
+        cap_ball_lift.setTargetPosition(2957);
     }
 
     public void posB() {
