@@ -168,32 +168,33 @@ public class FirstAuto extends LinearOpMode {
             double distance = right_range.cmUltrasonic();
             double error = distance - target;
             double differential = error * 0.1;
-            double velocity = right_drive1.getMaxSpeed();
-            double leftWheelVelocity = velocity + differential;
-            double rightWheelVelocity = velocity - differential;
-            int rightWheelVelocityInt = (int)Math.round(rightWheelVelocity);
-            int leftWheelVelocityInt = (int)Math.round(leftWheelVelocity);
+            double rightVelocity = right_drive1.getMaxSpeed();
+            double leftVelocity = left_drive1.getMaxSpeed();
+            double leftVelocityCorrection = leftVelocity + differential;
+            double rightVelocityCorrection = rightVelocity - differential;
+            int rightVelocityCorrectionInt = (int)Math.round(rightVelocityCorrection);
+            int leftVelocityCorrectionInt = (int)Math.round(leftVelocityCorrection);
             //figure out how to round right/leftWheelVelocity to produce an int
 
-
+            //so I realize that this follow bit is redundant, so you can fix it if you'd like
             if(distance < target){
                 //must have an int for velocity, can have either for power (can't have 2.54 encoder ticks)
-                right_drive1.setPower(rightWheelVelocity);
-                right_drive2.setMaxSpeed(rightWheelVelocityInt);
-                left_drive1.setMaxSpeed(leftWheelVelocityInt);
-                left_drive2.setMaxSpeed(leftWheelVelocityInt);
+                right_drive1.setPower(rightVelocityCorrectionInt);
+                right_drive2.setMaxSpeed(rightVelocityCorrectionInt);
+                left_drive1.setMaxSpeed(leftVelocityCorrectionInt);
+                left_drive2.setMaxSpeed(leftVelocityCorrectionInt);
             }
             else if(distance > target){
-                left_drive1.setMaxSpeed(leftWheelVelocityInt);
-                left_drive2.setMaxSpeed(leftWheelVelocityInt);
-                right_drive1.setMaxSpeed(rightWheelVelocityInt);
-                right_drive2.setMaxSpeed(rightWheelVelocityInt);
+                left_drive1.setMaxSpeed(leftVelocityCorrectionInt);
+                left_drive2.setMaxSpeed(leftVelocityCorrectionInt);
+                right_drive1.setMaxSpeed(rightVelocityCorrectionInt);
+                right_drive2.setMaxSpeed(rightVelocityCorrectionInt);
             }
             else if(distance == target){
-                left_drive1.setMaxSpeed(leftWheelVelocityInt);
-                left_drive2.setMaxSpeed(leftWheelVelocityInt);
-                right_drive1.setMaxSpeed(rightWheelVelocityInt);
-                right_drive2.setMaxSpeed(rightWheelVelocityInt);
+                left_drive1.setMaxSpeed(leftVelocityCorrectionInt);
+                left_drive2.setMaxSpeed(leftVelocityCorrectionInt);
+                right_drive1.setMaxSpeed(rightVelocityCorrectionInt);
+                right_drive2.setMaxSpeed(rightVelocityCorrectionInt);
             }
             telemetry.addData("rightRange", right_range.cmUltrasonic());
             telemetry.update();
