@@ -67,10 +67,11 @@ public class FirstTele extends OpMode {
     public void posA() {
         // drive
         // drop cam before slide goes down
+        cap_ball_lift.setPower(0.2);
+        cap_ball_lift.setMaxSpeed(1680);
+        cap_ball_lift.setTargetPosition(0);
         cap_ball_tilt.setPower(0.3);
         cap_ball_tilt.setTargetPosition(40);
-        cap_ball_lift.setPower(0.2);
-        cap_ball_lift.setTargetPosition(2957);
     }
 
     public void posB() {
@@ -81,46 +82,51 @@ public class FirstTele extends OpMode {
 
     public void posC(){
         // hold
-        cap_ball_tilt.setPower(0.3);
-        cap_ball_tilt.setTargetPosition(300);
+        cap_ball_lift.setPower(0.2);
+        cap_ball_lift.setMaxSpeed(1680);
+        cap_ball_lift.setTargetPosition(1488);
     }
 
     public void posD(){
         // raised
-        cap_ball_tilt.setPower(0.3);
-        cap_ball_tilt.setTargetPosition(300);
+        cap_ball_lift.setPower(0.2);
+        cap_ball_lift.setMaxSpeed(1680);
+        cap_ball_lift.setTargetPosition(5500);
     }
 
     public void posE(){
         // drop
-        cap_ball_tilt.setPower(0.3);
-        cap_ball_tilt.setTargetPosition(400);
+        cap_ball_lift.setPower(0.2);
+        cap_ball_lift.setMaxSpeed(1680);
+        cap_ball_lift.setTargetPosition(5000);
     }
 
     public void posReset(){
         // posCounter set one below because of incrementing when button pressed
-        posCounter = -1;
+        posCounter = 1;
+        posCheck();
     }
 
     public void posCheck(){
-        if(posCounter == 0){
+        if(posCounter == 1){
             posA();
         }
-        if(posCounter == 1){
+        if(posCounter == 2){
             posB();
         }
-        if(posCounter == 2){
+        if(posCounter == 3){
             posC();
         }
-        if(posCounter == 3){
+        if(posCounter == 4){
             posD();
         }
-        if(posCounter == 4){
+        if(posCounter == 5){
             posE();
         }
-        if(posCounter == 5) {
+        if(posCounter == 6) {
             posReset();
         }
+        telemetry.addData("Position",posCounter);
     }
 
     /*
@@ -243,10 +249,9 @@ public class FirstTele extends OpMode {
         }
         if(isPressed&&!gamepad2.b){
             isPressed = false;
-            telemetry.addData("Position",posCounter);
             posCheck();
             posCounter ++;
-            if(posCounter > 6){
+            if(posCounter > 7){
                 posCounter = 0;
             }
         }
@@ -256,11 +261,10 @@ public class FirstTele extends OpMode {
         }
         if(isPressed2&&!gamepad2.x){
             isPressed2 = false;
-            telemetry.addData("Position",posCounter);
             posCheck();
             posCounter --;
             if(posCounter < -1){
-                posCounter = -1;
+                posCounter = 0;
             }
         }
 
