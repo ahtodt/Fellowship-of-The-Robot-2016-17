@@ -15,15 +15,7 @@
             DcMotor left_drive2;
             DcMotor right_drive1;
             DcMotor right_drive2;
-            //DcMotor particle_collector;
             DcMotor mortar;
-            /*DcMotor cap_ball_tilt;
-            DcMotor cap_ball_lift;
-            Servo collector_gate;
-            Servo mortar_gate;
-            Servo magazine_cam;
-            Servo right_beacon;
-            Servo left_beacon;  */
             double baselinePower = .2;
             double powerCoefficient = .0001;
             double mortarPower;
@@ -55,7 +47,6 @@
             boolean encoderReset = false;
             boolean startFiring = false;
 
-            GyroSensor gyro;
 
             /*
              * Code to run ONCE when the driver hits INIT
@@ -73,28 +64,14 @@
                 right_drive2 = hardwareMap.dcMotor.get("right_drive2");
                 left_drive2.setDirection(DcMotorSimple.Direction.REVERSE);
                 right_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
-                /*cap_ball_lift = hardwareMap.dcMotor.get("cap_ball_lift");
-                cap_ball_tilt = hardwareMap.dcMotor.get("cap_ball_tilt");*/
-                //particle_collector = hardwareMap.dcMotor.get("particle_collector");
-               // particle_collector.setDirection(DcMotorSimple.Direction.REVERSE);
                 mortar = hardwareMap.dcMotor.get("mortar");
                 mortar.setDirection(DcMotorSimple.Direction.REVERSE);
                 mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 mortar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 mortar.setPower(engagePower);
                 mortar.setTargetPosition(mortarEngagedState);
-                /*left_beacon=hardwareMap.servo.get("left_beacon");
-                right_beacon=hardwareMap.servo.get("right_beacon");
-                collector_gate=hardwareMap.servo.get("collector_gate");
-                mortar_gate=hardwareMap.servo.get("mortar_gate");
-                magazine_cam = hardwareMap.servo.get("magazine_cam");
-                left_beacon.setPosition(0);
-                right_beacon.setPosition(0);
-                collector_gate.setPosition(0);
-                mortar_gate.setPosition(0);
-                gyro=hardwareMap.gyroSensor.get("gyro");
                 // Wait for the game to start (driver presses PLAY)
-                gyro.calibrate(); */
+
 
             }
 
@@ -117,8 +94,6 @@
              */
             @Override
             public void loop() {
-                // telemetry.addData("gyro", gyro.getHeading());
-                // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
                 left = -gamepad1.left_stick_y;
                 right = -gamepad1.right_stick_y;
                 left_drive1.setPower(left * 0.5);
@@ -131,70 +106,8 @@
                 if(gamepad2.a){
                     mortar.setPower(1);
                 }mortar.setPower(0);
-
-                //cap ball mechanism on gamepad 2 stick
-
-                /*if(gamepad1.x&&!leftReset){
-                    if(!LeftDown){
-                        left_beacon.setPosition((1));
-                        LeftDown = true;
-                    }else{
-                        left_beacon.setPosition(- 1);
-                        LeftDown = false;
-                    }
-                    leftReset = true;
-                }
-
-                if(gamepad1.b&&!rightReset){
-                    if(!RightDown){
-                        right_beacon.setPosition((1));
-                        RightDown = true;
-                    }else{
-                        right_beacon.setPosition(-1);
-                        RightDown = false;
-                    }
-                    rightReset=true;
-
-                }
-
-                if(!gamepad1.x){
-                    leftReset = false;
-                }
-                if(!gamepad1.b){
-                    rightReset=false;
-                }
-
-
-                if(gamepad1.y&&!liftReset){
-                    if(!lifting){
-                        cap_ball_lift.setPower(0.5);
-                        lifting = true;
-                    }else{
-                        cap_ball_lift.setPower(0);
-                        lifting = false;
-                    }
-                    liftReset = true;
-                }
-                if(!gamepad1.y){
-                    liftReset = false;
-                }
-
-                /*if(gamepad1.right_bumper&&!particleCollectorReset){
-                    if(!collecting){
-                        particle_collector.setPower(1);
-                        collecting = true;
-                    }else{
-                        particle_collector.setPower(0);
-                        collecting = false;
-                    }
-                    particleCollectorReset = true;
-                }
-                if(!gamepad1.right_bumper){
-                    particleCollectorReset = false;
-                }*/
-
-
             }
+
 
             public void shootingSequence(){
                 if(shots>1){
