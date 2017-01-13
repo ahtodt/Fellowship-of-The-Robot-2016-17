@@ -76,41 +76,45 @@
     public void posB() {
         // scoop
         cap_ball_tilt.setPower(0.3);
-        cap_ball_tilt.setTargetPosition(400);
+        cap_ball_tilt.setTargetPosition(360);
     }
 
     public void posC(){
         // hold
+        cap_ball_tilt.setPower(0);
         cap_ball_lift.setPower(0.5);
         cap_ball_lift.setMaxSpeed(1680);
-        cap_ball_lift.setTargetPosition(-894);
+        cap_ball_lift.setTargetPosition(2682);
     }
 
     public void posD(){
         // raised
-        cap_ball_lift.setPower(0.5);
-        cap_ball_lift.setMaxSpeed(2520);
-        cap_ball_lift.setTargetPosition(-3887);
+        cap_ball_lift.setPower(1);
+        cap_ball_lift.setMaxSpeed(1680);
+        cap_ball_lift.setTargetPosition(14760);
     }
 
     public void posE(){
         // drop
-        cap_ball_lift.setPower(0.5);
+        cap_ball_lift.setPower(1);
         cap_ball_lift.setMaxSpeed(1680);
-        cap_ball_lift.setTargetPosition(-3250);
+        cap_ball_lift.setTargetPosition(9750);
     }
 
     public void posA2(){
         cap_ball_lift.setPower(0.5);
         cap_ball_lift.setMaxSpeed(1680);
-        cap_ball_lift.setTargetPosition(-40);
+        cap_ball_lift.setTargetPosition(120);
     }
 
     public void posEnd(){
+
+        posCounter = 0;
+
         cap_ball_lift.setPower(0.5);
         cap_ball_lift.setMaxSpeed(1680);
         cap_ball_lift.setTargetPosition(0);
-        cap_ball_tilt.setPower(0.3);
+        cap_ball_tilt.setPower(0.2);
         cap_ball_tilt.setTargetPosition(0);
 
     }
@@ -170,7 +174,7 @@
         cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         cap_ball_lift.setPower(0.5);
         cap_ball_lift.setMaxSpeed(1680);
-        cap_ball_lift.setTargetPosition(-40);
+        cap_ball_lift.setTargetPosition(120);
       /*  particle_collector = hardwareMap.dcMotor.get("particle_collector");
         mortar = hardwareMap.dcMotor.get("mortar");
         left_beacon=hardwareMap.servo.get("left_beacon");
@@ -276,7 +280,7 @@
             }
         }
 
-        if(gamepad2.x){
+      if(gamepad2.x){
             isPressed2 = true;
         }
         if(isPressed2&&!gamepad2.x){
