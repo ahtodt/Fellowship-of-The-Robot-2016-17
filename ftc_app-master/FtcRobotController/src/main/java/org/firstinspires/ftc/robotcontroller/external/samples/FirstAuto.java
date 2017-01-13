@@ -92,6 +92,7 @@ public class FirstAuto extends LinearOpMode {
     DcMotor right_drive2;
     DcMotor mortar;
     DcMotor cap_ball_lift;
+    DcMotor cap_ball_tilt;
     DcMotor particle_collector;
     Servo left_beacon;
     Servo right_beacon;
@@ -113,17 +114,31 @@ public class FirstAuto extends LinearOpMode {
     double leftVelocity = left_drive1.getPower(); //the error occurs before the power goes toward the motors
     double leftVelocityCorrection = leftVelocity + differential; //telemetry for range sensors? telemetry for error?
     double rightVelocityCorrection = rightVelocity + differential; //telemetry for differential?
-    int rightVelocityCorrectionInt = (int)Math.round(rightVelocityCorrection);
-    int leftVelocityCorrectionInt = (int)Math.round(leftVelocityCorrection);
+    /*int rightVelocityCorrectionInt = (int)Math.round(rightVelocityCorrection);
+    int leftVelocityCorrectionInt = (int)Math.round(leftVelocityCorrection);*/
 
     //560 encoder ticks for AndyMark motors, 1440 for Tetrix, 1680 for AndyMark 60:1
     //WRITE SOME CODE SO THAT THE MOTORS DON'T BURN OUT IF THE ROBOT RUNS INTO SOMETHING IMMOBILE
-    //change maxSpeed to Power
     //changed + to - and - to + above, changed 38 to 25, added telemetry into if statement
     //reason code gave errors because wallSense written before hardwareMap
-    //changed + and - but still turns same way (turns clockwise from the front, left drive forward)
+    //changed + and - but still turns same way (turns clockwise from the top, left drive forward)
     //just changed so + and + for both
-    //possible problems: 
+
+    //possible problems: range sensor not at pivot point, gets further away no matter what
+    //wrong target position or need to use optical not ultrasonic
+    //not gaining enough speed prior to reading range/adjusting (put delay?)
+    //I think I will try to get a video of how its acting so I know which side is being powered in which direction. I will also try to
+    //measure how far away the range sensor is from the wall.
+
+    //something to do with velocity control
+    //just commented out velocity control. I don't think this is the issue though, so I'm going to change something else before I test
+    //really hoping that the + + thing will fix the problem since its possible each side drives in opposite directions
+    //++ didn't work. will try to read left_range instead of right_range
+    //never did this. tried making sure using "real" configuration and made sure it matches wiring
+    //threw "NullPointerException double com.qualcomm.hardware.modernroboticsi2crangesensor.cmultrasonic" error
+    //commented out the telemetry in the if statement, added cap_ball_tilt into code since it was missing
+    //didn't get rid of error
+
 
     /*public void stopMotors(){
         right_drive1.setPower(0);
@@ -356,6 +371,7 @@ public class FirstAuto extends LinearOpMode {
         mortar_gate = hardwareMap.servo.get("mortar_gate");
         cap_ball_lift = hardwareMap.dcMotor.get("cap_ball_lift");
         particle_collector = hardwareMap.dcMotor.get("particle_collector");
+        cap_ball_tilt = hardwareMap.dcMotor.get("cap_ball_tilt");
 
         // Wait for the game to start (driver presses PLAY)
         /*gyro.calibrate();
@@ -404,17 +420,17 @@ public class FirstAuto extends LinearOpMode {
             right_drive2.setPower(.2);
             left_drive1.setPower(.2);
             left_drive1.setPower(.2);
-            right_drive1.setMaxSpeed(1680);
+            /*right_drive1.setMaxSpeed(1680);
             right_drive2.setMaxSpeed(1680);
             left_drive1.setMaxSpeed(1680);
-            left_drive2.setMaxSpeed(1680);
+            left_drive2.setMaxSpeed(1680);*/
             if(distance != target){
-                right_drive1.setPower(rightVelocityCorrectionInt); //potentially reverse different motors in hardware map
-                right_drive2.setPower(rightVelocityCorrectionInt);
-                left_drive1.setPower(leftVelocityCorrectionInt);
-                left_drive2.setPower(leftVelocityCorrectionInt);
-                telemetry.addData("rightRange", right_range.cmUltrasonic());
-                telemetry.update();
+                right_drive1.setPower(rightVelocityCorrection); //potentially reverse different motors in hardware map
+                right_drive2.setPower(rightVelocityCorrection);
+                left_drive1.setPower(leftVelocityCorrection);
+                left_drive2.setPower(leftVelocityCorrection);
+               //telemetry.addData("rightRange", right_range.cmUltrasonic());
+               //telemetry.update();
             }
         }
 
