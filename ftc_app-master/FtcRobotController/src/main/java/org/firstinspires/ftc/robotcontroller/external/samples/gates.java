@@ -17,10 +17,10 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 public class gates extends OpMode{
     double left;
     double right;
-    /*DcMotor left_drive1;
+    DcMotor left_drive1;
     DcMotor left_drive2;
     DcMotor right_drive1;
-    DcMotor right_drive2;*/
+    DcMotor right_drive2;
     DcMotor particle_collector;
     DcMotor mortar;
     DcMotor cap_ball_tilt;
@@ -37,9 +37,13 @@ public class gates extends OpMode{
     double cockingSpeed = .5;
     double engagePower =.2;
     final double triggerCutoff = .2;
-    double up = 1;
-    double mid = .5;
-    double down = 0;
+    double PCGateUp = .3;
+    double PCGateDown = .75;
+    double mortarGateUp = .6;
+    double mortarGateDown = 1;
+    double camUp = 1;
+    double camMid = .5;
+    double camDown = .3;
     int mortarFreeState;
     int mortarEngagedState = 300;
     int mortarReadyState;
@@ -64,15 +68,32 @@ public class gates extends OpMode{
     boolean waitFinished = false;
     boolean encoderReset = false;
     boolean startFiring = false;
+    boolean cocked = false;
     // GyroSensor gyro;
-    public void vibrateCam(){
 
-        if(magazine_cam.getPosition()==up){
-            magazine_cam.setPosition(up-.1);
-        }else if(magazine_cam.getPosition()<=(up-.1)){
-            magazine_cam.setPosition(up);
+    public void cock(){
+        if(!cocked){
+            mortar.setPower(engagePower);
+            mortar.setTargetPosition(mortarEngagedState);
+            cocked = true;
         }
     }
+    public void vibrateCam(){
+
+        if(magazine_cam.getPosition()==camUp){
+            magazine_cam.setPosition(camUp-.3);
+        }else if(magazine_cam.getPosition()<=(camUp-.3)){
+            magazine_cam.setPosition(camUp);
+        }
+    }
+    public void vibrateParticleGate(){
+        if(collector_gate.getPosition()==PCGateDown-.2){
+            collector_gate.setPosition(PCGateDown);
+        }else if(collector_gate.getPosition()<=(PCGateDown)){
+            collector_gate.setPosition(PCGateDown-.2);
+        }
+    }
+
     public void shootingSequence(){
         if(shots>1){
             mortarFreeState = 1305;
@@ -87,19 +108,19 @@ public class gates extends OpMode{
                 mortar.setTargetPosition(mortarFreeState);
             }
             if (mortar.getCurrentPosition() >= mortarFreeState && !waitFinished) {
+                mortar_gate.setPosition(mortarGateUp);
                 if (!waitStarted) {
-                    mortar_gate.setPosition(up);
+
                     resetStartTime();
                     waitStarted = true;
                 }
-                if (waitStarted && (getRuntime() > 1)) ;
+                if (waitStarted && (getRuntime() > 1.75)) ;
                 {
-
                     waitFinished = true;
                 }
             }
             if(waitFinished){
-                mortar_gate.setPosition(down);
+
                 mortar.setTargetPosition(mortarReadyState);
             }
             if (waitFinished && !encoderReset&&mortar.getCurrentPosition()>=mortarFreeState) {
@@ -117,6 +138,7 @@ public class gates extends OpMode{
                 waitFinished = false;
                 mortarReset = false;
                 encoderReset = false;
+                mortar_gate.setPosition(mortarGateDown);
 
             }
         }
@@ -138,21 +160,22 @@ public class gates extends OpMode{
      * The init() method of the hardware class does all the work here
      */
 
-        /*left_drive1=hardwareMap.dcMotor.get("left_drive1");
+        left_drive1=hardwareMap.dcMotor.get("left_drive1");
         left_drive2=hardwareMap.dcMotor.get("left_drive2");
         right_drive1=hardwareMap.dcMotor.get("right_drive1");
         right_drive2=hardwareMap.dcMotor.get("right_drive2");
         left_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
-        right_drive1.setDirection(DcMotorSimple.Direction.REVERSE);*/
+        right_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
         /*cap_ball_lift = hardwareMap.dcMotor.get("cap_ball_lift");
-        cap_ball_tilt = hardwareMap.dcMotor.get("cap_ball_tilt");
-        particle_collector = hardwareMap.dcMotor.get("particle_collector");*/
+        cap_ball_tilt = hardwareMap.dcMotor.get("cap_ball_tilt");*/
+        particle_collector = hardwareMap.dcMotor.get("particle_collector");
+        particle_collector.setDirection(DcMotorSimple.Direction.REVERSE);
         mortar = hardwareMap.dcMotor.get("mortar");
         mortar.setDirection(DcMotorSimple.Direction.REVERSE);
         mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         mortar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        mortar.setPower(engagePower);
-        mortar.setTargetPosition(mortarEngagedState);
+       // mortar.setPower(engagePower);
+       // mortar.setTargetPosition(mortarEngagedState);
 
         left_beacon=hardwareMap.servo.get("left_beacon");
         right_beacon=hardwareMap.servo.get("right_beacon");
@@ -160,13 +183,15 @@ public class gates extends OpMode{
         collector_gate=hardwareMap.servo.get("collector_gate");
         mortar_gate=hardwareMap.servo.get("mortar_gate");
         magazine_cam = hardwareMap.servo.get("magazine_cam");
-        left_beacon.setPosition(0.1);
-        right_beacon.setPosition(0.1);
-        collector_gate.setPosition(down);
+        magazine_cam.setDirection(Servo.Direction.REVERSE);
+        left_beacon.setPosition(0.2);
+        right_beacon.setPosition(0.3);
+        collector_gate.setPosition(PCGateDown);
 /*        gyro=hardwareMap.gyroSensor.get("gyro");
         // Wait for the game to start (driver presses PLAY)
         gyro.calibrate(); */
-        mortar_gate.setPosition(down);
+        mortar_gate.setPosition(mortarGateDown);
+        magazine_cam.setPosition(camDown);
     }
 
     /*
@@ -191,6 +216,13 @@ public class gates extends OpMode{
         telemetry.addData("mortar", mortar.getCurrentPosition());
         telemetry.addData("shooterCount", shooterCount);
         telemetry.addData("runtime", getRuntime());
+        telemetry.addLine();
+        left = -gamepad1.left_stick_y;
+        right = -gamepad1.right_stick_y;
+        left_drive1.setPower(left * 0.5);
+        left_drive2.setPower(left * 0.5);
+        right_drive1.setPower(right * 0.5);
+        right_drive2.setPower(right * 0.5);
 
         // telemetry.addData("gyro", gyro.getHeading());
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
@@ -201,13 +233,39 @@ public class gates extends OpMode{
         right_drive1.setPower(right);
         right_drive2.setPower(right);*/
 
+
+
+        if(gamepad2.right_trigger>triggerCutoff){
+        //collecting mode
+            particle_collector.setPower(1);
+            collector_gate.setPosition(PCGateUp);
+            mortar_gate.setPosition(mortarGateUp);
+            magazine_cam.setPosition(camMid);
+    }
+    else if(gamepad2.left_trigger > triggerCutoff){
+        //ejecting mode
+            particle_collector.setPower(-1);
+        collector_gate.setPosition(PCGateUp);
+        magazine_cam.setPosition(camMid);        mortar_gate.setPosition(mortarGateDown);
+
+        }else{
+          //drive/fire sequence
+            particle_collector.setPower(0);
+            vibrateParticleGate(); // +vibrate
+            //sequenced with motor
+            vibrateCam(); // + vibrate
+        }
+
+
         //cap ball mechanism on gamepad 2 stick
-       /* if(gamepad2.x){
+        if(gamepad2.x){
             buttonPressed = true;
+            mortar_gate.setPosition(mortarGateDown);
         }
         if(buttonPressed&&!gamepad2.x){
             shooterCount++;
             buttonPressed = false;
+            cock();
         }
         if(gamepad2.a&&!mortarReset){
 
@@ -215,31 +273,6 @@ public class gates extends OpMode{
         }
         if(startFiring){
             shootingSequence();
-        }*/
-        if(gamepad2.a){
-            mortar.setPower(1);
-
-        }mortar.setPower(0);
-
-        if(gamepad2.right_trigger>triggerCutoff){
-        //collecting mode
-            particle_collector.setPower(1);
-            collector_gate.setPosition(up);
-            mortar_gate.setPosition(up);
-            magazine_cam.setPosition(mid);
-    }
-    else if(gamepad2.left_trigger > triggerCutoff){
-        //ejecting mode
-            particle_collector.setPower(-1);
-        collector_gate.setPosition(down);
-        mortar_gate.setPosition(down);
-        magazine_cam.setPosition(mid);
-    }else{
-          //drive/fire sequence
-            particle_collector.setPower(0);
-            collector_gate.setPosition(down); // +vibrate
-            mortar_gate.setPosition(up); //sequenced with motor
-            vibrateCam(); // + vibrate
         }
     }
 

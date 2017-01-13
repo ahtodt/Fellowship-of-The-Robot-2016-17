@@ -189,26 +189,21 @@ public class mortar extends OpMode{
         right_drive2.setPower(right);*/
 
         //cap ball mechanism on gamepad 2 stick
-       /* if(gamepad2.x){
+        if (gamepad2.x) {
             buttonPressed = true;
         }
-        if(buttonPressed&&!gamepad2.x){
+        if (buttonPressed && !gamepad2.x) {
             shooterCount++;
             buttonPressed = false;
         }
-        if(gamepad2.a&&!mortarReset){
+        if (gamepad2.a && !mortarReset) {
 
             startFiring = true;
         }
-        if(startFiring){
+        if (startFiring) {
             shootingSequence();
-        }*/
-        if(gamepad2.a){
-            mortar.setPower(1);
-
-        }mortar.setPower(0);
+        }
     }
-
 
     /*
      * Code to run ONCE after the driver hits STOP
