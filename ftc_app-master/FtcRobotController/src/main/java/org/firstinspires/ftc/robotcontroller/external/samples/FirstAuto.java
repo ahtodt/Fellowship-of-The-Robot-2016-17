@@ -138,7 +138,9 @@ public class FirstAuto extends LinearOpMode {
     //threw "NullPointerException double com.qualcomm.hardware.modernroboticsi2crangesensor.cmultrasonic" error
     //commented out the telemetry in the if statement, added cap_ball_tilt into code since it was missing
     //didn't get rid of error
-    //added telemetry for target, rightRange, distance, error, differential, rightVelocity, and leftVelocity
+    //added telemetry for target, rightRange, distance, error, differential, rightVelocity, leftVelocity, rightVelocityCorrection and
+    //leftVelocityCorrection
+    //doesn't have error with Reed's version of this code
 
 
     /*public void stopMotors(){
@@ -204,16 +206,19 @@ public class FirstAuto extends LinearOpMode {
     }
 */
 
-    /*public void findWhiteLine(){
+    public void findWhiteLine(){
         if(floor_seeker.green()<5){
             wallSense();
            }
         else if (floor_seeker.green()>5){
-            redBeaconPress();
+            left_drive1.setPower(0);
+            left_drive2.setPower(0);
+            right_drive1.setPower(0);
+            right_drive2.setPower(0);
+            //redBeaconPress();
         }
 
-   }*/
-
+   }
 
 
     /*public void redBeaconPress(){
@@ -223,14 +228,14 @@ public class FirstAuto extends LinearOpMode {
         left_drive2.setMaxSpeed(0);
         if (right_color.red() > 1.5) {
             right_beacon.setPosition(.15);
-            continueForward();
+            //continueForward();
         }
         else if (right_color.blue() > 1.5) {
             //add code for specific position/encoder ticks forward
             right_beacon.setPosition(.15);
-            continueForward();
+            //continueForward();
         }
-    }*/
+    */
 
     /*public void continueForward(){
         if(floor_seeker.green()<5){
@@ -417,6 +422,16 @@ public class FirstAuto extends LinearOpMode {
         //run until the end of the match (driver presses STOP)
         //while (opModeIsActive()) {
         public void wallSense(){
+            if(right_range.cmUltrasonic()<20){
+                right_drive1.setPower(.25);
+                right_drive2.setPower(.25);
+                left_drive1.setPower(.25);
+                left_drive2.setPower(.25);
+            }else if(right_range.cmUltrasonic()>=20){
+                left_drive1.setPower(.25);
+                left_drive2.setPower(.25);
+                right_drive1.setPower(.25);
+                right_drive2.setPower(.25);
            /* right_drive1.setPower(.2);
             right_drive2.setPower(.2);
             left_drive1.setPower(.2);
@@ -425,7 +440,7 @@ public class FirstAuto extends LinearOpMode {
             right_drive2.setMaxSpeed(1680);
             left_drive1.setMaxSpeed(1680);
             left_drive2.setMaxSpeed(1680);*/
-            if(distance != target){
+           /* if(distance != target){
                 telemetry.addData("target", target);
                 telemetry.addData("rightRange", right_range.cmUltrasonic());
                 telemetry.addData("distance", distance);
@@ -433,7 +448,9 @@ public class FirstAuto extends LinearOpMode {
                 telemetry.addData("differential", differential);
                 telemetry.addData("rightVelocity", rightVelocity);
                 telemetry.addData("leftVelocity", leftVelocity);
-                telemetry.update();
+                telemetry.addData("leftVelocityCorrection", leftVelocityCorrection);
+                telemetry.addData("rightVelocityCorrection", rightVelocityCorrection);
+                telemetry.update(); */
 
                 /*right_drive1.setPower(rightVelocityCorrection); //potentially reverse different motors in hardware map
                 right_drive2.setPower(rightVelocityCorrection);
