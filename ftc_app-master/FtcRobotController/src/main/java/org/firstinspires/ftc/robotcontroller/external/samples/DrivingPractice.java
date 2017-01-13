@@ -6,6 +6,8 @@
         import com.qualcomm.robotcore.hardware.DcMotor;
         import com.qualcomm.robotcore.hardware.DcMotorSimple;
         import com.qualcomm.robotcore.hardware.GyroSensor;
+        import com.qualcomm.robotcore.hardware.Servo;
+        import com.qualcomm.robotcore.util.Range;
 
 
         public class DrivingPractice extends OpMode {
@@ -15,13 +17,29 @@
             DcMotor left_drive2;
             DcMotor right_drive1;
             DcMotor right_drive2;
+            DcMotor particle_collector;
             DcMotor mortar;
+            DcMotor cap_ball_tilt;
+            DcMotor cap_ball_lift;
+            Servo collector_gate;
+            Servo mortar_gate;
+            Servo magazine_cam;
+            Servo right_beacon;
+            Servo left_beacon;
             double baselinePower = .2;
             double powerCoefficient = .0001;
             double mortarPower;
             double firingSpeed = .9;
             double cockingSpeed = .5;
             double engagePower =.2;
+            final double triggerCutoff = .2;
+            double PCGateUp = .3;
+            double PCGateDown = .75;
+            double mortarGateUp = .6;
+            double mortarGateDown = 1;
+            double camUp = 1;
+            double camMid = .5;
+            double camDown = .3;
             int mortarFreeState;
             int mortarEngagedState = 300;
             int mortarReadyState;
@@ -46,69 +64,29 @@
             boolean waitFinished = false;
             boolean encoderReset = false;
             boolean startFiring = false;
-
-
-            /*
-             * Code to run ONCE when the driver hits INIT
-             */
-            @Override
-            public void init() {
-
-            /* Initialize the hardware variables.
-             * The init() method of the hardware class does all the work here
-             */
-
-                left_drive1 = hardwareMap.dcMotor.get("left_drive1");
-                left_drive2 = hardwareMap.dcMotor.get("left_drive2");
-                right_drive1 = hardwareMap.dcMotor.get("right_drive1");
-                right_drive2 = hardwareMap.dcMotor.get("right_drive2");
-                left_drive2.setDirection(DcMotorSimple.Direction.REVERSE);
-                right_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
-                mortar = hardwareMap.dcMotor.get("mortar");
-                mortar.setDirection(DcMotorSimple.Direction.REVERSE);
-                mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                mortar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                mortar.setPower(engagePower);
-                mortar.setTargetPosition(mortarEngagedState);
-                // Wait for the game to start (driver presses PLAY)
-
-
+            boolean cocked = false;
+            GyroSensor gyro;
+            public void stopMotors(){
+                right_drive1.setPower(0);
+                left_drive1.setPower(0);
+                right_drive2.setPower(0);
+                left_drive2.setPower(0);
             }
-
-            /*
-             * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
-             */
-            @Override
-            public void init_loop() {
+            public void setPowerLeft(double power){
+                left_drive1.setPower(power);
+                left_drive2.setPower(power);
             }
-
-            /*
-             * Code to run ONCE when the driver hits PLAY
-             */
-            @Override
-            public void start() {
+            public void setPowerRight(double power){
+                right_drive1.setPower(power);
+                right_drive2.setPower(power);
             }
-
-            /*
-             * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
-             */
-            @Override
-            public void loop() {
-                left = -gamepad1.left_stick_y;
-                right = -gamepad1.right_stick_y;
-                left_drive1.setPower(left * 0.5);
-                left_drive2.setPower(left * 0.5);
-                right_drive1.setPower(right * 0.5);
-                right_drive2.setPower(right * 0.5);
-                telemetry.addData("mortar", mortar.getCurrentPosition());
-                telemetry.addData("shooterCount", shooterCount);
-                telemetry.addData("runtime", getRuntime());
-                if(gamepad2.a){
-                    mortar.setPower(1);
-                }mortar.setPower(0);
+            public void cock(){
+                if(!cocked){
+                    mortar.setPower(engagePower);
+                    mortar.setTargetPosition(mortarEngagedState);
+                    cocked = true;
+                }
             }
-
-
             public void shootingSequence(){
                 if(shots>1){
                     mortarFreeState = 1305;
@@ -161,6 +139,106 @@
                 }
 
             }
+            /*
+             * Code to run ONCE when the driver hits INIT
+             */
+            @Override
+            public void init() {
+
+            /* Initialize the hardware variables.
+             * The init() method of the hardware class does all the work here
+             */
+
+                left_drive1=hardwareMap.dcMotor.get("left_drive1");
+                left_drive2=hardwareMap.dcMotor.get("left_drive2");
+                right_drive1=hardwareMap.dcMotor.get("right_drive1");
+                right_drive2=hardwareMap.dcMotor.get("right_drive2");
+                left_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
+                right_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
+        /*cap_ball_lift = hardwareMap.dcMotor.get("cap_ball_lift");
+        cap_ball_tilt = hardwareMap.dcMotor.get("cap_ball_tilt");*/
+                particle_collector = hardwareMap.dcMotor.get("particle_collector");
+                particle_collector.setDirection(DcMotorSimple.Direction.REVERSE);
+                mortar = hardwareMap.dcMotor.get("mortar");
+                mortar.setDirection(DcMotorSimple.Direction.REVERSE);
+                mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                mortar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                // mortar.setPower(engagePower);
+                // mortar.setTargetPosition(mortarEngagedState);
+
+                left_beacon=hardwareMap.servo.get("left_beacon");
+                right_beacon=hardwareMap.servo.get("right_beacon");
+                right_beacon.setDirection(Servo.Direction.REVERSE);
+                collector_gate=hardwareMap.servo.get("collector_gate");
+                mortar_gate=hardwareMap.servo.get("mortar_gate");
+                magazine_cam = hardwareMap.servo.get("magazine_cam");
+                magazine_cam.setDirection(Servo.Direction.REVERSE);
+                left_beacon.setPosition(0.2);
+                right_beacon.setPosition(0.3);
+                collector_gate.setPosition(PCGateDown);
+/*        gyro=hardwareMap.gyroSensor.get("gyro");
+        // Wait for the game to start (driver presses PLAY)
+        gyro.calibrate(); */
+                mortar_gate.setPosition(mortarGateDown);
+                magazine_cam.setPosition(camDown);
+                // Wait for the game to start (driver presses PLAY)
+
+
+            }
+
+            /*
+             * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
+             */
+            @Override
+            public void init_loop() {
+            }
+
+            /*
+             * Code to run ONCE when the driver hits PLAY
+             */
+            @Override
+            public void start() {
+            }
+
+            /*
+             * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
+             */
+            @Override
+            public void loop() {
+                float throttle = -gamepad1.left_stick_y;
+                float direction = gamepad1.left_stick_x;
+                float right = throttle - direction;
+                float left = throttle + direction;
+                right = Range.clip(right, -1, 1);
+                left = Range.clip(left, -1, 1);
+
+                setPowerLeft(left);
+                setPowerRight(right);
+                
+                if(gamepad2.x){
+                    buttonPressed = true;
+                    mortar_gate.setPosition(mortarGateDown);
+                }
+                if(buttonPressed&&!gamepad2.x){
+                    shooterCount++;
+                    buttonPressed = false;
+                    cock();
+                }
+                if(gamepad2.a&&!mortarReset){
+
+                    startFiring = true;
+                }
+                if(startFiring){
+                    shootingSequence();
+                }
+                telemetry.addData("mortar", mortar.getCurrentPosition());
+                telemetry.addData("shooterCount", shooterCount);
+                telemetry.addData("runtime", getRuntime());
+
+            }
+
+
+
 
 
             /*
