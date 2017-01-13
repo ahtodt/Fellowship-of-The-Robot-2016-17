@@ -105,7 +105,7 @@
                             resetStartTime();
                             waitStarted = true;
                         }
-                        if (waitStarted && (getRuntime() > 1)) ;
+                        if (waitStarted && getRuntime() > 1);
                         {
 
                             waitFinished = true;
@@ -214,7 +214,7 @@
 
                 setPowerLeft(left);
                 setPowerRight(right);
-                
+
                 if(gamepad2.x){
                     buttonPressed = true;
                     mortar_gate.setPosition(mortarGateDown);

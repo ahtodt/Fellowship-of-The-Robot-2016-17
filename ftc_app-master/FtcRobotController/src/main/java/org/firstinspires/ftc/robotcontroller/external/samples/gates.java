@@ -114,7 +114,6 @@ public class gates extends OpMode{
                     resetStartTime();
                     waitStarted = true;
                 }
-                if (waitStarted && (getRuntime() > 1.75)) ;
                 {
                     waitFinished = true;
                 }
