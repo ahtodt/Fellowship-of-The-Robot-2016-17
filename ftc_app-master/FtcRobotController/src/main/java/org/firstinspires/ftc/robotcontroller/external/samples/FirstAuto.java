@@ -106,7 +106,7 @@ public class FirstAuto extends LinearOpMode {
     ColorSensor floor_seeker;
     ColorSensor left_color;
     ColorSensor right_color;
-    double target = 25;
+    double target = 20;
     double distance = right_range.cmUltrasonic();
     double error = distance - target;
     double differential = error * 0.1;
@@ -138,6 +138,7 @@ public class FirstAuto extends LinearOpMode {
     //threw "NullPointerException double com.qualcomm.hardware.modernroboticsi2crangesensor.cmultrasonic" error
     //commented out the telemetry in the if statement, added cap_ball_tilt into code since it was missing
     //didn't get rid of error
+    //added telemetry for target, rightRange, distance, error, differential, rightVelocity, and leftVelocity
 
 
     /*public void stopMotors(){
@@ -416,21 +417,28 @@ public class FirstAuto extends LinearOpMode {
         //run until the end of the match (driver presses STOP)
         //while (opModeIsActive()) {
         public void wallSense(){
-            right_drive1.setPower(.2);
+           /* right_drive1.setPower(.2);
             right_drive2.setPower(.2);
             left_drive1.setPower(.2);
-            left_drive1.setPower(.2);
+            left_drive1.setPower(.2);*/
             /*right_drive1.setMaxSpeed(1680);
             right_drive2.setMaxSpeed(1680);
             left_drive1.setMaxSpeed(1680);
             left_drive2.setMaxSpeed(1680);*/
             if(distance != target){
-                right_drive1.setPower(rightVelocityCorrection); //potentially reverse different motors in hardware map
+                telemetry.addData("target", target);
+                telemetry.addData("rightRange", right_range.cmUltrasonic());
+                telemetry.addData("distance", distance);
+                telemetry.addData("error", error);
+                telemetry.addData("differential", differential);
+                telemetry.addData("rightVelocity", rightVelocity);
+                telemetry.addData("leftVelocity", leftVelocity);
+                telemetry.update();
+
+                /*right_drive1.setPower(rightVelocityCorrection); //potentially reverse different motors in hardware map
                 right_drive2.setPower(rightVelocityCorrection);
                 left_drive1.setPower(leftVelocityCorrection);
-                left_drive2.setPower(leftVelocityCorrection);
-               //telemetry.addData("rightRange", right_range.cmUltrasonic());
-               //telemetry.update();
+                left_drive2.setPower(leftVelocityCorrection);*/
             }
         }
 
