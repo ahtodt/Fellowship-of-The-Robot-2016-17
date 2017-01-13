@@ -46,6 +46,9 @@
             int lastError=0;
             int shooterCount = 0;
             int shots = 0;
+            int posCounter = 0;
+            boolean isPressed = false;
+            boolean isPressed2 = false;
             boolean RightDown = false;
             boolean LeftDown = false;
             boolean rightReset = false;
@@ -66,6 +69,91 @@
             boolean startFiring = false;
             boolean cocked = false;
             GyroSensor gyro;
+
+            public void posA() {
+                // drive
+                // drop cam before slide goes down
+                cap_ball_tilt.setPower(0.3);
+                cap_ball_tilt.setTargetPosition(40);
+            }
+
+            public void posB() {
+                // scoop
+                cap_ball_tilt.setPower(0.3);
+                cap_ball_tilt.setTargetPosition(370);
+            }
+
+            public void posC(){
+                // hold
+                cap_ball_tilt.setPower(0);
+                cap_ball_lift.setPower(0.5);
+                cap_ball_lift.setMaxSpeed(1680);
+                cap_ball_lift.setTargetPosition(2682);
+            }
+
+            public void posD(){
+                // raised
+                cap_ball_lift.setPower(1);
+                cap_ball_lift.setMaxSpeed(1680);
+                cap_ball_lift.setTargetPosition(14760);
+            }
+
+            public void posE(){
+                // drop
+                cap_ball_lift.setPower(1);
+                cap_ball_lift.setMaxSpeed(1680);
+                cap_ball_lift.setTargetPosition(9750);
+            }
+
+            public void posA2(){
+                cap_ball_lift.setPower(0.5);
+                cap_ball_lift.setMaxSpeed(1680);
+                cap_ball_lift.setTargetPosition(120);
+            }
+
+            public void posEnd(){
+
+                posCounter = 0;
+
+                cap_ball_lift.setPower(0.5);
+                cap_ball_lift.setMaxSpeed(1680);
+                cap_ball_lift.setTargetPosition(0);
+                cap_ball_tilt.setPower(0.2);
+                cap_ball_tilt.setTargetPosition(0);
+
+            }
+
+            public void posReset(){
+                // posCounter set one below because of incrementing when button pressed
+                posCounter = 0;
+                posCheck();
+            }
+
+            public void posCheck(){
+                if(posCounter == 0){
+                    posA2();
+                }
+                if(posCounter == 1){
+                    posA();
+                }
+                if(posCounter == 2){
+                    posB();
+                }
+                if(posCounter == 3){
+                    posC();
+                }
+                if(posCounter == 4){
+                    posD();
+                }
+                if(posCounter == 5){
+                    posE();
+                }
+                if(posCounter == 6) {
+                    posReset();
+                }
+                telemetry.addData("Position",posCounter);
+            }
+
             public void stopMotors(){
                 right_drive1.setPower(0);
                 left_drive1.setPower(0);
@@ -165,7 +253,15 @@
                 mortar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 // mortar.setPower(engagePower);
                 // mortar.setTargetPosition(mortarEngagedState);
-
+                cap_ball_lift = hardwareMap.dcMotor.get("cap_ball_lift");
+                cap_ball_tilt = hardwareMap.dcMotor.get("cap_ball_tilt");
+                cap_ball_tilt.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                cap_ball_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                cap_ball_lift.setPower(0.5);
+                cap_ball_lift.setMaxSpeed(1680);
+                cap_ball_lift.setTargetPosition(120);
                 left_beacon=hardwareMap.servo.get("left_beacon");
                 right_beacon=hardwareMap.servo.get("right_beacon");
                 right_beacon.setDirection(Servo.Direction.REVERSE);
@@ -234,6 +330,34 @@
                 telemetry.addData("mortar", mortar.getCurrentPosition());
                 telemetry.addData("shooterCount", shooterCount);
                 telemetry.addData("runtime", getRuntime());
+
+                if(gamepad2.b){
+                    isPressed = true;
+                }
+                if(isPressed&&!gamepad2.b){
+                    isPressed = false;
+                    posCheck();
+                    posCounter ++;
+                    if(posCounter > 7){
+                        posCounter = 0;
+                    }
+                }
+
+               /* if(gamepad2.x){
+                    isPressed2 = true;
+                }
+                if(isPressed2&&!gamepad2.x){
+                    isPressed2 = false;
+                    posCheck();
+                    posCounter --;
+                    if(posCounter < -1){
+                        posCounter = 0;
+                    }
+                } */
+
+                if(gamepad2.start){
+                    posEnd();
+                }
 
             }
 
