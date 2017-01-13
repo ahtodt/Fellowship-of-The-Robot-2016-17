@@ -46,35 +46,48 @@ public class  Beacon extends OpMode {
     double driveSteering;
     double leftPower;
     double rightPower;
-    Servo armServo;
-    DcMotor leftMotor;
-    DcMotor rightMotor;
-    //DcMotor shooterMotor;
+    Servo right_beacon;
+    Servo left_beacon;
+    DcMotor left_drive1;
+    DcMotor left_drive2;
+    DcMotor right_drive1;
+    DcMotor right_drive2;
+    DcMotor mortar;
     GyroSensor gyro;
-    ModernRoboticsI2cRangeSensor Range;
-    ModernRoboticsI2cRangeSensor rightRangeSensor;
-    ColorSensor floorSeeker;
-    ColorSensor beaconSeeker;
+    ModernRoboticsI2cRangeSensor right_range;
+    ModernRoboticsI2cRangeSensor left_range;
+    ModernRoboticsI2cRangeSensor front_range;
+    ColorSensor floor_seeker;
+    ColorSensor right_color;
+    ColorSensor left_color;
     String color;
 
     @Override
     public void init() {
-        I2cAddr colorAdress = I2cAddr.create8bit(0x70);
+        I2cAddr colorAddress = I2cAddr.create8bit(0x70);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-        leftMotor = hardwareMap.dcMotor.get("left_drive");
-        rightMotor = hardwareMap.dcMotor.get("right_drive");
-        rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        //shooterMotor = hardwareMap.dcMotor.get("shooterMotor");
+        left_drive1 = hardwareMap.dcMotor.get("left_drive1");
+        left_drive2 = hardwareMap.dcMotor.get("left_drive2");
+        right_drive1 = hardwareMap.dcMotor.get("right_drive1");
+        right_drive2 = hardwareMap.dcMotor.get("right_drive2");
+        right_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
+        left_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
+        mortar = hardwareMap.dcMotor.get("mortar");
         gyro = hardwareMap.gyroSensor.get("gyro");
-        Range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "sensor_range");
-        floorSeeker = hardwareMap.colorSensor.get("floorSeeker");
-        rightRangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rightRangeSensor");
-        armServo = hardwareMap.servo.get("armServo");
-        armServo.setPosition(0);
-        beaconSeeker = hardwareMap.colorSensor.get("beaconSeeker");
-        beaconSeeker.enableLed(false);
-        beaconSeeker.setI2cAddress(colorAdress);
+        right_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "right_range");
+        left_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "left_range");
+        floor_seeker = hardwareMap.colorSensor.get("floor_seeker");
+        left_beacon = hardwareMap.servo.get("left_beacon");
+        right_beacon = hardwareMap.servo.get("right_beacon");
+        left_beacon.setPosition(0);
+        right_beacon.setPosition(0);
+        left_color = hardwareMap.colorSensor.get("left_color");
+        right_color = hardwareMap.colorSensor.get("right_color");
+        right_color.enableLed(false);
+        left_color.enableLed(false);
+        left_color.setI2cAddress(colorAddress);
+        right_color.setI2cAddress(colorAddress);
         // Wait for the game to start (driver presses PLAY)
         gyro.calibrate();
         while (gyro.isCalibrating()) {
@@ -86,9 +99,9 @@ public class  Beacon extends OpMode {
 
 
         if(gamepad1.a){
-            armServo.setPosition(.15);
+            right_beacon.setPosition(.15);
         }else{
-            armServo.setPosition(0);
+            right_beacon.setPosition(0);
         }
         float throttle = -gamepad1.left_stick_y;
         float direction = gamepad1.left_stick_x;
@@ -100,14 +113,17 @@ public class  Beacon extends OpMode {
 
         //right = (float) scaleInput(right);
         //left = (float) scaleInput(left);
-        //motorRight.setPower(left);
-        //motorLeft.setPower(right);
+        //left_drive1.setPower(left);
+        //left_drive2.setPower(left);
+        //right_drive1.setPower(right);
+        //right_drive2.setPower(right);
 
-        telemetry.addData("red", beaconSeeker.red());
-        telemetry.addData("blue", beaconSeeker.blue());
-        if (beaconSeeker.red() > 1.5) {
+        telemetry.addData("red", right_color.red());
+        telemetry.addData("blue", right_color.blue());
+        if (right_color.red() > 1.5) {
             color = "red";
-        } else if (beaconSeeker.blue() > 1.5) {
+
+        } else if (right_color.blue() > 1.5) {
             color = "blue";
         }
 

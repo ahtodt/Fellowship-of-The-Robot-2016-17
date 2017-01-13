@@ -38,7 +38,7 @@ public class FirstTele extends OpMode {
     // boolean rightReset = false;
     // boolean leftReset = false;
     // boolean lifting = false;
-   // boolean liftReset = false;
+    // boolean liftReset = false;
     int posCounter = 0;
     boolean isPressed = false;
     boolean isPressed2 = false;
