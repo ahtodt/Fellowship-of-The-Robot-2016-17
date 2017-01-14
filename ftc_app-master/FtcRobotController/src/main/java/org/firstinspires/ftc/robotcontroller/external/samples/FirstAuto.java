@@ -99,7 +99,12 @@ public class FirstAuto extends LinearOpMode {
     ColorSensor floor_seeker;
     ColorSensor left_color;
     ColorSensor right_color;
-
+    public void stopMotors(){
+        right_drive1.setPower(0);
+        left_drive1.setPower(0);
+        right_drive2.setPower(0);
+        left_drive2.setPower(0);
+    }
 
     @Override
     public void runOpMode() {
@@ -229,13 +234,9 @@ public class FirstAuto extends LinearOpMode {
                  right_drive1.setPower(0.1);
                  right_drive2.setPower(0.1);
                  //wallSense();
-             }while (floor_seeker.red()>5){
-                left_drive1.setPower(0);
-                left_drive2.setPower(0);
-                right_drive1.setPower(0);
-                right_drive2.setPower(0);
+             }stopMotors();
                 //redBeaconPress();
-            }
+
         }
 
         /*public void wallSense(){

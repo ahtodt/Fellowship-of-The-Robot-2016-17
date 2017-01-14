@@ -312,7 +312,7 @@
             public void loop() {
 
                 float throttle = -gamepad1.left_stick_y*Math.abs(gamepad1.left_stick_y);
-                float direction = (gamepad1.left_stick_x/3)*2;
+                float direction = (gamepad1.right_stick_x/3)*2;
                 float right = throttle - direction;
                 float left = throttle + direction;
                 right = Range.clip(right, -1, 1);

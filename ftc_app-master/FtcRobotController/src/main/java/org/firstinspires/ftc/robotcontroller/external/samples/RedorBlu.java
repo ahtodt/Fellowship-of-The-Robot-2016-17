@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 
-public class LastTele extends OpMode {
+public class RedorBlu extends OpMode {
     String color;
 
 
