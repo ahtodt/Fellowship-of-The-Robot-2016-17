@@ -79,6 +79,9 @@
 
             public void posB() {
                 // scoop
+                cap_ball_lift.setPower(0.5);
+                cap_ball_lift.setMaxSpeed(1680);
+                cap_ball_lift.setTargetPosition(120);
                 cap_ball_tilt.setPower(0.3);
                 cap_ball_tilt.setTargetPosition(370);
             }
@@ -102,11 +105,11 @@
                 // drop
                 cap_ball_lift.setPower(1);
                 cap_ball_lift.setMaxSpeed(1680);
-                cap_ball_lift.setTargetPosition(9750);
+                cap_ball_lift.setTargetPosition(10000);
             }
 
             public void posA2(){
-                cap_ball_lift.setPower(0.5);
+                cap_ball_lift.setPower(1);
                 cap_ball_lift.setMaxSpeed(1680);
                 cap_ball_lift.setTargetPosition(120);
             }
@@ -242,7 +245,12 @@
                 right_drive1=hardwareMap.dcMotor.get("right_drive1");
                 right_drive2=hardwareMap.dcMotor.get("right_drive2");
                 left_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
-                right_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
+                right_drive2.setDirection(DcMotorSimple.Direction.REVERSE);
+                left_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                left_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                right_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                right_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         /*cap_ball_lift = hardwareMap.dcMotor.get("cap_ball_lift");
         cap_ball_tilt = hardwareMap.dcMotor.get("cap_ball_tilt");*/
                 particle_collector = hardwareMap.dcMotor.get("particle_collector");
@@ -259,6 +267,7 @@
                 cap_ball_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                cap_ball_tilt.setPower(0.3);
                 cap_ball_lift.setPower(0.5);
                 cap_ball_lift.setMaxSpeed(1680);
                 cap_ball_lift.setTargetPosition(120);
@@ -301,16 +310,35 @@
              */
             @Override
             public void loop() {
-                float throttle = -gamepad1.left_stick_y;
-                float direction = gamepad1.left_stick_x;
+
+                float throttle = -gamepad1.left_stick_y*Math.abs(gamepad1.left_stick_y);
+                float direction = (gamepad1.left_stick_x/3)*2;
                 float right = throttle - direction;
                 float left = throttle + direction;
                 right = Range.clip(right, -1, 1);
                 left = Range.clip(left, -1, 1);
+                setPowerRight(right*Math.abs(right)*.3);
+                setPowerLeft(left*Math.abs(left)*.3);
+                /*int leftSpeed = (int)(800*left);
+                int rightSpeed = (int)(800*right);
 
-                setPowerLeft(left);
-                setPowerRight(right);
-
+               if(leftSpeed>0) {
+                   setPowerLeft(1);
+               }else if(leftSpeed<0) {
+                   setPowerLeft(-1);
+               }
+                if(rightSpeed>0) {
+                    setPowerRight(1);
+                }else if(rightSpeed<0){
+                    setPowerRight(-1);
+                }
+                left_drive1.setMaxSpeed(Math.abs(leftSpeed));
+                left_drive2.setMaxSpeed(Math.abs(leftSpeed));
+                right_drive1.setMaxSpeed(Math.abs(rightSpeed));
+                right_drive2.setMaxSpeed(Math.abs(rightSpeed));
+                telemetry.addData("left", leftSpeed);
+                telemetry.addData("right", rightSpeed);
+                */
                 if(gamepad2.x){
                     buttonPressed = true;
                     mortar_gate.setPosition(mortarGateDown);
@@ -336,24 +364,24 @@
                 }
                 if(isPressed&&!gamepad2.b){
                     isPressed = false;
-                    posCheck();
                     posCounter ++;
+                    posCheck();
                     if(posCounter > 7){
                         posCounter = 0;
                     }
                 }
 
-               /* if(gamepad2.x){
+                if(gamepad2.y){
                     isPressed2 = true;
                 }
-                if(isPressed2&&!gamepad2.x){
+                if(isPressed2&&!gamepad2.y){
                     isPressed2 = false;
-                    posCheck();
                     posCounter --;
+                    posCheck();
                     if(posCounter < -1){
                         posCounter = 0;
                     }
-                } */
+                }
 
                 if(gamepad2.start){
                     posEnd();

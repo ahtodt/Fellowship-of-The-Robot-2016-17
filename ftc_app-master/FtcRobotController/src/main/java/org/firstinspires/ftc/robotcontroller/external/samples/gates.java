@@ -96,10 +96,10 @@ public class gates extends OpMode{
 
     public void shootingSequence(){
         if(shots>1){
-            mortarFreeState = 1305;
+            mortarFreeState = 1320;
             mortarReadyState = 1305;
         }else{
-            mortarFreeState = 1290;
+            mortarFreeState = 1320;
             mortarReadyState = 1290;
         }
         if(shots<shooterCount) {
