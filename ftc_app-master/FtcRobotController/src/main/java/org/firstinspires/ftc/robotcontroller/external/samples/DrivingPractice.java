@@ -245,7 +245,7 @@
                 right_drive1=hardwareMap.dcMotor.get("right_drive1");
                 right_drive2=hardwareMap.dcMotor.get("right_drive2");
                 left_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
-                right_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
+                right_drive2.setDirection(DcMotorSimple.Direction.REVERSE);
         /*cap_ball_lift = hardwareMap.dcMotor.get("cap_ball_lift");
         cap_ball_tilt = hardwareMap.dcMotor.get("cap_ball_tilt");*/
                 particle_collector = hardwareMap.dcMotor.get("particle_collector");
@@ -312,8 +312,8 @@
                 right = Range.clip(right, -1, 1);
                 left = Range.clip(left, -1, 1);
 
-                setPowerLeft(left);
-                setPowerRight(right);
+                setPowerLeft(left*.2);
+                setPowerRight(right*.2);
 
                 if(gamepad2.x){
                     buttonPressed = true;
