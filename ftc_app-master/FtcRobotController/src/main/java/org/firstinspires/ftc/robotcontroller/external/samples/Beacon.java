@@ -84,8 +84,6 @@ public class  Beacon extends OpMode {
         right_beacon.setPosition(0);
         left_color = hardwareMap.colorSensor.get("left_color");
         right_color = hardwareMap.colorSensor.get("right_color");
-        right_color.enableLed(false);
-        left_color.enableLed(false);
         left_color.setI2cAddress(colorAddress);
         right_color.setI2cAddress(colorAddress);
         // Wait for the game to start (driver presses PLAY)
