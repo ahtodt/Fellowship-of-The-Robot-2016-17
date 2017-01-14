@@ -41,12 +41,18 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+
+import java.util.concurrent.locks.Lock;
+
 import static java.lang.Math.*;
+
+
 
 
 public class FirstAuto extends LinearOpMode {
@@ -102,7 +108,7 @@ public class FirstAuto extends LinearOpMode {
         I2cAddr colorAddress1 = I2cAddr.create8bit(0x01);
         I2cAddr colorAddress2 = I2cAddr.create8bit(0x04);
         I2cAddr colorAddress3 = I2cAddr.create8bit(0x07);
-        left_color.setI2cAddress(colorAddress1); //need to do this with the range sensor?
+        left_color.setI2cAddress(colorAddress1);
         right_color.setI2cAddress(colorAddress2);
         floor_seeker.setI2cAddress(colorAddress3);
         left_color = hardwareMap.colorSensor.get("left_color");
@@ -144,6 +150,7 @@ public class FirstAuto extends LinearOpMode {
 
         waitForStart();
         runtime.reset();
+
 
         //positionToShoot();
         //shootBall();
@@ -216,9 +223,13 @@ public class FirstAuto extends LinearOpMode {
         }*/
 
          public void findWhiteLine(){
-             if(floor_seeker.green()<5){
-                 wallSense();
-             }else if (floor_seeker.green()>5){
+             while(floor_seeker.red()<5){
+                 left_drive1.setPower(0.1);
+                 left_drive2.setPower(0.1);
+                 right_drive1.setPower(0.1);
+                 right_drive2.setPower(0.1);
+                 //wallSense();
+             }while (floor_seeker.red()>5){
                 left_drive1.setPower(0);
                 left_drive2.setPower(0);
                 right_drive1.setPower(0);
@@ -227,19 +238,19 @@ public class FirstAuto extends LinearOpMode {
             }
         }
 
-        public void wallSense(){
-            if(right_range.cmUltrasonic()<20){
-                right_drive1.setPower(.25);
-                right_drive2.setPower(.25);
-                left_drive1.setPower(.25);
-                left_drive2.setPower(.25);
-            }else if(right_range.cmUltrasonic()>=20){
-                left_drive1.setPower(.25);
-                left_drive2.setPower(.25);
-                right_drive1.setPower(.25);
-                right_drive2.setPower(.25);
+        /*public void wallSense(){
+            while(right_range.cmUltrasonic()<20){
+                right_drive1.setPower(.01);
+                right_drive2.setPower(.01);
+                left_drive1.setPower(.01);
+                left_drive2.setPower(.01);
+            }while(right_range.cmUltrasonic()>=20){
+                left_drive1.setPower(.01);
+                left_drive2.setPower(.01);
+                right_drive1.setPower(.01);
+                right_drive2.setPower(.01);
             }
-        }
+        }*/
 
         //right_drive1.setPower(0);
         //right_drive2.setPower(0);
@@ -248,7 +259,7 @@ public class FirstAuto extends LinearOpMode {
 
     }
 
-    /*public void redBeaconPress(){
+        /*public void redBeaconPress(){
             right_drive1.setMaxSpeed(0);
             right_drive2.setMaxSpeed(0);
             left_drive1.setMaxSpeed(0);
@@ -265,10 +276,10 @@ public class FirstAuto extends LinearOpMode {
     */
 
         /*public void continueForward(){
-            if(floor_seeker.green()<5){
+            if(floor_seeker.red()<5){
                 wallSense();
             }
-            else if (floor_seeker.green()>5){
+            else if (floor_seeker.red()>5){
                 secondBeaconPress();
             }
         }*/
