@@ -105,11 +105,11 @@
                 // drop
                 cap_ball_lift.setPower(1);
                 cap_ball_lift.setMaxSpeed(1680);
-                cap_ball_lift.setTargetPosition(9750);
+                cap_ball_lift.setTargetPosition(10000);
             }
 
             public void posA2(){
-                cap_ball_lift.setPower(0.5);
+                cap_ball_lift.setPower(1);
                 cap_ball_lift.setMaxSpeed(1680);
                 cap_ball_lift.setTargetPosition(120);
             }
