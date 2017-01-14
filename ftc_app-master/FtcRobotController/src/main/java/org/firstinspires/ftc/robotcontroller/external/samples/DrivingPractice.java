@@ -79,6 +79,9 @@
 
             public void posB() {
                 // scoop
+                cap_ball_lift.setPower(0.5);
+                cap_ball_lift.setMaxSpeed(1680);
+                cap_ball_lift.setTargetPosition(120);
                 cap_ball_tilt.setPower(0.3);
                 cap_ball_tilt.setTargetPosition(370);
             }
@@ -336,24 +339,24 @@
                 }
                 if(isPressed&&!gamepad2.b){
                     isPressed = false;
-                    posCheck();
                     posCounter ++;
+                    posCheck();
                     if(posCounter > 7){
                         posCounter = 0;
                     }
                 }
 
-               /* if(gamepad2.x){
+                if(gamepad2.y){
                     isPressed2 = true;
                 }
-                if(isPressed2&&!gamepad2.x){
+                if(isPressed2&&!gamepad2.y){
                     isPressed2 = false;
-                    posCheck();
                     posCounter --;
+                    posCheck();
                     if(posCounter < -1){
                         posCounter = 0;
                     }
-                } */
+                }
 
                 if(gamepad2.start){
                     posEnd();
