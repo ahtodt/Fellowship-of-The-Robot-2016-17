@@ -13,8 +13,10 @@
         import com.qualcomm.robotcore.util.Range;
         import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 
+        import java.util.concurrent.TimeUnit;
 
-public class FirstTele extends OpMode {
+
+        public class FirstTele extends OpMode {
     double left;
     double right;
     //DcMotor left_drive1;
@@ -69,58 +71,83 @@ public class FirstTele extends OpMode {
         // drop cam before slide goes down
         cap_ball_tilt.setPower(0.3);
         cap_ball_tilt.setTargetPosition(40);
-        cap_ball_lift.setPower(0.2);
-        cap_ball_lift.setTargetPosition(2957);
     }
 
     public void posB() {
         // scoop
         cap_ball_tilt.setPower(0.3);
-        cap_ball_tilt.setTargetPosition(400);
+        cap_ball_tilt.setTargetPosition(360);
     }
 
     public void posC(){
         // hold
-        cap_ball_tilt.setPower(0.3);
-        cap_ball_tilt.setTargetPosition(300);
+        cap_ball_tilt.setPower(0);
+        cap_ball_lift.setPower(0.5);
+        cap_ball_lift.setMaxSpeed(1680);
+        cap_ball_lift.setTargetPosition(2682);
     }
 
     public void posD(){
         // raised
-        cap_ball_tilt.setPower(0.3);
-        cap_ball_tilt.setTargetPosition(300);
+        cap_ball_lift.setPower(1);
+        cap_ball_lift.setMaxSpeed(1680);
+        cap_ball_lift.setTargetPosition(14760);
     }
 
     public void posE(){
         // drop
-        cap_ball_tilt.setPower(0.3);
-        cap_ball_tilt.setTargetPosition(400);
+        cap_ball_lift.setPower(1);
+        cap_ball_lift.setMaxSpeed(1680);
+        cap_ball_lift.setTargetPosition(9750);
+    }
+
+    public void posA2(){
+        cap_ball_lift.setPower(0.5);
+        cap_ball_lift.setMaxSpeed(1680);
+        cap_ball_lift.setTargetPosition(120);
+    }
+
+    public void posEnd(){
+
+        posCounter = 0;
+
+        cap_ball_lift.setPower(0.5);
+        cap_ball_lift.setMaxSpeed(1680);
+        cap_ball_lift.setTargetPosition(0);
+        cap_ball_tilt.setPower(0.2);
+        cap_ball_tilt.setTargetPosition(0);
+
     }
 
     public void posReset(){
         // posCounter set one below because of incrementing when button pressed
-        posCounter = -1;
+        posCounter = 0;
+        posCheck();
     }
 
     public void posCheck(){
         if(posCounter == 0){
-            posA();
+            posA2();
         }
         if(posCounter == 1){
-            posB();
+            posA();
         }
         if(posCounter == 2){
-            posC();
+            posB();
         }
         if(posCounter == 3){
-            posD();
+            posC();
         }
         if(posCounter == 4){
+            posD();
+        }
+        if(posCounter == 5){
             posE();
         }
-        if(posCounter == 5) {
+        if(posCounter == 6) {
             posReset();
         }
+        telemetry.addData("Position",posCounter);
     }
 
     /*
@@ -145,6 +172,9 @@ public class FirstTele extends OpMode {
         cap_ball_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        cap_ball_lift.setPower(0.5);
+        cap_ball_lift.setMaxSpeed(1680);
+        cap_ball_lift.setTargetPosition(120);
       /*  particle_collector = hardwareMap.dcMotor.get("particle_collector");
         mortar = hardwareMap.dcMotor.get("mortar");
         left_beacon=hardwareMap.servo.get("left_beacon");
@@ -243,25 +273,27 @@ public class FirstTele extends OpMode {
         }
         if(isPressed&&!gamepad2.b){
             isPressed = false;
-            telemetry.addData("Position",posCounter);
             posCheck();
             posCounter ++;
-            if(posCounter > 6){
+            if(posCounter > 7){
                 posCounter = 0;
             }
         }
 
-        if(gamepad2.x){
+      if(gamepad2.x){
             isPressed2 = true;
         }
         if(isPressed2&&!gamepad2.x){
             isPressed2 = false;
-            telemetry.addData("Position",posCounter);
             posCheck();
             posCounter --;
             if(posCounter < -1){
-                posCounter = -1;
+                posCounter = 0;
             }
+        }
+
+        if(gamepad2.start){
+            posEnd();
         }
 
 
