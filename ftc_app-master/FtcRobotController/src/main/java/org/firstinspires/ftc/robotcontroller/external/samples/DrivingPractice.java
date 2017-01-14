@@ -262,6 +262,7 @@
                 cap_ball_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                cap_ball_tilt.setPower(0.3);
                 cap_ball_lift.setPower(0.5);
                 cap_ball_lift.setMaxSpeed(1680);
                 cap_ball_lift.setTargetPosition(120);
