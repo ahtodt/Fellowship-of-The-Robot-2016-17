@@ -59,6 +59,12 @@ public class FirstAuto extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     //DcMotor leftMotor = null;
     //DcMotor rightMotor = null;
+   I2cAddr leftColorI2c = I2cAddr.create8bit(0x4c);
+    I2cAddr floorI2c = I2cAddr.create8bit(0x70);
+    I2cAddr rightColorI2c = I2cAddr.create8bit(0x3c);
+    I2cAddr frontRangeI2c = I2cAddr.create8bit(0x44);
+    I2cAddr rightRangeI2c = I2cAddr.create8bit(0x34);
+    I2cAddr leftRangeI2c= I2cAddr.create8bit(0x28);
     double left;
     double right;
     double turnTolerance = 1;
@@ -113,21 +119,19 @@ public class FirstAuto extends LinearOpMode {
         left_color = hardwareMap.colorSensor.get("left_color");
         right_color = hardwareMap.colorSensor.get("right_color");
         floor_seeker = hardwareMap.colorSensor.get("floor_seeker");
-        I2cAddr colorAddress1 = I2cAddr.create8bit(0x01);
-        I2cAddr colorAddress2 = I2cAddr.create8bit(0x04);
-        I2cAddr colorAddress3 = I2cAddr.create8bit(0x07);
-        left_color.setI2cAddress(colorAddress1);
-        right_color.setI2cAddress(colorAddress2);
-        floor_seeker.setI2cAddress(colorAddress3);
-        I2cAddr rangeAddress1 = I2cAddr.create8bit(0x02);
-        I2cAddr rangeAddress2 = I2cAddr.create8bit(0x05);
-        I2cAddr rangeAddress3 = I2cAddr.create8bit(0x08);
+        left_color.setI2cAddress(leftColorI2c);
+        right_color.setI2cAddress(rightColorI2c);
+        floor_seeker.setI2cAddress(floorI2c);
+        floor_seeker.enableLed(false);
+        floor_seeker.enableLed(true);
+        right_color.enableLed(false);
+        left_color.enableLed(false);
         right_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "right_range");
         left_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "left_range");
         front_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "front_range");
-        left_range.setI2cAddress(rangeAddress1);
-        right_range.setI2cAddress(rangeAddress2);
-        front_range.setI2cAddress(rangeAddress3);
+        front_range.setI2cAddress(frontRangeI2c);
+        left_range.setI2cAddress(leftRangeI2c);
+        right_range.setI2cAddress(rightRangeI2c);
         left_drive1 = hardwareMap.dcMotor.get("left_drive1");
         left_drive2 = hardwareMap.dcMotor.get("left_drive2"); 
         right_drive1 = hardwareMap.dcMotor.get("right_drive1");
@@ -156,13 +160,16 @@ public class FirstAuto extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-
+        while(true&&opModeIsActive()){
+            telemetry.addData("right", right_range.cmUltrasonic());
+            telemetry.update();
+        }
         //positionToShoot();
         //shootBall();
         //driveStraight();
         //driveToWall();
         //gyroTurn(-90);
-        findWhiteLine();
+        //findWhiteLine();
         //wallSense();
         //shoot(30);
         right_drive1.setPower(0);
@@ -228,7 +235,7 @@ public class FirstAuto extends LinearOpMode {
         }*/
 
          public void findWhiteLine(){
-             while(floor_seeker.red()<5){
+             while(right_range.cmUltrasonic()>30){
                  left_drive1.setPower(0.1);
                  left_drive2.setPower(0.1);
                  right_drive1.setPower(0.1);
