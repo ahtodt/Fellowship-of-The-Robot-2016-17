@@ -287,8 +287,8 @@
                 mortar_gate=hardwareMap.servo.get("mortar_gate");
                 magazine_cam = hardwareMap.servo.get("magazine_cam");
                 magazine_cam.setDirection(Servo.Direction.REVERSE);
-                left_beacon.setPosition(0);
-                right_beacon.setPosition(0);
+                left_beacon.setPosition(0.19);
+                right_beacon.setPosition(0.26);
                 collector_gate.setPosition(PCGateDown);
 /*        gyro=hardwareMap.gyroSensor.get("gyro");
         // Wait for the game to start (driver presses PLAY)
