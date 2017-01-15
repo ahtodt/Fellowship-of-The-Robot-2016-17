@@ -26,7 +26,7 @@ public class RedorBlu extends LinearOpMode {
     public void runOpMode() {
 
         while(!gamepad1.a || !gamepad1.x){
-            telemetry.addLine("red or blue?");`
+            telemetry.addLine("red or blue?");
         }
         if (gamepad1.a){
             color = "blue";
