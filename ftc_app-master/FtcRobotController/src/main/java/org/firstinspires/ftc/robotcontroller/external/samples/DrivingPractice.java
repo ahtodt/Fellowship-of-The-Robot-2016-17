@@ -230,6 +230,15 @@
                 }
 
             }
+
+            public void rightBeacon(){
+                right_beacon.setPosition(.41);
+            }
+
+            public void leftBeacon(){
+                left_beacon.setPosition(.34);
+            }
+
             /*
              * Code to run ONCE when the driver hits INIT
              */
@@ -278,8 +287,8 @@
                 mortar_gate=hardwareMap.servo.get("mortar_gate");
                 magazine_cam = hardwareMap.servo.get("magazine_cam");
                 magazine_cam.setDirection(Servo.Direction.REVERSE);
-                left_beacon.setPosition(0.2);
-                right_beacon.setPosition(0.3);
+                left_beacon.setPosition(0);
+                right_beacon.setPosition(0);
                 collector_gate.setPosition(PCGateDown);
 /*        gyro=hardwareMap.gyroSensor.get("gyro");
         // Wait for the game to start (driver presses PLAY)
@@ -385,6 +394,14 @@
 
                 if(gamepad2.start){
                     posEnd();
+                }
+
+                if(gamepad2.left_bumper){
+                    leftBeacon();
+                }
+
+                if(gamepad2.right_bumper){
+                    rightBeacon();
                 }
 
             }

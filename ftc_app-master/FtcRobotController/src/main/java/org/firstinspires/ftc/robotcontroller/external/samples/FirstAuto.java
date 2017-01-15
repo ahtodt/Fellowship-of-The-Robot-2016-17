@@ -59,7 +59,7 @@ public class FirstAuto extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     //DcMotor leftMotor = null;
     //DcMotor rightMotor = null;
-   I2cAddr leftColorI2c = I2cAddr.create8bit(0x4c);
+    I2cAddr leftColorI2c = I2cAddr.create8bit(0x4c);
     I2cAddr floorI2c = I2cAddr.create8bit(0x70);
     I2cAddr rightColorI2c = I2cAddr.create8bit(0x3c);
     I2cAddr frontRangeI2c = I2cAddr.create8bit(0x44);
