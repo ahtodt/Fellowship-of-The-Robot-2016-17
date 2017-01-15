@@ -160,10 +160,10 @@ public class FirstAuto extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        while(true&&opModeIsActive()){
+        /*while(true&&opModeIsActive()){
             telemetry.addData("right", right_range.cmUltrasonic());
             telemetry.update();
-        }
+        }*/
         //positionToShoot();
         //shootBall();
         //driveStraight();

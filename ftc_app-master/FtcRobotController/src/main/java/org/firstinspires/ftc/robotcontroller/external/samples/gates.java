@@ -96,10 +96,10 @@ public class gates extends OpMode{
 
     public void shootingSequence(){
         if(shots>1){
-            mortarFreeState = 1320;
+            mortarFreeState = 1305;
             mortarReadyState = 1305;
         }else{
-            mortarFreeState = 1320;
+            mortarFreeState = 1290;
             mortarReadyState = 1290;
         }
         if(shots<shooterCount) {
@@ -114,15 +114,15 @@ public class gates extends OpMode{
                     resetStartTime();
                     waitStarted = true;
                 }
-                if (waitStarted && getRuntime() > 5)
+                if(waitStarted && getRuntime() > .6){
+                    mortar_gate.setPosition(mortarGateDown);
+                }
+                if (waitStarted && getRuntime() > 1)
                 {
                     waitFinished = true;
                 }
             }
-            if(waitFinished){
 
-                mortar.setTargetPosition(mortarReadyState);
-            }
             if (waitFinished && !encoderReset&&mortar.getCurrentPosition()>=mortarFreeState) {
                 mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 mortar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -184,8 +184,8 @@ public class gates extends OpMode{
         mortar_gate=hardwareMap.servo.get("mortar_gate");
         magazine_cam = hardwareMap.servo.get("magazine_cam");
         magazine_cam.setDirection(Servo.Direction.REVERSE);
-        left_beacon.setPosition(0.2);
-        right_beacon.setPosition(0.3);
+        left_beacon.setPosition(0.19);
+        right_beacon.setPosition(0.26);
         collector_gate.setPosition(PCGateDown);
 /*        gyro=hardwareMap.gyroSensor.get("gyro");
         // Wait for the game to start (driver presses PLAY)
