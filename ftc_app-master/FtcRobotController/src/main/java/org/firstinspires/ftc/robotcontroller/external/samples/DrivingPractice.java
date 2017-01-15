@@ -156,7 +156,21 @@
                 }
                 telemetry.addData("Position", posCounter);
             }
+            public void vibrateCam(){
 
+                if(magazine_cam.getPosition()==camUp){
+                    magazine_cam.setPosition(camUp-.3);
+                }else if(magazine_cam.getPosition()<=(camUp-.3)){
+                    magazine_cam.setPosition(camUp);
+                }
+            }
+            public void vibrateParticleGate(){
+                if(collector_gate.getPosition()==PCGateDown-.2){
+                    collector_gate.setPosition(PCGateDown);
+                }else if(collector_gate.getPosition()<=(PCGateDown)){
+                    collector_gate.setPosition(PCGateDown-.2);
+                }
+            }
             public void stopMotors(){
                 right_drive1.setPower(0);
                 left_drive1.setPower(0);
@@ -351,6 +365,27 @@
                 telemetry.addData("left", leftSpeed);
                 telemetry.addData("right", rightSpeed);
                 */
+
+                if(gamepad2.right_trigger>triggerCutoff){
+                    //collecting mode
+                    particle_collector.setPower(1);
+                    collector_gate.setPosition(PCGateUp);
+                    mortar_gate.setPosition(mortarGateUp);
+                    magazine_cam.setPosition(camMid);
+                }
+                else if(gamepad2.left_trigger > triggerCutoff){
+                    //ejecting mode
+                    particle_collector.setPower(-1);
+                    collector_gate.setPosition(PCGateUp);
+                    magazine_cam.setPosition(camMid);        mortar_gate.setPosition(mortarGateDown);
+
+                }else{
+                    //drive/fire sequence
+                    particle_collector.setPower(0);
+                    vibrateParticleGate(); // +vibrate
+                    //sequenced with motor
+                    vibrateCam(); // + vibrate
+                }
                 if(gamepad2.x){
                     buttonPressed = true;
                     mortar_gate.setPosition(mortarGateDown);
