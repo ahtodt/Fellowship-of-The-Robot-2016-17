@@ -42,6 +42,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.DrivingPractice;
 import org.firstinspires.ftc.robotcontroller.external.samples.FirstAuto;
 import org.firstinspires.ftc.robotcontroller.external.samples.FirstTele;
 import org.firstinspires.ftc.robotcontroller.external.samples.ParticleCollector;
+import org.firstinspires.ftc.robotcontroller.external.samples.RedorBlu;
 import org.firstinspires.ftc.robotcontroller.external.samples.gates;
 import org.firstinspires.ftc.robotcontroller.external.samples.mortar;
 
@@ -98,5 +99,6 @@ public class FtcOpModeRegister implements OpModeRegister {
         manager.register("ParticleCollector", ParticleCollector.class);
         manager.register("Gates", gates.class);
         manager.register("DrivingPractice", DrivingPractice.class);
+        manager.register("RedorBlu", RedorBlu.class);
     }
 }
