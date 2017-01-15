@@ -113,15 +113,17 @@ public class FirstAuto extends LinearOpMode {
         left_color = hardwareMap.colorSensor.get("left_color");
         right_color = hardwareMap.colorSensor.get("right_color");
         floor_seeker = hardwareMap.colorSensor.get("floor_seeker");
-        I2cAddr colorAddress1 = I2cAddr.create8bit(0x01);
-        I2cAddr colorAddress2 = I2cAddr.create8bit(0x04);
-        I2cAddr colorAddress3 = I2cAddr.create8bit(0x07);
+        I2cAddr colorAddress1 = I2cAddr.create8bit(0x16);
+        I2cAddr colorAddress2 = I2cAddr.create8bit(0x20);
+        I2cAddr colorAddress3 = I2cAddr.create8bit(0x24);
         left_color.setI2cAddress(colorAddress1);
         right_color.setI2cAddress(colorAddress2);
-        floor_seeker.setI2cAddress(colorAddress3);
-        I2cAddr rangeAddress1 = I2cAddr.create8bit(0x02);
-        I2cAddr rangeAddress2 = I2cAddr.create8bit(0x05);
-        I2cAddr rangeAddress3 = I2cAddr.create8bit(0x08);
+        floor_seeker.enableLed(false);
+        floor_seeker.enableLed(true);
+
+        I2cAddr rangeAddress1 = I2cAddr.create8bit(0x17);
+        I2cAddr rangeAddress2 = I2cAddr.create8bit(0x21);
+        I2cAddr rangeAddress3 = I2cAddr.create8bit(0x25);
         right_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "right_range");
         left_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "left_range");
         front_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "front_range");
@@ -155,7 +157,10 @@ public class FirstAuto extends LinearOpMode {
 
         waitForStart();
         runtime.reset();
-
+        while(true&&opModeIsActive()){
+            telemetry.addData("blrg", floor_seeker.blue());
+            telemetry.update();
+        }
 
         //positionToShoot();
         //shootBall();
@@ -228,11 +233,12 @@ public class FirstAuto extends LinearOpMode {
         }*/
 
          public void findWhiteLine(){
-             while(floor_seeker.red()<5){
+             while(floor_seeker.blue()<12){
                  left_drive1.setPower(0.1);
                  left_drive2.setPower(0.1);
                  right_drive1.setPower(0.1);
                  right_drive2.setPower(0.1);
+                 telemetry.addData("sensor", floor_seeker.blue());
                  //wallSense();
              }stopMotors();
                 //redBeaconPress();
