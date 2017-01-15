@@ -154,7 +154,7 @@
                 if(posCounter == 6) {
                     posReset();
                 }
-                telemetry.addData("Position",posCounter);
+                telemetry.addData("Position", posCounter);
             }
 
             public void stopMotors(){
@@ -192,19 +192,21 @@
                         mortar.setTargetPosition(mortarFreeState);
                     }
                     if (mortar.getCurrentPosition() >= mortarFreeState && !waitFinished) {
+                        mortar_gate.setPosition(mortarGateUp);
                         if (!waitStarted) {
+
                             resetStartTime();
                             waitStarted = true;
                         }
-                        if (waitStarted && getRuntime() > 1);
+                        if(waitStarted && getRuntime() > .6){
+                            mortar_gate.setPosition(mortarGateDown);
+                        }
+                        if (waitStarted && getRuntime() > 1)
                         {
-
                             waitFinished = true;
                         }
                     }
-                    if(waitFinished){
-                        mortar.setTargetPosition(mortarReadyState);
-                    }
+
                     if (waitFinished && !encoderReset&&mortar.getCurrentPosition()>=mortarFreeState) {
                         mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                         mortar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -220,6 +222,7 @@
                         waitFinished = false;
                         mortarReset = false;
                         encoderReset = false;
+                        mortar_gate.setPosition(mortarGateDown);
 
                     }
                 }
