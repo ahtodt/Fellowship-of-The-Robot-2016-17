@@ -235,11 +235,12 @@ public class FirstAuto extends LinearOpMode {
         }*/
 
          public void findWhiteLine(){
-             while(right_range.cmUltrasonic()>30){
+             while(floor_seeker.blue()<12){
                  left_drive1.setPower(0.1);
                  left_drive2.setPower(0.1);
                  right_drive1.setPower(0.1);
                  right_drive2.setPower(0.1);
+                 telemetry.addData("sensor", floor_seeker.blue());
                  //wallSense();
              }stopMotors();
                 //redBeaconPress();
