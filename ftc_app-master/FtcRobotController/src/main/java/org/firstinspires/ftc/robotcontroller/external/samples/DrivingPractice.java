@@ -248,13 +248,6 @@
 
             }
 
-            public void rightBeacon(){
-                right_beacon.setPosition(.41);
-            }
-
-            public void leftBeacon(){
-                left_beacon.setPosition(.34);
-            }
 
             /*
              * Code to run ONCE when the driver hits INIT
@@ -337,14 +330,14 @@
             @Override
             public void loop() {
 
-                float throttle = -gamepad1.left_stick_y*Math.abs(gamepad1.left_stick_y);
-                float direction = (gamepad1.right_stick_x/3)*2;
+                float throttle = -gamepad1.left_stick_y * Math.abs(gamepad1.left_stick_y);
+                float direction = (gamepad1.right_stick_x / 3) * 2;
                 float right = throttle - direction;
                 float left = throttle + direction;
                 right = Range.clip(right, -1, 1);
                 left = Range.clip(left, -1, 1);
-                setPowerRight(right*Math.abs(right)*.3);
-                setPowerLeft(left*Math.abs(left)*.3);
+                setPowerRight(right * Math.abs(right) * .3);
+                setPowerLeft(left * Math.abs(left) * .3);
                 /*int leftSpeed = (int)(800*left);
                 int rightSpeed = (int)(800*right);
 
@@ -390,71 +383,71 @@
                     buttonPressed = true;
                     mortar_gate.setPosition(mortarGateDown);
                 }
-                if(buttonPressed&&!gamepad2.x){
+                if (buttonPressed && !gamepad2.x) {
                     shooterCount++;
                     buttonPressed = false;
                     cock();
                 }
-                if(gamepad2.a&&!mortarReset){
+                if (gamepad2.a && !mortarReset) {
 
                     startFiring = true;
                 }
-                if(startFiring){
+                if (startFiring) {
                     shootingSequence();
                 }
                 telemetry.addData("mortar", mortar.getCurrentPosition());
                 telemetry.addData("shooterCount", shooterCount);
                 telemetry.addData("runtime", getRuntime());
 
-                if(gamepad2.b){
+                if (gamepad2.b) {
                     isPressed = true;
                 }
-                if(isPressed&&!gamepad2.b){
+                if (isPressed && !gamepad2.b) {
                     isPressed = false;
-                    posCounter ++;
+                    posCounter++;
                     posCheck();
-                    if(posCounter > 7){
+                    if (posCounter > 7) {
                         posCounter = 0;
                     }
                 }
 
-                if(gamepad2.y){
+                if (gamepad2.y) {
                     isPressed2 = true;
                 }
-                if(isPressed2&&!gamepad2.y){
+                if (isPressed2 && !gamepad2.y) {
                     isPressed2 = false;
-                    posCounter --;
+                    posCounter--;
                     posCheck();
-                    if(posCounter < -1){
+                    if (posCounter < -1) {
                         posCounter = 0;
                     }
                 }
 
-                if(gamepad2.start){
+                if (gamepad2.start) {
                     posEnd();
                 }
 
-                if(gamepad2.left_bumper){
-                    leftBeacon();
+                if (gamepad2.left_bumper) {
+                    left_beacon.setPosition(.34);
+                }
+                else{
+                    left_beacon.setPosition(.19);
                 }
 
-                if(gamepad2.right_bumper){
-                    rightBeacon();
+                if (gamepad2.right_bumper) {
+                    right_beacon.setPosition(.41);
                 }
-
+                else{
+                    right_beacon.setPosition(.26);
+                }
             }
-
-
-
-
-
             /*
              * Code to run ONCE after the driver hits STOP
              */
                 @Override
-                public void stop() {
-                }
+                public void stop(){
 
+                }
             }
 
 
