@@ -81,7 +81,7 @@
                 // scoop
                 cap_ball_lift.setPower(0.5);
                 cap_ball_lift.setMaxSpeed(1680);
-                cap_ball_lift.setTargetPosition(120);
+                cap_ball_lift.setTargetPosition(-121);
                 cap_ball_tilt.setPower(0.3);
                 cap_ball_tilt.setTargetPosition(370);
             }
@@ -91,27 +91,27 @@
                 cap_ball_tilt.setPower(0);
                 cap_ball_lift.setPower(0.5);
                 cap_ball_lift.setMaxSpeed(1680);
-                cap_ball_lift.setTargetPosition(2682);
+                cap_ball_lift.setTargetPosition(-2714);
             }
 
             public void posD(){
                 // raised
                 cap_ball_lift.setPower(1);
                 cap_ball_lift.setMaxSpeed(1680);
-                cap_ball_lift.setTargetPosition(14760);
+                cap_ball_lift.setTargetPosition(-14934);
             }
 
             public void posE(){
                 // drop
                 cap_ball_lift.setPower(1);
                 cap_ball_lift.setMaxSpeed(1680);
-                cap_ball_lift.setTargetPosition(12380);
+                cap_ball_lift.setTargetPosition(-12526);
             }
 
             public void posA2(){
                 cap_ball_lift.setPower(1);
                 cap_ball_lift.setMaxSpeed(1680);
-                cap_ball_lift.setTargetPosition(120);
+                cap_ball_lift.setTargetPosition(-121);
             }
 
             public void posEnd(){
@@ -289,7 +289,7 @@
                 cap_ball_tilt.setPower(0.3);
                 cap_ball_lift.setPower(0.5);
                 cap_ball_lift.setMaxSpeed(1680);
-                cap_ball_lift.setTargetPosition(120);
+                cap_ball_lift.setTargetPosition(-121);
                 left_beacon=hardwareMap.servo.get("left_beacon");
                 right_beacon=hardwareMap.servo.get("right_beacon");
                 right_beacon.setDirection(Servo.Direction.REVERSE);
