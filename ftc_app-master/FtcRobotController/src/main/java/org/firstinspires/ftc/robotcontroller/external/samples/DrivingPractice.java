@@ -68,6 +68,10 @@
             boolean encoderReset = false;
             boolean startFiring = false;
             boolean cocked = false;
+            boolean backwardsMode = false;
+            boolean bumperPressed = false;
+            boolean precisionMode = false;
+            boolean bumperPrecision = false;
             GyroSensor gyro;
 
             public void posA() {
@@ -97,7 +101,7 @@
             public void posD(){
                 // raised
                 cap_ball_lift.setPower(1);
-                cap_ball_lift.setMaxSpeed(1680);
+                cap_ball_lift.setMaxSpeed(3000);
                 cap_ball_lift.setTargetPosition(14760);
             }
 
@@ -159,8 +163,8 @@
             public void vibrateCam(){
 
                 if(magazine_cam.getPosition()==camUp){
-                    magazine_cam.setPosition(camUp-.3);
-                }else if(magazine_cam.getPosition()<=(camUp-.3)){
+                    magazine_cam.setPosition(camUp-.25);
+                }else if(magazine_cam.getPosition()<=(camUp-.25)){
                     magazine_cam.setPosition(camUp);
                 }
             }
@@ -194,18 +198,16 @@
             }
             public void shootingSequence(){
                 if(shots>1){
-                    mortarFreeState = 1305;
-                    mortarReadyState = 1305;
-                }else{
-                    mortarFreeState = 1290;
-                    mortarReadyState = 1290;
+                    mortarFreeState = 1440;
+                }else {
+                    mortarFreeState = 1440;
                 }
                 if(shots<shooterCount) {
-                    if (mortar.getCurrentPosition() < mortarFreeState && !waitStarted) {
+                    if (mortar.getCurrentPosition() < (mortarFreeState) && !waitStarted) {
                         mortar.setPower(firingSpeed);
                         mortar.setTargetPosition(mortarFreeState);
                     }
-                    if (mortar.getCurrentPosition() >= mortarFreeState && !waitFinished) {
+                    if (mortar.getCurrentPosition() >= (mortarFreeState-7) && !waitFinished) {
                         mortar_gate.setPosition(mortarGateUp);
                         if (!waitStarted) {
 
@@ -221,7 +223,7 @@
                         }
                     }
 
-                    if (waitFinished && !encoderReset&&mortar.getCurrentPosition()>=mortarFreeState) {
+                    if (waitFinished && !encoderReset&&mortar.getCurrentPosition()>=(mortarFreeState-7)) {
                         mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                         mortar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                         encoderReset = true;
@@ -330,34 +332,102 @@
             @Override
             public void loop() {
 
-                float throttle = -gamepad1.left_stick_y * Math.abs(gamepad1.left_stick_y);
-                float direction = (gamepad1.right_stick_x / 3) * 2;
-                float right = throttle - direction;
-                float left = throttle + direction;
-                right = Range.clip(right, -1, 1);
-                left = Range.clip(left, -1, 1);
-                setPowerRight(right * Math.abs(right) * .3);
-                setPowerLeft(left * Math.abs(left) * .3);
-                /*int leftSpeed = (int)(800*left);
-                int rightSpeed = (int)(800*right);
-
-               if(leftSpeed>0) {
-                   setPowerLeft(1);
-               }else if(leftSpeed<0) {
-                   setPowerLeft(-1);
-               }
-                if(rightSpeed>0) {
-                    setPowerRight(1);
-                }else if(rightSpeed<0){
-                    setPowerRight(-1);
+                if(gamepad1.right_bumper){
+                    bumperPressed = true;
                 }
-                left_drive1.setMaxSpeed(Math.abs(leftSpeed));
-                left_drive2.setMaxSpeed(Math.abs(leftSpeed));
-                right_drive1.setMaxSpeed(Math.abs(rightSpeed));
-                right_drive2.setMaxSpeed(Math.abs(rightSpeed));
-                telemetry.addData("left", leftSpeed);
-                telemetry.addData("right", rightSpeed);
-                */
+                if(bumperPressed && !gamepad1.right_bumper){
+                    if(backwardsMode){
+                        backwardsMode = false;
+                    }else{
+                        backwardsMode = true;
+                    }
+                    bumperPressed = false;
+
+                }
+
+
+
+                if(gamepad1.left_bumper){
+                    bumperPrecision = true;
+                }
+                if(bumperPrecision && !gamepad1.left_bumper){
+                    if(precisionMode){
+                        precisionMode = false;
+                    }else{
+                        precisionMode = true;
+                    }
+                    bumperPrecision = false;
+
+                }
+
+if(backwardsMode&&!precisionMode) {
+    float throttle = gamepad1.left_stick_y ;
+    float direction = gamepad1.right_stick_x;
+    float right = throttle - direction;
+    float left = throttle + direction;
+    right = Range.clip(right, -1, 1);
+    left = Range.clip(left, -1, 1);
+    setPowerRight(right * .3);
+    setPowerLeft(left * .3);
+
+}else if(precisionMode&&!backwardsMode) {
+    float throttle = -gamepad1.left_stick_y ;
+    float direction = gamepad1.right_stick_x ;
+    float right = throttle - direction;
+    float left = throttle + direction;
+
+    int leftSpeed = (int) (800 * left);
+    int rightSpeed = (int) (800 * right);
+
+    if (leftSpeed > 0) {
+        setPowerLeft(1);
+    } else if (leftSpeed < 0) {
+        setPowerLeft(-1);
+    }
+    if (rightSpeed > 0) {
+        setPowerRight(1);
+    } else if (rightSpeed < 0) {
+        setPowerRight(-1);
+    }
+    left_drive1.setMaxSpeed(Math.abs(leftSpeed));
+    left_drive2.setMaxSpeed(Math.abs(leftSpeed));
+    right_drive1.setMaxSpeed(Math.abs(rightSpeed));
+    right_drive2.setMaxSpeed(Math.abs(rightSpeed));
+}else if(!precisionMode&&!backwardsMode)
+{
+    float throttle = -gamepad1.left_stick_y ;
+    float direction = gamepad1.right_stick_x ;
+    float right = throttle - direction;
+    float left = throttle + direction;
+    right = Range.clip(right, -1, 1);
+    left = Range.clip(left, -1, 1);
+    setPowerRight(right * .3);
+    setPowerLeft(left * .3);
+}else if(precisionMode&&backwardsMode){
+                    float throttle = gamepad1.left_stick_y ;
+                    float direction = gamepad1.right_stick_x ;
+                    float right = throttle - direction;
+                    float left = throttle + direction;
+    int leftSpeed = (int) (800 * left);
+    int rightSpeed = (int) (800 * right);
+
+    if (leftSpeed > 0) {
+        setPowerLeft(1);
+    } else if (leftSpeed < 0) {
+        setPowerLeft(-1);
+    }
+    if (rightSpeed > 0) {
+        setPowerRight(1);
+    } else if (rightSpeed < 0) {
+        setPowerRight(-1);
+    }
+    left_drive1.setMaxSpeed(Math.abs(leftSpeed));
+    left_drive2.setMaxSpeed(Math.abs(leftSpeed));
+    right_drive1.setMaxSpeed(Math.abs(rightSpeed));
+    right_drive2.setMaxSpeed(Math.abs(rightSpeed));
+                }
+telemetry.addData("precicison", precisionMode);
+                telemetry.addData("backwards", backwardsMode);
 
                 if(gamepad2.right_trigger>triggerCutoff){
                     //collecting mode
@@ -422,7 +492,9 @@
                         posCounter = 0;
                     }
                 }
-
+                /*if(shots<1){
+                    magazine_cam.setPosition(camDown);
+                }*/
                 if (gamepad2.start) {
                     posEnd();
                 }

@@ -112,7 +112,7 @@ public class  Beacon extends OpMode {
 
 
         //right = (float) scaleInput(right);
-        //left = (float) scaleInput(left);
+                //left = (float) scaleInput(left);
         //left_drive1.setPower(left);
         //left_drive2.setPower(left);
         //right_drive1.setPower(right);
