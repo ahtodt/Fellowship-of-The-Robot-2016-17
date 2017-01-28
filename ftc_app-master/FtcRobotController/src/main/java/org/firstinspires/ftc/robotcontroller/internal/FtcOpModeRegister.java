@@ -101,6 +101,6 @@ public class FtcOpModeRegister implements OpModeRegister {
         manager.register("Gates", gates.class);
         manager.register("DrivingPractice", DrivingPractice.class);
         manager.register("RedorBlu", RedorBlu.class);
-        manager.register("Auto", Auto.class);
+        manager.register("Auto", Auto.class); //wait, drive longer, someyhing about capball
     }
 }

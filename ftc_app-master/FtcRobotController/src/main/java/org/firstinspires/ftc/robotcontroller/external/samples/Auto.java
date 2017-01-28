@@ -53,7 +53,7 @@ import java.util.concurrent.locks.Lock;
 import static java.lang.Math.*;
 
 
-
+//delay, longer drive before shoot, turn for square after shoot, only shoot one or fix the mortar
 
 public class Auto extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
@@ -83,14 +83,15 @@ public class Auto extends LinearOpMode {
     double cockingSpeed = .5;
     double mortarGateUp = .6;
     double mortarGateDown = 1;
-    double camUp = 1;
-    double camMid = .5;
-    double camDown = .3;
+    double camUp = 0;
+    double camMid = .3;
+    double camDown = .5;
+    double camZero = 1;
     double PCGateUp = .3;
     double PCGateDown = .75;
     int mortarFreeState = 1440;
     int mortarEngagedState = 300;
-    int driveDistance = (700);
+    int driveDistance = (625);
     DcMotor left_drive1;
     DcMotor right_drive1;
     DcMotor left_drive2;
@@ -135,6 +136,7 @@ public class Auto extends LinearOpMode {
         left_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         right_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         left_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        magazine_cam.setPosition(camUp);
         while (right_drive1.getCurrentPosition() < driveDistance && left_drive2.getCurrentPosition() < driveDistance) {
 
             setPowerLeft(.1);
@@ -146,27 +148,30 @@ public class Auto extends LinearOpMode {
     public void capBall() {
         while (right_drive1.getCurrentPosition() < (driveDistance * 2) && left_drive2.getCurrentPosition() < (driveDistance * 2)) {
 
-            setPowerLeft(.1);
-            setPowerRight(.1);
+            left_drive1.setPower(-1);
+            left_drive2.setPower(-1);
+            right_drive1.setPower(0);
+            right_drive2.setPower(0);
         }
         stopMotors();
 
-    }
+    } //find out how to get it to spin exactly one half circle and then have it back onto platform
 
-    public void waitForTen() {
+   public void waitForTen() {
         while ((getRuntime() < 11) && opModeIsActive()) {
         }
     }
 
     public void shootBall() {
-        magazine_cam.setPosition(camUp);
         mortar.setPower(firingSpeed);
         mortar.setTargetPosition(mortarFreeState);
+        mortar_gate.setPosition(mortarGateDown);
+        sleep(500);
         mortar_gate.setPosition(mortarGateUp);
         sleep(1000);
         mortar_gate.setPosition(mortarGateDown);
-
-
+        mortar.setPower(firingSpeed);
+        mortar.setTargetPosition(mortarFreeState * 2);
     }
 
 
@@ -228,7 +233,7 @@ public class Auto extends LinearOpMode {
         //gyro = hardwareMap.gyroSensor.get("gyro");
         collector_gate.setPosition(PCGateDown);
         mortar_gate.setPosition(mortarGateDown);
-        magazine_cam.setPosition(camDown);
+        magazine_cam.setPosition(camZero);
         /*gyro.calibrate();
         while(gyro.isCalibrating()){
             sleep(40);
@@ -236,7 +241,7 @@ public class Auto extends LinearOpMode {
 
         waitForStart();
         resetStartTime();
-        sleep(7000);
+        sleep(500);
         positionToShoot();
         shootBall();
         waitForTen();
