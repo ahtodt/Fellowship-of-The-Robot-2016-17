@@ -35,27 +35,18 @@ package org.firstinspires.ftc.robotcontroller.external.samples;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-
-import java.util.concurrent.locks.Lock;
-
-import static java.lang.Math.*;
 
 
 //delay, longer drive before shoot, turn for square after shoot, only shoot one or fix the mortar
 
-public class Auto extends LinearOpMode {
+public class AutoFar extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     //DcMotor leftMotor = null;
     //DcMotor rightMotor = null;
@@ -91,7 +82,7 @@ public class Auto extends LinearOpMode {
     double PCGateDown = .75;
     int mortarFreeState = 1440;
     int mortarEngagedState = 300;
-    int driveDistance = (625);
+    int driveDistance = (525);
     DcMotor left_drive1;
     DcMotor right_drive1;
     DcMotor left_drive2;
@@ -113,6 +104,7 @@ public class Auto extends LinearOpMode {
     ColorSensor floor_seeker;
     ColorSensor left_color;
     ColorSensor right_color;
+
 
     public void stopMotors() {
         right_drive1.setPower(0);
@@ -145,20 +137,9 @@ public class Auto extends LinearOpMode {
         stopMotors();
     }
 
-    public void capBall() {
-        while (right_drive1.getCurrentPosition() < (driveDistance * 2) && left_drive2.getCurrentPosition() < (driveDistance * 2)) {
 
-            left_drive1.setPower(-1);
-            left_drive2.setPower(-1);
-            right_drive1.setPower(0);
-            right_drive2.setPower(0);
-        }
-        stopMotors();
-
-    } //find out how to get it to spin exactly one half circle and then have it back onto platform
-
-   public void waitForTen() {
-        while ((getRuntime() < 11) && opModeIsActive()) {
+    public void waitForTen() {
+        while ((getRuntime() < 5) && opModeIsActive()) {
         }
     }
 
@@ -172,6 +153,35 @@ public class Auto extends LinearOpMode {
         mortar_gate.setPosition(mortarGateDown);
         mortar.setPower(firingSpeed);
         mortar.setTargetPosition(mortarFreeState * 2);
+    }
+
+    public void capBall() {
+        while (right_drive1.getCurrentPosition() < (driveDistance * 3)
+                //note: if you think you need to set it to *2, make it *3 and if you want *3, make it *4, etc.
+                && left_drive2.getCurrentPosition() < (driveDistance * 3)) {
+            left_drive1.setPower(.15);
+            left_drive2.setPower(.15);
+            right_drive1.setPower(.15);
+            right_drive2.setPower(.15);
+           /* while(getRuntime() < 2 ) {
+                left_drive1.setPower(-1);
+                left_drive1.setMaxSpeed(-200);
+                left_drive2.setPower(-1);
+                left_drive2.setMaxSpeed(-200);
+                right_drive1.setPower(0);
+                right_drive2.setPower(0);
+            }
+            while(gyro.getHeading() > 190) {
+                left_drive1.setPower(-1);
+                left_drive1.setMaxSpeed(-200);
+                left_drive2.setPower(-1);
+                left_drive2.setMaxSpeed(-200);
+                right_drive1.setPower(0);
+                right_drive2.setPower(0);
+            }*/
+        }
+        stopMotors();
+
     }
 
 
@@ -188,72 +198,6 @@ public class Auto extends LinearOpMode {
         //redBeaconPress();
 
     }
-
-    @Override
-    public void runOpMode() {
-        telemetry.addData("Status first", "Initialized");
-        telemetry.update();
-        /*left_color = hardwareMap.colorSensor.get("left_color");
-        right_color = hardwareMap.colorSensor.get("right_color");
-        floor_seeker = hardwareMap.colorSensor.get("floor_seeker");
-        left_color.setI2cAddress(leftColorI2c);
-        right_color.setI2cAddress(rightColorI2c);
-        floor_seeker.setI2cAddress(floorI2c);
-        floor_seeker.enableLed(false);
-        floor_seeker.enableLed(true);
-        right_color.enableLed(false);
-        left_color.enableLed(false);
-        right_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "right_range");
-        left_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "left_range");
-        front_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "front_range");
-        front_range.setI2cAddress(frontRangeI2c);
-        left_range.setI2cAddress(leftRangeI2c);
-        right_range.setI2cAddress(rightRangeI2c);*/
-        left_drive1 = hardwareMap.dcMotor.get("left_drive1");
-        left_drive2 = hardwareMap.dcMotor.get("left_drive2");
-        right_drive1 = hardwareMap.dcMotor.get("right_drive1");
-        right_drive2 = hardwareMap.dcMotor.get("right_drive2");
-        right_drive2.setDirection(DcMotorSimple.Direction.REVERSE);
-        left_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
-        mortar = hardwareMap.dcMotor.get("mortar");
-        mortar.setDirection(DcMotorSimple.Direction.REVERSE);
-        mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        mortar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        mortar_gate = hardwareMap.servo.get("mortar_gate");
-        cap_ball_lift = hardwareMap.dcMotor.get("cap_ball_lift");
-        cap_ball_tilt = hardwareMap.dcMotor.get("cap_ball_tilt");
-        left_beacon = hardwareMap.servo.get("left_beacon");
-        right_beacon = hardwareMap.servo.get("right_beacon");
-        right_beacon.setDirection(Servo.Direction.REVERSE);
-        left_beacon.setPosition(0.19);
-        right_beacon.setPosition(0.26);
-        particle_collector = hardwareMap.dcMotor.get("particle_collector");
-        collector_gate = hardwareMap.servo.get("collector_gate");
-        magazine_cam = hardwareMap.servo.get("magazine_cam");
-        //gyro = hardwareMap.gyroSensor.get("gyro");
-        collector_gate.setPosition(PCGateDown);
-        mortar_gate.setPosition(mortarGateDown);
-        magazine_cam.setPosition(camZero);
-        /*gyro.calibrate();
-        while(gyro.isCalibrating()){
-            sleep(40);
-        }*/
-
-        waitForStart();
-        resetStartTime();
-        sleep(500);
-        positionToShoot();
-        shootBall();
-        waitForTen();
-        capBall();
-
-        //shoot(30);
-
-
-    }
-}
-
-
 
 
         /*public void wallSense(){
@@ -319,3 +263,65 @@ public class Auto extends LinearOpMode {
             //enter some code about how to park
         }*/
 
+    @Override
+    public void runOpMode() {
+        telemetry.addData("Status first", "Initialized");
+        telemetry.update();
+        /*left_color = hardwareMap.colorSensor.get("left_color");
+        right_color = hardwareMap.colorSensor.get("right_color");
+        floor_seeker = hardwareMap.colorSensor.get("floor_seeker");
+        left_color.setI2cAddress(leftColorI2c);
+        right_color.setI2cAddress(rightColorI2c);
+        floor_seeker.setI2cAddress(floorI2c);
+        floor_seeker.enableLed(false);
+        floor_seeker.enableLed(true);
+        right_color.enableLed(false);
+        left_color.enableLed(false);
+        right_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "right_range");
+        left_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "left_range");
+        front_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "front_range");
+        front_range.setI2cAddress(frontRangeI2c);
+        left_range.setI2cAddress(leftRangeI2c);
+        right_range.setI2cAddress(rightRangeI2c);*/
+        left_drive1 = hardwareMap.dcMotor.get("left_drive1");
+        left_drive2 = hardwareMap.dcMotor.get("left_drive2");
+        right_drive1 = hardwareMap.dcMotor.get("right_drive1");
+        right_drive2 = hardwareMap.dcMotor.get("right_drive2");
+        right_drive2.setDirection(DcMotorSimple.Direction.REVERSE);
+        left_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
+        mortar = hardwareMap.dcMotor.get("mortar");
+        mortar.setDirection(DcMotorSimple.Direction.REVERSE);
+        mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        mortar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        mortar_gate = hardwareMap.servo.get("mortar_gate");
+        cap_ball_lift = hardwareMap.dcMotor.get("cap_ball_lift");
+        cap_ball_tilt = hardwareMap.dcMotor.get("cap_ball_tilt");
+        left_beacon = hardwareMap.servo.get("left_beacon");
+        right_beacon = hardwareMap.servo.get("right_beacon");
+        right_beacon.setDirection(Servo.Direction.REVERSE);
+        left_beacon.setPosition(0.19);
+        right_beacon.setPosition(0.26);
+        particle_collector = hardwareMap.dcMotor.get("particle_collector");
+        collector_gate = hardwareMap.servo.get("collector_gate");
+        magazine_cam = hardwareMap.servo.get("magazine_cam");
+        gyro = hardwareMap.gyroSensor.get("gyro");
+        collector_gate.setPosition(PCGateDown);
+        mortar_gate.setPosition(mortarGateDown);
+        magazine_cam.setPosition(camZero);
+        gyro.calibrate();
+        while (gyro.isCalibrating()) {
+            sleep(40);
+        }
+
+        waitForStart();
+        resetStartTime();
+        sleep(18000);
+        positionToShoot();
+        shootBall();
+        waitForTen();
+        capBall();
+
+        //shoot(30);
+
+    }
+}

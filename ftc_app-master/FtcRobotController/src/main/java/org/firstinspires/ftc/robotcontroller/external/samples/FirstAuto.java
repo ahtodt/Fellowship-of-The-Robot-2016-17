@@ -168,7 +168,7 @@ public class FirstAuto extends LinearOpMode {
         //shootBall();
         //driveStraight();
         //driveToWall();
-        //gyroTurn(-90);
+        //Turn(-90)gyro;
         //findWhiteLine();
         //wallSense();
         //shoot(30);
