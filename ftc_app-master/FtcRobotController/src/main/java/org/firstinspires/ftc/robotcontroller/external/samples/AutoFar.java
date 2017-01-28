@@ -316,10 +316,9 @@ public class AutoFar extends LinearOpMode {
 
         waitForStart();
         resetStartTime();
-        sleep(20000);
         positionToShoot();
         shootBall();
-        sleep(1000);
+        sleep(20000);
         capBall();
 
         //shoot(30);
