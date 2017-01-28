@@ -139,7 +139,8 @@ public class AutoFar extends LinearOpMode {
 
 
     public void waitForTen() {
-        while ((getRuntime() < 5) && opModeIsActive()) {
+        while ((getRuntime() < 18) && opModeIsActive()) {
+            sleep(500);
         }
     }
 
@@ -315,10 +316,10 @@ public class AutoFar extends LinearOpMode {
 
         waitForStart();
         resetStartTime();
-        sleep(18000);
+        sleep(20000);
         positionToShoot();
         shootBall();
-        waitForTen();
+        sleep(1000);
         capBall();
 
         //shoot(30);

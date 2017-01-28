@@ -139,7 +139,8 @@ public class AutoNearDelay extends LinearOpMode {
 
 
     public void waitForTen() {
-        while ((getRuntime() < 5) && opModeIsActive()) {
+        while ((getRuntime() < 18) && opModeIsActive()) {
+            sleep(500);
         }
     }
 
@@ -314,7 +315,7 @@ public class AutoNearDelay extends LinearOpMode {
 
         waitForStart();
         resetStartTime();
-        sleep(200);
+        sleep(18000);
         positionToShoot();
         shootBall();
         waitForTen();
