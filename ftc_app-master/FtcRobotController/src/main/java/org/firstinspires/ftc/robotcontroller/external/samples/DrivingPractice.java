@@ -70,7 +70,7 @@
             boolean cocked = false;
             boolean backwardsMode = false;
             boolean bumperPressed = false;
-            boolean precisionMode = false;
+            boolean precisionMode = true;
             boolean bumperPrecision = false;
             GyroSensor gyro;
 
@@ -349,30 +349,7 @@
 
 
 
-                if(gamepad1.left_bumper){
-                    bumperPrecision = true;
-                }
-                if(bumperPrecision && !gamepad1.left_bumper){
-                    if(precisionMode){
-                        precisionMode = false;
-                    }else{
-                        precisionMode = true;
-                    }
-                    bumperPrecision = false;
-
-                }
-
-if(backwardsMode&&!precisionMode) {
-    float throttle = gamepad1.left_stick_y ;
-    float direction = gamepad1.right_stick_x;
-    float right = throttle - direction;
-    float left = throttle + direction;
-    right = Range.clip(right, -1, 1);
-    left = Range.clip(left, -1, 1);
-    setPowerRight(right * .3);
-    setPowerLeft(left * .3);
-
-}else if(precisionMode&&!backwardsMode) {
+if(precisionMode&&!backwardsMode) {
     float throttle = -gamepad1.left_stick_y ;
     float direction = gamepad1.right_stick_x ;
     float right = throttle - direction;
@@ -395,16 +372,7 @@ if(backwardsMode&&!precisionMode) {
     left_drive2.setMaxSpeed(Math.abs(leftSpeed));
     right_drive1.setMaxSpeed(Math.abs(rightSpeed));
     right_drive2.setMaxSpeed(Math.abs(rightSpeed));
-}else if(!precisionMode&&!backwardsMode)
-{
-    float throttle = -gamepad1.left_stick_y ;
-    float direction = gamepad1.right_stick_x ;
-    float right = throttle - direction;
-    float left = throttle + direction;
-    right = Range.clip(right, -1, 1);
-    left = Range.clip(left, -1, 1);
-    setPowerRight(right * .3);
-    setPowerLeft(left * .3);
+
 }else if(precisionMode&&backwardsMode){
                     float throttle = gamepad1.left_stick_y ;
                     float direction = gamepad1.right_stick_x ;

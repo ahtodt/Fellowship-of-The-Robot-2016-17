@@ -297,6 +297,11 @@ public class AutoFar extends LinearOpMode {
         mortar_gate = hardwareMap.servo.get("mortar_gate");
         cap_ball_lift = hardwareMap.dcMotor.get("cap_ball_lift");
         cap_ball_tilt = hardwareMap.dcMotor.get("cap_ball_tilt");
+        cap_ball_tilt.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        cap_ball_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        cap_ball_tilt.setPower(0.3);
         left_beacon = hardwareMap.servo.get("left_beacon");
         right_beacon = hardwareMap.servo.get("right_beacon");
         right_beacon.setDirection(Servo.Direction.REVERSE);
