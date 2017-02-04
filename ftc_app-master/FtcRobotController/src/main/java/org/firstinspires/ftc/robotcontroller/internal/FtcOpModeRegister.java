@@ -36,6 +36,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
 import com.qualcomm.robotcore.eventloop.opmode.AnnotatedOpModeRegistrar;
 
+import org.firstinspires.ftc.robotcontroller.external.samples.AutoFarWait;
 import org.firstinspires.ftc.robotcontroller.external.samples.AutoNear;
 import org.firstinspires.ftc.robotcontroller.external.samples.AutoNearDelay;
 import org.firstinspires.ftc.robotcontroller.external.samples.AutoFar;
@@ -106,5 +107,6 @@ public class FtcOpModeRegister implements OpModeRegister {
         manager.register("AutoNear", AutoNear.class);
         manager.register("AutoNearDelay", AutoNearDelay.class);
         manager.register("AutoFar", AutoFar.class);
+        manager.register("AutoFarWait", AutoFarWait.class);
     }
 }
