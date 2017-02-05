@@ -72,6 +72,8 @@
             boolean bumperPressed = false;
             boolean precisionMode = true;
             boolean bumperPrecision = false;
+            boolean bumperPressed2 =false;
+            boolean capBallTurn = false;
             GyroSensor gyro;
 
             public void posA() {
@@ -347,11 +349,25 @@
 
                 }
 
+                if(gamepad1.left_bumper){
+                    bumperPressed2 = true;
+                }
+                if(bumperPressed2 && !gamepad1.left_bumper){
+                    if(capBallTurn){
+                        capBallTurn = false;
+                    }else{
+                        capBallTurn = true;
+                    }
+                    bumperPressed2 = false;
+
+                }
+
+
 
 
 if(precisionMode&&!backwardsMode) {
-    float throttle = -gamepad1.left_stick_y ;
-    float direction = gamepad1.right_stick_x ;
+    float throttle = -gamepad1.left_stick_y;
+    float direction = gamepad1.right_stick_x;
     float right = throttle - direction;
     float left = throttle + direction;
 
@@ -373,7 +389,61 @@ if(precisionMode&&!backwardsMode) {
     right_drive1.setMaxSpeed(Math.abs(rightSpeed));
     right_drive2.setMaxSpeed(Math.abs(rightSpeed));
 
-}else if(precisionMode&&backwardsMode){
+}else if(capBallTurn&&!backwardsMode){
+                    float throttle = -gamepad1.left_stick_y ;
+                    float direction = gamepad1.right_stick_x ;
+                    float right = throttle - direction;
+                    float left = throttle + direction;
+
+                    int leftSpeed = (int) (400 * left);
+                    int rightSpeed = (int) (400 * right);
+
+                    if (leftSpeed > 0) {
+                        setPowerLeft(1);
+                    } else if (leftSpeed < 0) {
+                        setPowerLeft(-1);
+                    }
+                    if (rightSpeed > 0) {
+                        setPowerRight(1);
+                    } else if (rightSpeed < 0) {
+                        setPowerRight(-1);
+                    }
+                    left_drive1.setMaxSpeed(Math.abs(leftSpeed));
+                    left_drive2.setMaxSpeed(Math.abs(leftSpeed));
+                    right_drive1.setMaxSpeed(Math.abs(rightSpeed));
+                    right_drive2.setMaxSpeed(Math.abs(rightSpeed));
+
+                }else
+                if(capBallTurn&&backwardsMode){
+                    float throttle = gamepad1.left_stick_y ;
+                    float direction = gamepad1.right_stick_x ;
+                    float right = throttle - direction;
+                    float left = throttle + direction;
+
+                    int leftSpeed = (int) (400 * left);
+                    int rightSpeed = (int) (400 * right);
+
+                    if (leftSpeed > 0) {
+                        setPowerLeft(1);
+                    } else if (leftSpeed < 0) {
+                        setPowerLeft(-1);
+                    }
+                    if (rightSpeed > 0) {
+                        setPowerRight(1);
+                    } else if (rightSpeed < 0) {
+                        setPowerRight(-1);
+                    }
+                    left_drive1.setMaxSpeed(Math.abs(leftSpeed));
+                    left_drive2.setMaxSpeed(Math.abs(leftSpeed));
+                    right_drive1.setMaxSpeed(Math.abs(rightSpeed));
+                    right_drive2.setMaxSpeed(Math.abs(rightSpeed));
+
+                }
+
+
+
+
+else if(precisionMode&&backwardsMode){
                     float throttle = gamepad1.left_stick_y ;
                     float direction = gamepad1.right_stick_x ;
                     float right = throttle - direction;
