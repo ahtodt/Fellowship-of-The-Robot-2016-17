@@ -62,8 +62,8 @@ public class AutoNear extends LinearOpMode {
     I2cAddr leftColorI2c = I2cAddr.create8bit(0x4c);
     I2cAddr floorI2c = I2cAddr.create8bit(0x70);
     I2cAddr rightColorI2c = I2cAddr.create8bit(0x3c);
-    I2cAddr frontRangeI2c = I2cAddr.create8bit(0x44);
-    I2cAddr rightRangeI2c = I2cAddr.create8bit(0x34);
+    //I2cAddr frontRangeI2c = I2cAddr.create8bit(0x44);
+    //I2cAddr rightRangeI2c = I2cAddr.create8bit(0x34);
     I2cAddr leftRangeI2c = I2cAddr.create8bit(0x28);
     double left;
     double right;
@@ -107,14 +107,14 @@ public class AutoNear extends LinearOpMode {
     Servo mortar_gate;
     GyroSensor gyro;
     int shots = 1;
-    ModernRoboticsI2cRangeSensor front_range;
-    ModernRoboticsI2cRangeSensor right_range;
+    //ModernRoboticsI2cRangeSensor front_range;
+    //ModernRoboticsI2cRangeSensor right_range;
     ModernRoboticsI2cRangeSensor left_range;
     ColorSensor floor_seeker;
     ColorSensor left_color;
     ColorSensor right_color;
     double target = 20;
-    double distance = right_range.cmUltrasonic();
+    double distance = left_range.cmUltrasonic();
     double error = distance - target;
     double differential = error * 0.1;
     double rightVelocity = right_drive1.getPower();
@@ -219,18 +219,21 @@ public class AutoNear extends LinearOpMode {
     }
 
 
-        /*public void wallSense(){
-            while(right_range.cmUltrasonic()<20){
+        public void wallSense() {
+            while (left_range.cmUltrasonic() < 20) {
                 right_drive1.setPower(.01);
                 right_drive2.setPower(.01);
                 left_drive1.setPower(.01);
                 left_drive2.setPower(.01);
-            }while(right_range.cmUltrasonic()>=20){
+            }
+            while (left_range.cmUltrasonic() >= 20) {
                 left_drive1.setPower(.01);
                 left_drive2.setPower(.01);
                 right_drive1.setPower(.01);
                 right_drive2.setPower(.01);
             }
+            stopMotors();
+        }
             /* right_drive1.setPower(.2);
                right_drive2.setPower(.2);
                left_drive1.setPower(.2);
@@ -239,11 +242,11 @@ public class AutoNear extends LinearOpMode {
                right_drive2.setMaxSpeed(1680);
                left_drive1.setMaxSpeed(1680);
                left_drive2.setMaxSpeed(1680);*/
-/*             if(distance != target){
-              /*right_drive1.setPower(rightVelocityCorrection); //potentially reverse different motors in hardware map
-                right_drive2.setPower(rightVelocityCorrection);
-                left_drive1.setPower(leftVelocityCorrection);
-                 left_drive2.setPower(leftVelocityCorrection);*/
+    /*      if(distance != target){
+               right_drive1.setPower(rightVelocityCorrection); //potentially reverse different motors in hardware map
+               right_drive2.setPower(rightVelocityCorrection);
+               left_drive1.setPower(leftVelocityCorrection);
+               left_drive2.setPower(leftVelocityCorrection);*/
                 //stopMotors();
 
 
@@ -296,7 +299,7 @@ public class AutoNear extends LinearOpMode {
     public void runOpMode() {
         telemetry.addData("Status first", "Initialized");
         telemetry.update();
-        /*left_color = hardwareMap.colorSensor.get("left_color");
+        left_color = hardwareMap.colorSensor.get("left_color");
         right_color = hardwareMap.colorSensor.get("right_color");
         floor_seeker = hardwareMap.colorSensor.get("floor_seeker");
         left_color.setI2cAddress(leftColorI2c);
@@ -306,12 +309,12 @@ public class AutoNear extends LinearOpMode {
         floor_seeker.enableLed(true);
         right_color.enableLed(false);
         left_color.enableLed(false);
-        right_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "right_range");
+        //right_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "right_range");
         left_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "left_range");
-        front_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "front_range");
-        front_range.setI2cAddress(frontRangeI2c);
+        //front_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "front_range");
+        //front_range.setI2cAddress(frontRangeI2c);
         left_range.setI2cAddress(leftRangeI2c);
-        right_range.setI2cAddress(rightRangeI2c);*/
+        //right_range.setI2cAddress(rightRangeI2c);
         left_drive1 = hardwareMap.dcMotor.get("left_drive1");
         left_drive2 = hardwareMap.dcMotor.get("left_drive2");
         right_drive1 = hardwareMap.dcMotor.get("right_drive1");
@@ -350,12 +353,12 @@ public class AutoNear extends LinearOpMode {
         waitForStart();
         resetStartTime();
         sleep(500);
-        positionToShoot();
-        shootBall();
-        waitForTen();
+        //positionToShoot();
+        //shootBall();
+        //waitForTen();
         //capBall();
 
         //shoot(30);
-
+        wallSense();
     }
 }
