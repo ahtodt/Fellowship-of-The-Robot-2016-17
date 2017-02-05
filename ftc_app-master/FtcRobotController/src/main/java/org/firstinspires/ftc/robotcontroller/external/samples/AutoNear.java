@@ -138,7 +138,7 @@ public class AutoNear extends LinearOpMode {
         right_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         left_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         magazine_cam.setPosition(camUp);
-        while (right_drive1.getCurrentPosition() < driveDistance && left_drive2.getCurrentPosition() < driveDistance) {
+        while (right_drive1.getCurrentPosition() < driveDistance && left_drive2.getCurrentPosition() < driveDistance&&opModeIsActive()) {
 
             setPowerLeft(.1);
             setPowerRight(.1);
@@ -166,7 +166,7 @@ public class AutoNear extends LinearOpMode {
 
     public void capBall() {
         while (right_drive1.getCurrentPosition() < (driveDistance * 2.25)
-                && left_drive2.getCurrentPosition() < (driveDistance * 2.25)) {
+                && left_drive2.getCurrentPosition() < (driveDistance * 2.25)&&opModeIsActive()) {
             left_drive1.setPower(.1);
             left_drive2.setPower(.1);
             right_drive1.setPower(.2);

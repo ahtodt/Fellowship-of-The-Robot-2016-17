@@ -129,7 +129,7 @@ public class AutoFar extends LinearOpMode {
         right_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         left_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         magazine_cam.setPosition(camUp);
-        while (right_drive1.getCurrentPosition() < driveDistance && left_drive2.getCurrentPosition() < driveDistance) {
+        while ((right_drive1.getCurrentPosition() < driveDistance) && (left_drive2.getCurrentPosition() < driveDistance)&&opModeIsActive()) {
 
             setPowerLeft(.1);
             setPowerRight(.1);
@@ -159,7 +159,7 @@ public class AutoFar extends LinearOpMode {
     public void capBall() {
         while (right_drive1.getCurrentPosition() < (driveDistance * 3)
                 //note: if you think you need to set it to *2, make it *3 and if you want *3, make it *4, etc.
-                && left_drive2.getCurrentPosition() < (driveDistance * 3)) {
+                && left_drive2.getCurrentPosition() < (driveDistance * 3)&&opModeIsActive()) {
             left_drive1.setPower(.15);
             left_drive2.setPower(.15);
             right_drive1.setPower(.15);

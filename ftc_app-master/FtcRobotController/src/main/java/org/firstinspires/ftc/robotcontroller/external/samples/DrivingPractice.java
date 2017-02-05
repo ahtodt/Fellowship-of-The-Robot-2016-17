@@ -160,7 +160,6 @@
                 if(posCounter == 6) {
                     posReset();
                 }
-                telemetry.addData("Position", posCounter);
             }
             public void vibrateCam(){
 
@@ -351,7 +350,7 @@
 
 if(precisionMode&&!backwardsMode) {
     float throttle = -gamepad1.left_stick_y ;
-    float direction = gamepad1.right_stick_x ;
+    float direction = gamepad1.left_stick_x ;
     float right = throttle - direction;
     float left = throttle + direction;
 
@@ -375,7 +374,7 @@ if(precisionMode&&!backwardsMode) {
 
 }else if(precisionMode&&backwardsMode){
                     float throttle = gamepad1.left_stick_y ;
-                    float direction = gamepad1.right_stick_x ;
+                    float direction = gamepad1.left_stick_x ;
                     float right = throttle - direction;
                     float left = throttle + direction;
     int leftSpeed = (int) (800 * left);
@@ -396,7 +395,6 @@ if(precisionMode&&!backwardsMode) {
     right_drive1.setMaxSpeed(Math.abs(rightSpeed));
     right_drive2.setMaxSpeed(Math.abs(rightSpeed));
                 }
-telemetry.addData("precicison", precisionMode);
                 telemetry.addData("backwards", backwardsMode);
 
                 if(gamepad2.right_trigger>triggerCutoff){
@@ -435,9 +433,7 @@ telemetry.addData("precicison", precisionMode);
                 if (startFiring) {
                     shootingSequence();
                 }
-                telemetry.addData("mortar", mortar.getCurrentPosition());
                 telemetry.addData("shooterCount", shooterCount);
-                telemetry.addData("runtime", getRuntime());
 
                 if (gamepad2.b) {
                     isPressed = true;
