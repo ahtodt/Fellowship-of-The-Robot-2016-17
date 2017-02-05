@@ -267,7 +267,7 @@ public class AutoNearDelay extends LinearOpMode {
     public void runOpMode() {
         telemetry.addData("Status first", "Initialized");
         telemetry.update();
-        /*left_color = hardwareMap.colorSensor.get("left_color");
+        left_color = hardwareMap.colorSensor.get("left_color");
         right_color = hardwareMap.colorSensor.get("right_color");
         floor_seeker = hardwareMap.colorSensor.get("floor_seeker");
         left_color.setI2cAddress(leftColorI2c);
@@ -282,7 +282,7 @@ public class AutoNearDelay extends LinearOpMode {
         front_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "front_range");
         front_range.setI2cAddress(frontRangeI2c);
         left_range.setI2cAddress(leftRangeI2c);
-        right_range.setI2cAddress(rightRangeI2c);*/
+        right_range.setI2cAddress(rightRangeI2c);
         left_drive1 = hardwareMap.dcMotor.get("left_drive1");
         left_drive2 = hardwareMap.dcMotor.get("left_drive2");
         right_drive1 = hardwareMap.dcMotor.get("right_drive1");
@@ -313,6 +313,12 @@ public class AutoNearDelay extends LinearOpMode {
         collector_gate.setPosition(PCGateDown);
         mortar_gate.setPosition(mortarGateDown);
         magazine_cam.setPosition(camZero);
+        telemetry.addData("left_optical", left_range.cmOptical());
+        telemetry.addData("left_ultrasonic", left_range.cmUltrasonic());
+        telemetry.addData("right_optical", right_range.cmOptical());
+        telemetry.addData("right_ultrasonic", right_range.cmUltrasonic());
+        telemetry.addData("front_optical", front_range.cmOptical());
+        telemetry.addData("front_ultrasonic", front_range.cmUltrasonic());
         gyro.calibrate();
         while (gyro.isCalibrating()) {
             sleep(40);

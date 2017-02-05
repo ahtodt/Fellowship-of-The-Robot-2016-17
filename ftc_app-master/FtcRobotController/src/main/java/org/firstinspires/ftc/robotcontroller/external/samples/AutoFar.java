@@ -32,7 +32,6 @@ TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.robotcontroller.external.samples;
-
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -40,6 +39,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.I2cAddr;
+import com.qualcomm.robotcore.hardware.I2cDevice;
+import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
+import com.qualcomm.robotcore.hardware.I2cDeviceSynchImpl;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -53,9 +55,6 @@ public class AutoFar extends LinearOpMode {
     I2cAddr leftColorI2c = I2cAddr.create8bit(0x4c);
     I2cAddr floorI2c = I2cAddr.create8bit(0x70);
     I2cAddr rightColorI2c = I2cAddr.create8bit(0x3c);
-    I2cAddr frontRangeI2c = I2cAddr.create8bit(0x44);
-    I2cAddr rightRangeI2c = I2cAddr.create8bit(0x34);
-    I2cAddr leftRangeI2c = I2cAddr.create8bit(0x28);
     double left;
     double right;
     double turnTolerance = 1;
@@ -98,12 +97,11 @@ public class AutoFar extends LinearOpMode {
     Servo mortar_gate;
     GyroSensor gyro;
     int shots = 1;
-    ModernRoboticsI2cRangeSensor front_range;
-    ModernRoboticsI2cRangeSensor right_range;
-    ModernRoboticsI2cRangeSensor left_range;
+    ModernRoboticsI2cRangeSensor range;
     ColorSensor floor_seeker;
     ColorSensor left_color;
     ColorSensor right_color;
+
 
 
     public void stopMotors() {
@@ -268,7 +266,7 @@ public class AutoFar extends LinearOpMode {
     public void runOpMode() {
         telemetry.addData("Status first", "Initialized");
         telemetry.update();
-        /*left_color = hardwareMap.colorSensor.get("left_color");
+        left_color = hardwareMap.colorSensor.get("left_color");
         right_color = hardwareMap.colorSensor.get("right_color");
         floor_seeker = hardwareMap.colorSensor.get("floor_seeker");
         left_color.setI2cAddress(leftColorI2c);
@@ -278,12 +276,7 @@ public class AutoFar extends LinearOpMode {
         floor_seeker.enableLed(true);
         right_color.enableLed(false);
         left_color.enableLed(false);
-        right_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "right_range");
-        left_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "left_range");
-        front_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "front_range");
-        front_range.setI2cAddress(frontRangeI2c);
-        left_range.setI2cAddress(leftRangeI2c);
-        right_range.setI2cAddress(rightRangeI2c);*/
+        range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "left_range");
         left_drive1 = hardwareMap.dcMotor.get("left_drive1");
         left_drive2 = hardwareMap.dcMotor.get("left_drive2");
         right_drive1 = hardwareMap.dcMotor.get("right_drive1");
@@ -325,8 +318,6 @@ public class AutoFar extends LinearOpMode {
         shootBall();
         sleep(20000);
         capBall();
-
-        //shoot(30);
 
     }
 }

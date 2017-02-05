@@ -1,13 +1,15 @@
 
 
              package org.firstinspires.ftc.robotcontroller.external.samples;
-
+import org.firstinspires.ftc.robotcontroller.external.samples.MRI_Range_Sensors;
         import com.qualcomm.robotcore.eventloop.opmode.OpMode;
         import com.qualcomm.robotcore.hardware.DcMotor;
         import com.qualcomm.robotcore.hardware.DcMotorSimple;
         import com.qualcomm.robotcore.hardware.GyroSensor;
+        import com.qualcomm.robotcore.hardware.I2cAddr;
         import com.qualcomm.robotcore.hardware.Servo;
         import com.qualcomm.robotcore.util.Range;
+        import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 
 
         public class DrivingPractice extends OpMode {
@@ -75,6 +77,12 @@
             boolean bumperPressed2 =false;
             boolean capBallTurn = false;
             GyroSensor gyro;
+            I2cAddr frontRangeI2c = I2cAddr.create8bit(0x46);
+            I2cAddr rightRangeI2c = I2cAddr.create8bit(0x36);
+            I2cAddr leftRangeI2c = I2cAddr.create8bit(0x30);
+            ModernRoboticsI2cRangeSensor front_range;
+            ModernRoboticsI2cRangeSensor right_range;
+            ModernRoboticsI2cRangeSensor left_range;
 
             public void posA() {
                 // drive
@@ -305,6 +313,21 @@
                 left_beacon.setPosition(0.19);
                 right_beacon.setPosition(0.26);
                 collector_gate.setPosition(PCGateDown);
+                right_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "right_range");
+                left_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "left_range");
+                front_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "front_range");
+                front_range.setI2cAddress(frontRangeI2c);
+                left_range.setI2cAddress(leftRangeI2c);
+                right_range.setI2cAddress(rightRangeI2c);
+                telemetry.addData("left_optical", left_range.cmOptical());
+                telemetry.addData("left_ultrasonic", left_range.cmUltrasonic());
+                telemetry.addData("right_optical", right_range.cmOptical());
+                telemetry.addData("right_ultrasonic", right_range.cmUltrasonic());
+                telemetry.addData("front_optical", front_range.cmOptical());
+                telemetry.addData("front_ultrasonic", front_range.cmUltrasonic());
+                /*telemetry.addData("left_address", left_range.getI2cAddress());
+                telemetry.addData("right_address", right_range.getI2cAddress());
+                telemetry.addData("front_address", front_range.getI2cAddress());*/
 /*        gyro=hardwareMap.gyroSensor.get("gyro");
         // Wait for the game to start (driver presses PLAY)
         gyro.calibrate(); */

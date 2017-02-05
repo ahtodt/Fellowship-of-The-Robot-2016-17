@@ -113,6 +113,17 @@ public class AutoNear extends LinearOpMode {
     ColorSensor floor_seeker;
     ColorSensor left_color;
     ColorSensor right_color;
+    double target = 20;
+    double distance = right_range.cmUltrasonic();
+    double error = distance - target;
+    double differential = error * 0.1;
+    double rightVelocity = right_drive1.getPower();
+    double leftVelocity = left_drive1.getPower();
+    double leftVelocityCorrection = leftVelocity + differential;
+    double rightVelocityCorrection = rightVelocity + differential;
+    //int rightVelocityCorrectionInt = (int)Math.round(rightVelocityCorrection);
+    //int leftVelocityCorrectionInt = (int)Math.round(leftVelocityCorrection);
+
 
 
     public void stopMotors() {
@@ -220,11 +231,21 @@ public class AutoNear extends LinearOpMode {
                 right_drive1.setPower(.01);
                 right_drive2.setPower(.01);
             }
-        }
+            /* right_drive1.setPower(.2);
+               right_drive2.setPower(.2);
+               left_drive1.setPower(.2);
+               left_drive1.setPower(.2);*/
+    /*         right_drive1.setMaxSpeed(1680);
+               right_drive2.setMaxSpeed(1680);
+               left_drive1.setMaxSpeed(1680);
+               left_drive2.setMaxSpeed(1680);*/
+/*             if(distance != target){
+              /*right_drive1.setPower(rightVelocityCorrection); //potentially reverse different motors in hardware map
+                right_drive2.setPower(rightVelocityCorrection);
+                left_drive1.setPower(leftVelocityCorrection);
+                 left_drive2.setPower(leftVelocityCorrection);*/
+                //stopMotors();
 
-    //stopMotors();
-
-}
 
         /*public void redBeaconPress(){
             right_drive1.setMaxSpeed(0);
