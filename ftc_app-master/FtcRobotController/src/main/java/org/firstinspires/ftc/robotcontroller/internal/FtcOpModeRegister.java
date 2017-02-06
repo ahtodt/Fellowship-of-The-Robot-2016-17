@@ -37,6 +37,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
 import com.qualcomm.robotcore.eventloop.opmode.AnnotatedOpModeRegistrar;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.Beacon;
+import org.firstinspires.ftc.robotcontroller.external.samples.CapBallReset;
 import org.firstinspires.ftc.robotcontroller.external.samples.ConceptNullOp;
 import org.firstinspires.ftc.robotcontroller.external.samples.DrivingPractice;
 import org.firstinspires.ftc.robotcontroller.external.samples.FirstAuto;
@@ -100,5 +101,6 @@ public class FtcOpModeRegister implements OpModeRegister {
         manager.register("Gates", gates.class);
         manager.register("DrivingPractice", DrivingPractice.class);
         manager.register("RedorBlu", RedorBlu.class);
+        manager.register("CapBallReset", CapBallReset.class);
     }
 }
