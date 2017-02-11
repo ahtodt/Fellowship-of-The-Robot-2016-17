@@ -31,38 +31,28 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-
-import java.util.concurrent.locks.Lock;
-
-import static java.lang.Math.*;
 
 
 //delay, longer drive before shoot, turn for square after shoot, only shoot one or fix the mortar
 
-public class AutoNear extends LinearOpMode {
+public class NearBlue extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     //DcMotor leftMotor = null;
     //DcMotor rightMotor = null;
     I2cAddr leftColorI2c = I2cAddr.create8bit(0x4c);
     I2cAddr floorI2c = I2cAddr.create8bit(0x70);
     I2cAddr rightColorI2c = I2cAddr.create8bit(0x3c);
-    I2cAddr leftRangeI2c = I2cAddr.create8bit(0x28);
     double left;
     double right;
     double turnTolerance;
@@ -70,8 +60,8 @@ public class AutoNear extends LinearOpMode {
     double oneRotation = 420;
     double currentHeading;
     double powerFloor;
-    double floor = .015;
-    double driveGain = .0003;
+    double floor = .06;
+    double driveGain = .0000;
     int distance = 1450;
     double directionAdjust;
     double startHeading;
@@ -96,7 +86,7 @@ public class AutoNear extends LinearOpMode {
     double rightBeaconIn = .26;
     int mortarFreeState = 1440;
     int mortarEngagedState = 300;
-    int driveDistance = (525);
+    int driveDistance = (470);
 
     DcMotor left_drive1;
     DcMotor right_drive1;
@@ -104,7 +94,6 @@ public class AutoNear extends LinearOpMode {
     DcMotor right_drive2;
     DcMotor mortar;
     DcMotor cap_ball_lift;
-    DcMotor cap_ball_tilt;
     DcMotor particle_collector;
     Servo left_beacon;
     Servo right_beacon;
@@ -117,17 +106,6 @@ public class AutoNear extends LinearOpMode {
     ColorSensor floor_seeker;
     ColorSensor left_color;
     ColorSensor right_color;
-    double target = 20;
-    double rangeDistance = left_range.cmUltrasonic();
-    double error = rangeDistance - target;
-    double differential = error * 0.1;
-    double rightVelocity = right_drive1.getPower();
-    double leftVelocity = left_drive1.getPower();
-    double leftVelocityCorrection = leftVelocity + differential;
-    double rightVelocityCorrection = rightVelocity + differential;
-    //int rightVelocityCorrectionInt = (int)Math.round(rightVelocityCorrection);
-    //int leftVelocityCorrectionInt = (int)Math.round(leftVelocityCorrection);
-
 
 
     public void stopMotors() {
@@ -232,38 +210,38 @@ public class AutoNear extends LinearOpMode {
             }else{
                 currentHeading = gyro.getHeading();
             }
-        headingError = desiredAngle - currentHeading;
+            headingError = desiredAngle - currentHeading;
             if(headingError<0){
                 powerFloor = -floor;
             }else{
                 powerFloor = floor;
             }
-        driveSteering = (headingError * driveGain)+powerFloor;
+            driveSteering = (headingError * driveGain)+powerFloor;
 
-        leftPower = driveSteering;
-        if(leftPower>.2){
-            leftPower = .2;
-        }else if(leftPower<-.2){
-            leftPower = -.2;
-        }
+            leftPower = driveSteering;
+            if(leftPower>.2){
+                leftPower = .2;
+            }else if(leftPower<-.2){
+                leftPower = -.2;
+            }
 
-        rightPower = -driveSteering;
-        if(rightPower>.2){
-            rightPower = .2;
-        }else if(rightPower < -.2) {
-            rightPower = -.2;
-        }
+            rightPower = -driveSteering;
+            if(rightPower>.2){
+                rightPower = .2;
+            }else if(rightPower < -.2) {
+                rightPower = -.2;
+            }
 
-        setPowerLeft(leftPower);
-        setPowerRight(rightPower);
+            setPowerLeft(leftPower);
+            setPowerRight(rightPower);
 
-        telemetry.addData("in turn loop", leftPower);
+            telemetry.addData("in turn loop", leftPower);
             telemetry.addData("gyro", gyro.getHeading());
 
-    } while (Math.abs(currentHeading-desiredAngle)>turnTolerance&&opModeIsActive());
+        } while (Math.abs(currentHeading-desiredAngle)>turnTolerance&&opModeIsActive());
 
-    stopMotors();
-}
+        stopMotors();
+    }
     public void wallTurn(int target){
         stopMotors();
         right_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -274,15 +252,19 @@ public class AutoNear extends LinearOpMode {
         left_drive1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         right_drive2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         left_drive2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        setPowerLeft(.1);
-        setPowerRight(.1);
-        left_drive1.setTargetPosition(-target);
-        left_drive2.setTargetPosition(-target);
-        right_drive1.setTargetPosition(target);
-        right_drive2.setTargetPosition(target);
-            while (left_drive1.getCurrentPosition() > -target && opModeIsActive()) {
+        setPowerLeft(1);
+        setPowerRight(1);
+        for(int i = 0; i<10; i++) {
+            left_drive1.setTargetPosition(target);
+            left_drive2.setTargetPosition(target);
+            right_drive1.setTargetPosition(-target);
+            right_drive2.setTargetPosition(-target);
+            while (right_drive1.getCurrentPosition() > -target && opModeIsActive()) {
 
 
+            }
+            sleep(1000);
+            target = target+90;
         }
     }
     public void lineTurn(int angle){
@@ -297,69 +279,54 @@ public class AutoNear extends LinearOpMode {
         left_drive2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         setPowerLeft(.1);
         setPowerRight(.1);
-        left_drive1.setTargetPosition(-angle+20);
-        left_drive2.setTargetPosition(-angle+20);
-        right_drive1.setTargetPosition(angle+10);
-        right_drive2.setTargetPosition(angle+10);
-        while (left_drive1.getCurrentPosition() < (-angle+20) && opModeIsActive()) {
+        right_drive1.setTargetPosition(-angle+40);
+        right_drive2.setTargetPosition(-angle+40);
+        left_drive1.setTargetPosition(angle+15);
+        left_drive2.setTargetPosition(angle+15);
+        while (right_drive1.getCurrentPosition() < (-angle+30) && opModeIsActive()) {
 
 
         }
     }
 
-        public void wallSense() {
-            while (left_range.cmUltrasonic() < 20) {
-                right_drive1.setPower(.01);
-                right_drive2.setPower(.01);
-                left_drive1.setPower(.01);
-                left_drive2.setPower(.01);
-            }
-            while (left_range.cmUltrasonic() >= 20) {
-                left_drive1.setPower(.01);
-                left_drive2.setPower(.01);
-                right_drive1.setPower(.01);
-                right_drive2.setPower(.01);
-            }
-            stopMotors();
+    public void wallSense(){
+        while(left_range.cmUltrasonic()<20){
+            right_drive1.setPower(.01);
+            right_drive2.setPower(.01);
+            left_drive1.setPower(.01);
+            left_drive2.setPower(.01);
+        }while(left_range.cmUltrasonic()>=20){
+            left_drive1.setPower(.01);
+            left_drive2.setPower(.01);
+            right_drive1.setPower(.01);
+            right_drive2.setPower(.01);
         }
-            /* right_drive1.setPower(.2);
-               right_drive2.setPower(.2);
-               left_drive1.setPower(.2);
-               left_drive1.setPower(.2);*/
-    /*         right_drive1.setMaxSpeed(1680);
-               right_drive2.setMaxSpeed(1680);
-               left_drive1.setMaxSpeed(1680);
-               left_drive2.setMaxSpeed(1680);*/
-    /*      if(distance != target){
-               right_drive1.setPower(rightVelocityCorrection); //potentially reverse different motors in hardware map
-               right_drive2.setPower(rightVelocityCorrection);
-               left_drive1.setPower(leftVelocityCorrection);
-               left_drive2.setPower(leftVelocityCorrection);*/
-                //stopMotors();
+    }
+
+    //stopMotors();
 
 
-
-        public void firstBeaconPress() {
-            stopMotors();
-            if (left_color.red() > 1.5) {
-                left_beacon.setPosition(leftBeaconOut);
-               smallMove1();
-                sleep(500);
-                left_beacon.setPosition(leftBeaconIn);
-                smallMove2();
-            } else if (left_color.blue() > 1.5) {
-                //add code for specific position/encoder ticks forward
-                smallMove1();
-                sleep(500);
-                left_beacon.setPosition(leftBeaconOut);
-                smallMove2();
-                sleep(500);
-                left_beacon.setPosition(leftBeaconIn);
-            }else{
-                forward();
-            }
-            stopMotors();
+    public void firstBeaconPress() {
+        stopMotors();
+        if (right_color.blue() > 1.5) {
+            right_beacon.setPosition(rightBeaconOut);
+            smallMove1();
+            sleep(500);
+            right_beacon.setPosition(rightBeaconIn);
+            smallMove2();
+        } else if (right_color.red() > 1.5) {
+            //add code for specific position/encoder ticks forward
+            smallMove1();
+            sleep(500);
+            right_beacon.setPosition(rightBeaconOut);
+            smallMove2();
+            sleep(500);
+            right_beacon.setPosition(rightBeaconIn);
+        }else{
+            forward();
         }
+        stopMotors();
+    }
     public void smallMove1(){
         int encoderStart1 = right_drive1.getCurrentPosition();
         while(right_drive1.getCurrentPosition()<encoderStart1+70&&opModeIsActive()){
@@ -462,13 +429,13 @@ public class AutoNear extends LinearOpMode {
         stopMotors();
     }
     public void turnToWall(){
-        turnTolerance = 1;
-        wallTurn(98);
+        turnTolerance = 2;
+        wallTurn(90);
         sleep(500);
     }
     public void turnNormal(){
-        turnTolerance = 1;
-        lineTurn(-98);
+        turnTolerance = 2;
+        gyroTurnLeft(-5);
         sleep(500);
     }
     public void driveToWall(){
@@ -484,24 +451,24 @@ public class AutoNear extends LinearOpMode {
 
     }
     public void secondBeaconPress(){
-            right_drive1.setMaxSpeed(0);
-            right_drive2.setMaxSpeed(0);
-            left_drive1.setMaxSpeed(0);
-            left_drive2.setMaxSpeed(0);
-            if (left_color.red() > 1.5) {
-                left_beacon.setPosition(.15);
-        //park();
-            }
-            else if (left_color.blue() > 1.5) {
-                //add code for specific position/encoder ticks forward
-                left_beacon.setPosition(.15);
-                //park();
-            }
+        right_drive1.setMaxSpeed(0);
+        right_drive2.setMaxSpeed(0);
+        left_drive1.setMaxSpeed(0);
+        left_drive2.setMaxSpeed(0);
+        if (left_color.red() > 1.5) {
+            left_beacon.setPosition(.15);
+            //park();
         }
+        else if (left_color.blue() > 1.5) {
+            //add code for specific position/encoder ticks forward
+            left_beacon.setPosition(.15);
+            //park();
+        }
+    }
 
-        public void park(){
-            //enter some code about how to park
-        }
+    public void park(){
+        //enter some code about how to park
+    }
 
     @Override
     public void runOpMode() {
@@ -517,8 +484,7 @@ public class AutoNear extends LinearOpMode {
         floor_seeker.enableLed(true);
         right_color.enableLed(false);
         left_color.enableLed(false);
-        left_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "left_range");
-        left_range.setI2cAddress(leftRangeI2c);
+        left_range=hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "left_range");
         left_drive1 = hardwareMap.dcMotor.get("left_drive1");
         left_drive2 = hardwareMap.dcMotor.get("left_drive2");
         right_drive1 = hardwareMap.dcMotor.get("right_drive1");
@@ -535,12 +501,8 @@ public class AutoNear extends LinearOpMode {
         mortar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         mortar_gate = hardwareMap.servo.get("mortar_gate");
         cap_ball_lift = hardwareMap.dcMotor.get("cap_ball_lift");
-        cap_ball_tilt = hardwareMap.dcMotor.get("cap_ball_tilt");
-        cap_ball_tilt.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         cap_ball_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        cap_ball_tilt.setPower(0.3);
         left_beacon = hardwareMap.servo.get("left_beacon");
         right_beacon = hardwareMap.servo.get("right_beacon");
         right_beacon.setDirection(Servo.Direction.REVERSE);
@@ -562,15 +524,16 @@ public class AutoNear extends LinearOpMode {
         resetStartTime();
         positionToShoot();
         sleep(1000);
-        //shootBall();
+        shootBall();
         turnToWall();
         driveStraight();
         turnNormal();
         findWhiteLine();
-        //sleep(1000);
-        //firstBeaconPress();
+        sleep(1000);
+        firstBeaconPress();
         //capBall();
+
         //shoot(30);
-        wallSense();
+
     }
 }
