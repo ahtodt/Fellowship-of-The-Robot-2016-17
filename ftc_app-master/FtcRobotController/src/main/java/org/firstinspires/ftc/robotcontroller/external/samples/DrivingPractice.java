@@ -21,7 +21,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.MRI_Range_Sensors;
             DcMotor right_drive2;
             DcMotor particle_collector;
             DcMotor mortar;
-            DcMotor cap_ball_tilt;
+           // DcMotor cap_ball_tilt;
             DcMotor cap_ball_lift;
             Servo collector_gate;
             Servo mortar_gate;
@@ -300,7 +300,6 @@ import org.firstinspires.ftc.robotcontroller.external.samples.MRI_Range_Sensors;
                 cap_ball_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 //cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                cap_ball_lift.setMaxSpeed(1680);
                 left_beacon=hardwareMap.servo.get("left_beacon");
                 right_beacon=hardwareMap.servo.get("right_beacon");
                 right_beacon.setDirection(Servo.Direction.REVERSE);
@@ -526,9 +525,10 @@ else if(precisionMode&&backwardsMode){
                 }
                 telemetry.addData("shooterCount", shooterCount);
 
-                if(gamepad2.y&&cap_ball_lift.getCurrentPosition()<0){
+
+                if(gamepad2.dpad_down&&cap_ball_lift.getCurrentPosition()<0){
                     cap_ball_lift.setPower(1);
-                } else if(gamepad1.b&&cap_ball_lift.getCurrentPosition()>-15100){
+                } else if(gamepad2.dpad_up&&cap_ball_lift.getCurrentPosition()>-15100){
                     cap_ball_lift.setPower(-1);
                 } else{
                     cap_ball_lift.setPower(0);
