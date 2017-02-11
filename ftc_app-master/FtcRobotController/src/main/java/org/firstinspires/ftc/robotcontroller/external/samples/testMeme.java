@@ -69,6 +69,10 @@ public class testMeme extends LinearOpMode {
     double turnTolerance = 5;
     double newHeading;
     double oneRotation =420;
+    DcMotor left_drive1;
+    DcMotor right_drive1;
+    DcMotor left_drive2;
+    DcMotor right_drive2;
     DcMotor leftMotor;
     DcMotor rightMotor;
     DcMotor shooterMotor;
@@ -107,7 +111,15 @@ public class testMeme extends LinearOpMode {
         }
 
     }
+    public void setPowerLeft(double power) {
+        left_drive1.setPower(power);
+        left_drive2.setPower(power);
+    }
 
+    public void setPowerRight(double power) {
+        right_drive1.setPower(power);
+        right_drive2.setPower(power);
+    }
 
     public void shoot(int shots){
         shooterMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -154,23 +166,16 @@ public class testMeme extends LinearOpMode {
      }*/
     @Override
     public void runOpMode(){
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-        leftMotor=hardwareMap.dcMotor.get("left_drive");
-        rightMotor=hardwareMap.dcMotor.get("right_drive");
-        rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        shooterMotor = hardwareMap.dcMotor.get("shooterMotor");
-        gyro=hardwareMap.gyroSensor.get("gyro");
-        Range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "sensor_range");
-        floorSeeker = hardwareMap.colorSensor.get("floorSeeker");
-        rightRangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rightRangeSensor");
-
-        // Wait for the game to start (driver presses PLAY)
-        gyro.calibrate();
-        while(gyro.isCalibrating()){
-            sleep(40);
-        }
-
+        left_drive1 = hardwareMap.dcMotor.get("left_drive1");
+        left_drive2 = hardwareMap.dcMotor.get("left_drive2");
+        right_drive1 = hardwareMap.dcMotor.get("right_drive1");
+        right_drive2 = hardwareMap.dcMotor.get("right_drive2");
+        right_drive2.setDirection(DcMotorSimple.Direction.REVERSE);
+        left_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
+        right_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        left_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        right_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        left_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
 
@@ -189,26 +194,13 @@ public class testMeme extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
-
-        //driveStraight();
-        //gyroTurn(270, .6, "left");
-        // wallSense();
-        shoot(30);
-
-        rightMotor.setPower(0);
-        leftMotor.setPower(0);
-
-
-        // run until the end of the match (driver presses STOP)
-        while (opModeIsActive()) {
-            sleep(40);
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.update();
-            telemetry.addData("range", Range.cmUltrasonic());
-            telemetry.addData("gyro", gyro.getHeading());
-            // eg: Run wheels in tank mode (note: The joystick goes negative when pushed forwards)
-            // leftMotor.setPower(-gamepad1.left_stick_y);
-            // rightMotor.setPower(-gamepad1.right_stick_y);
-        }
+       while(opModeIsActive()) {
+           setPowerLeft(.9);
+           setPowerRight(.9);
+           left_drive1.setMaxSpeed(Math.abs(300));
+           left_drive2.setMaxSpeed(Math.abs(300));
+           right_drive1.setMaxSpeed(Math.abs(300));
+           right_drive2.setMaxSpeed(Math.abs(300));
+       }
     }
 }

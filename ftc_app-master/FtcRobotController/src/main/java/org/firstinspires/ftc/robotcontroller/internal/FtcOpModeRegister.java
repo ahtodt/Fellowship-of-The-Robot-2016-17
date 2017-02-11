@@ -45,6 +45,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.ConceptNullOp;
 import org.firstinspires.ftc.robotcontroller.external.samples.DrivingPractice;
 import org.firstinspires.ftc.robotcontroller.external.samples.FirstAuto;
 import org.firstinspires.ftc.robotcontroller.external.samples.FirstTele;
+import org.firstinspires.ftc.robotcontroller.external.samples.NearBlue;
 import org.firstinspires.ftc.robotcontroller.external.samples.ParticleCollector;
 import org.firstinspires.ftc.robotcontroller.external.samples.RedorBlu;
 import org.firstinspires.ftc.robotcontroller.external.samples.gates;
@@ -105,6 +106,7 @@ public class FtcOpModeRegister implements OpModeRegister {
         manager.register("DrivingPractice", DrivingPractice.class);
         //manager.register("RedorBlu", RedorBlu.class);
         manager.register("AutoNear", AutoNear.class);
+        manager.register("NearBlue", NearBlue.class);
         manager.register("AutoNearDelay", AutoNearDelay.class);
         manager.register("AutoFar", AutoFar.class);
         manager.register("AutoFarWait", AutoFarWait.class);
