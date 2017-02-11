@@ -36,11 +36,12 @@ import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
 import com.qualcomm.robotcore.eventloop.opmode.AnnotatedOpModeRegistrar;
 
+import org.firstinspires.ftc.robotcontroller.external.samples.AutoFar;
 import org.firstinspires.ftc.robotcontroller.external.samples.AutoFarWait;
 import org.firstinspires.ftc.robotcontroller.external.samples.AutoNear;
 import org.firstinspires.ftc.robotcontroller.external.samples.AutoNearDelay;
-import org.firstinspires.ftc.robotcontroller.external.samples.AutoFar;
 import org.firstinspires.ftc.robotcontroller.external.samples.Beacon;
+import org.firstinspires.ftc.robotcontroller.external.samples.CapBallReset;
 import org.firstinspires.ftc.robotcontroller.external.samples.ConceptNullOp;
 import org.firstinspires.ftc.robotcontroller.external.samples.DrivingPractice;
 import org.firstinspires.ftc.robotcontroller.external.samples.FirstAuto;
@@ -95,20 +96,24 @@ public class FtcOpModeRegister implements OpModeRegister {
         /**
          * Any manual OpMode class registrations should go here.
          */
-        //manager.register("Tele", FirstTele.class);
-        //manager.register("blorg", FirstAuto.class);
-        //manager.register("Test", testMeme.class);
-        //manager.register("Beacon", Beacon.class);
-        //manager.register("Mortar", mortar.class);
-        //manager.register("LastTele", LastTele.class);
-        //manager.register("ParticleCollector", ParticleCollector.class);
-        //manager.register("Gates", gates.class);
+        manager.register("Tele", FirstTele.class);
+        manager.register("Auto", FirstAuto.class);
+        manager.register("Test", testMeme.class);
+        manager.register("Beacon", Beacon.class);
+        manager.register("Mortar", mortar.class);
+        manager.register("LastTele", LastTele.class);
+        manager.register("ParticleCollector", ParticleCollector.class);
+        manager.register("Gates", gates.class);
         manager.register("DrivingPractice", DrivingPractice.class);
+
         //manager.register("RedorBlu", RedorBlu.class);
         manager.register("AutoNear", AutoNear.class);
         manager.register("NearBlue", NearBlue.class);
         manager.register("AutoNearDelay", AutoNearDelay.class);
         manager.register("AutoFar", AutoFar.class);
         manager.register("AutoFarWait", AutoFarWait.class);
+
+        manager.register("RedorBlu", RedorBlu.class);
+        manager.register("CapBallReset", CapBallReset.class);
     }
 }

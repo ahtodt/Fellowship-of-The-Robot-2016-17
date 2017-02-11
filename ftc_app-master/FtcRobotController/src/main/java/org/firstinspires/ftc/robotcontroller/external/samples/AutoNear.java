@@ -62,6 +62,7 @@ public class AutoNear extends LinearOpMode {
     I2cAddr leftColorI2c = I2cAddr.create8bit(0x4c);
     I2cAddr floorI2c = I2cAddr.create8bit(0x70);
     I2cAddr rightColorI2c = I2cAddr.create8bit(0x3c);
+    I2cAddr leftRangeI2c = I2cAddr.create8bit(0x28);
     double left;
     double right;
     double turnTolerance;
@@ -116,6 +117,17 @@ public class AutoNear extends LinearOpMode {
     ColorSensor floor_seeker;
     ColorSensor left_color;
     ColorSensor right_color;
+    double target = 20;
+    double rangeDistance = left_range.cmUltrasonic();
+    double error = rangeDistance - target;
+    double differential = error * 0.1;
+    double rightVelocity = right_drive1.getPower();
+    double leftVelocity = left_drive1.getPower();
+    double leftVelocityCorrection = leftVelocity + differential;
+    double rightVelocityCorrection = rightVelocity + differential;
+    //int rightVelocityCorrectionInt = (int)Math.round(rightVelocityCorrection);
+    //int leftVelocityCorrectionInt = (int)Math.round(leftVelocityCorrection);
+
 
 
     public void stopMotors() {
@@ -272,7 +284,6 @@ public class AutoNear extends LinearOpMode {
 
 
         }
-
     }
     public void lineTurn(int angle){
         stopMotors();
@@ -296,21 +307,36 @@ public class AutoNear extends LinearOpMode {
         }
     }
 
-        public void wallSense(){
-            while(left_range.cmUltrasonic()<20){
+        public void wallSense() {
+            while (left_range.cmUltrasonic() < 20) {
                 right_drive1.setPower(.01);
                 right_drive2.setPower(.01);
                 left_drive1.setPower(.01);
                 left_drive2.setPower(.01);
-            }while(left_range.cmUltrasonic()>=20){
+            }
+            while (left_range.cmUltrasonic() >= 20) {
                 left_drive1.setPower(.01);
                 left_drive2.setPower(.01);
                 right_drive1.setPower(.01);
                 right_drive2.setPower(.01);
             }
+            stopMotors();
         }
+            /* right_drive1.setPower(.2);
+               right_drive2.setPower(.2);
+               left_drive1.setPower(.2);
+               left_drive1.setPower(.2);*/
+    /*         right_drive1.setMaxSpeed(1680);
+               right_drive2.setMaxSpeed(1680);
+               left_drive1.setMaxSpeed(1680);
+               left_drive2.setMaxSpeed(1680);*/
+    /*      if(distance != target){
+               right_drive1.setPower(rightVelocityCorrection); //potentially reverse different motors in hardware map
+               right_drive2.setPower(rightVelocityCorrection);
+               left_drive1.setPower(leftVelocityCorrection);
+               left_drive2.setPower(leftVelocityCorrection);*/
+                //stopMotors();
 
-    //stopMotors();
 
 
         public void firstBeaconPress() {
@@ -491,7 +517,8 @@ public class AutoNear extends LinearOpMode {
         floor_seeker.enableLed(true);
         right_color.enableLed(false);
         left_color.enableLed(false);
-        left_range=hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "left_range");
+        left_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "left_range");
+        left_range.setI2cAddress(leftRangeI2c);
         left_drive1 = hardwareMap.dcMotor.get("left_drive1");
         left_drive2 = hardwareMap.dcMotor.get("left_drive2");
         right_drive1 = hardwareMap.dcMotor.get("right_drive1");
@@ -543,8 +570,7 @@ public class AutoNear extends LinearOpMode {
         //sleep(1000);
         //firstBeaconPress();
         //capBall();
-
         //shoot(30);
-
+        wallSense();
     }
 }

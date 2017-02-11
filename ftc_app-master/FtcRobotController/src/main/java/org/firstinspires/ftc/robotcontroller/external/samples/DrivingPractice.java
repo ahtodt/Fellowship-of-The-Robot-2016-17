@@ -1,13 +1,15 @@
 
 
              package org.firstinspires.ftc.robotcontroller.external.samples;
-
+import org.firstinspires.ftc.robotcontroller.external.samples.MRI_Range_Sensors;
         import com.qualcomm.robotcore.eventloop.opmode.OpMode;
         import com.qualcomm.robotcore.hardware.DcMotor;
         import com.qualcomm.robotcore.hardware.DcMotorSimple;
         import com.qualcomm.robotcore.hardware.GyroSensor;
+        import com.qualcomm.robotcore.hardware.I2cAddr;
         import com.qualcomm.robotcore.hardware.Servo;
         import com.qualcomm.robotcore.util.Range;
+        import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 
 
         public class DrivingPractice extends OpMode {
@@ -46,9 +48,9 @@
             int lastError=0;
             int shooterCount = 0;
             int shots = 0;
-            int posCounter = 0;
-            boolean isPressed = false;
-            boolean isPressed2 = false;
+            // int posCounter = 0;
+           // boolean isPressed = false;
+           // boolean isPressed2 = false;
             boolean RightDown = false;
             boolean LeftDown = false;
             boolean rightReset = false;
@@ -75,8 +77,14 @@
             boolean bumperPressed2 =false;
             boolean capBallTurn = false;
             GyroSensor gyro;
+            I2cAddr frontRangeI2c = I2cAddr.create8bit(0x46);
+            I2cAddr rightRangeI2c = I2cAddr.create8bit(0x36);
+            I2cAddr leftRangeI2c = I2cAddr.create8bit(0x30);
+            ModernRoboticsI2cRangeSensor front_range;
+            ModernRoboticsI2cRangeSensor right_range;
+            ModernRoboticsI2cRangeSensor left_range;
 
-            public void posA() {
+         /*   public void posA() {
                 // drive
                 // drop cam before slide goes down
                 cap_ball_tilt.setPower(0.3);
@@ -163,6 +171,7 @@
                     posReset();
                 }
             }
+            */
             public void vibrateCam(){
 
                 if(magazine_cam.getPosition()==camUp){
@@ -286,15 +295,12 @@
                 // mortar.setPower(engagePower);
                 // mortar.setTargetPosition(mortarEngagedState);
                 cap_ball_lift = hardwareMap.dcMotor.get("cap_ball_lift");
-                cap_ball_tilt = hardwareMap.dcMotor.get("cap_ball_tilt");
-                cap_ball_tilt.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+              //  cap_ball_tilt = hardwareMap.dcMotor.get("cap_ball_tilt");
+                // cap_ball_tilt.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 cap_ball_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                cap_ball_tilt.setPower(0.3);
-                cap_ball_lift.setPower(0.5);
+                //cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 cap_ball_lift.setMaxSpeed(1680);
-                cap_ball_lift.setTargetPosition(-121);
                 left_beacon=hardwareMap.servo.get("left_beacon");
                 right_beacon=hardwareMap.servo.get("right_beacon");
                 right_beacon.setDirection(Servo.Direction.REVERSE);
@@ -305,6 +311,21 @@
                 left_beacon.setPosition(0.19);
                 right_beacon.setPosition(0.26);
                 collector_gate.setPosition(PCGateDown);
+                right_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "right_range");
+                left_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "left_range");
+                front_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "front_range");
+                front_range.setI2cAddress(frontRangeI2c);
+                left_range.setI2cAddress(leftRangeI2c);
+                right_range.setI2cAddress(rightRangeI2c);
+                telemetry.addData("left_optical", left_range.cmOptical());
+                telemetry.addData("left_ultrasonic", left_range.cmUltrasonic());
+                telemetry.addData("right_optical", right_range.cmOptical());
+                telemetry.addData("right_ultrasonic", right_range.cmUltrasonic());
+                telemetry.addData("front_optical", front_range.cmOptical());
+                telemetry.addData("front_ultrasonic", front_range.cmUltrasonic());
+                /*telemetry.addData("left_address", left_range.getI2cAddress());
+                telemetry.addData("right_address", right_range.getI2cAddress());
+                telemetry.addData("front_address", front_range.getI2cAddress());*/
 /*        gyro=hardwareMap.gyroSensor.get("gyro");
         // Wait for the game to start (driver presses PLAY)
         gyro.calibrate(); */
@@ -505,7 +526,15 @@ else if(precisionMode&&backwardsMode){
                 }
                 telemetry.addData("shooterCount", shooterCount);
 
-                if (gamepad2.b) {
+                if(gamepad2.y&&cap_ball_lift.getCurrentPosition()<0){
+                    cap_ball_lift.setPower(1);
+                } else if(gamepad1.b&&cap_ball_lift.getCurrentPosition()>-15100){
+                    cap_ball_lift.setPower(-1);
+                } else{
+                    cap_ball_lift.setPower(0);
+                }
+
+              /*  if (gamepad2.b) {
                     isPressed = true;
                 }
                 if (isPressed && !gamepad2.b) {
@@ -530,10 +559,12 @@ else if(precisionMode&&backwardsMode){
                 }
                 /*if(shots<1){
                     magazine_cam.setPosition(camDown);
-                }*/
+                }
                 if (gamepad2.start) {
                     posEnd();
                 }
+
+                */
 
                 if (gamepad2.left_bumper) {
                     left_beacon.setPosition(.34);
