@@ -46,9 +46,11 @@ import org.firstinspires.ftc.robotcontroller.external.samples.ConceptNullOp;
 import org.firstinspires.ftc.robotcontroller.external.samples.DrivingPractice;
 import org.firstinspires.ftc.robotcontroller.external.samples.FirstAuto;
 import org.firstinspires.ftc.robotcontroller.external.samples.FirstTele;
+import org.firstinspires.ftc.robotcontroller.external.samples.I2CTest;
+import org.firstinspires.ftc.robotcontroller.external.samples.MRI_Range_Sensors;
 import org.firstinspires.ftc.robotcontroller.external.samples.NearBlue;
 import org.firstinspires.ftc.robotcontroller.external.samples.ParticleCollector;
-import org.firstinspires.ftc.robotcontroller.external.samples.RedorBlu;
+//import org.firstinspires.ftc.robotcontroller.external.samples.RedorBlu;
 import org.firstinspires.ftc.robotcontroller.external.samples.gates;
 import org.firstinspires.ftc.robotcontroller.external.samples.mortar;
 
@@ -105,6 +107,7 @@ public class FtcOpModeRegister implements OpModeRegister {
         manager.register("ParticleCollector", ParticleCollector.class);
         manager.register("Gates", gates.class);
         manager.register("DrivingPractice", DrivingPractice.class);
+        manager.register("I2CTest", I2CTest.class);
 
         //manager.register("RedorBlu", RedorBlu.class);
         manager.register("AutoNear", AutoNear.class);
@@ -112,8 +115,9 @@ public class FtcOpModeRegister implements OpModeRegister {
         manager.register("AutoNearDelay", AutoNearDelay.class);
         manager.register("AutoFar", AutoFar.class);
         manager.register("AutoFarWait", AutoFarWait.class);
+        manager.register("ModernRobotics Test", MRI_Range_Sensors.class);
 
-        manager.register("RedorBlu", RedorBlu.class);
+      //  manager.register("RedorBlu", RedorBlu.class);
         manager.register("CapBallReset", CapBallReset.class);
     }
 }
