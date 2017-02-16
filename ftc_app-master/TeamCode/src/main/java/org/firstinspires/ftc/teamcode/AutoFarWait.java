@@ -31,9 +31,10 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -45,17 +46,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 //delay, longer drive before shoot, turn for square after shoot, only shoot one or fix the mortar
-
+@Autonomous(name="AutoFarWait", group="Auto")
 public class AutoFarWait extends LinearOpMode {
+    mordorHardware robot           = new mordorHardware();
     private ElapsedTime runtime = new ElapsedTime();
-    //DcMotor leftMotor = null;
-    //DcMotor rightMotor = null;
-    I2cAddr leftColorI2c = I2cAddr.create8bit(0x4c);
-    I2cAddr floorI2c = I2cAddr.create8bit(0x70);
-    I2cAddr rightColorI2c = I2cAddr.create8bit(0x3c);
-    I2cAddr frontRangeI2c = I2cAddr.create8bit(0x44);
-    I2cAddr rightRangeI2c = I2cAddr.create8bit(0x34);
-    I2cAddr leftRangeI2c = I2cAddr.create8bit(0x28);
     double left;
     double right;
     double turnTolerance = 1;
@@ -83,53 +77,33 @@ public class AutoFarWait extends LinearOpMode {
     int mortarFreeState = 1440;
     int mortarEngagedState = 300;
     int driveDistance = (525);
-    DcMotor left_drive1;
-    DcMotor right_drive1;
-    DcMotor left_drive2;
-    DcMotor right_drive2;
-    DcMotor mortar;
-    DcMotor cap_ball_lift;
-    DcMotor cap_ball_tilt;
-    DcMotor particle_collector;
-    Servo left_beacon;
-    Servo right_beacon;
-    Servo collector_gate;
-    Servo magazine_cam;
-    Servo mortar_gate;
-    GyroSensor gyro;
     int shots = 1;
-    ModernRoboticsI2cRangeSensor front_range;
-    ModernRoboticsI2cRangeSensor right_range;
-    ModernRoboticsI2cRangeSensor left_range;
-    ColorSensor floor_seeker;
-    ColorSensor left_color;
-    ColorSensor right_color;
 
 
     public void stopMotors() {
-        right_drive1.setPower(0);
-        left_drive1.setPower(0);
-        right_drive2.setPower(0);
-        left_drive2.setPower(0);
+        robot.right_drive1.setPower(0);
+        robot.left_drive1.setPower(0);
+        robot.right_drive2.setPower(0);
+        robot.left_drive2.setPower(0);
     }
 
     public void setPowerLeft(double power) {
-        left_drive1.setPower(power);
-        left_drive2.setPower(power);
+        robot.left_drive1.setPower(power);
+        robot.left_drive2.setPower(power);
     }
 
     public void setPowerRight(double power) {
-        right_drive1.setPower(power);
-        right_drive2.setPower(power);
+        robot.right_drive1.setPower(power);
+        robot.right_drive2.setPower(power);
     }
 
     public void positionToShoot() {
-        right_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        left_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        right_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        left_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        magazine_cam.setPosition(camUp);
-        while (right_drive1.getCurrentPosition() < driveDistance && left_drive2.getCurrentPosition() < driveDistance&&opModeIsActive()) {
+        robot.right_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.left_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.right_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.left_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.magazine_cam.setPosition(camUp);
+        while (robot.right_drive1.getCurrentPosition() < driveDistance && robot.left_drive2.getCurrentPosition() < driveDistance&&opModeIsActive()) {
 
             setPowerLeft(.1);
             setPowerRight(.1);
@@ -145,25 +119,25 @@ public class AutoFarWait extends LinearOpMode {
     }
 
     public void shootBall() {
-        mortar.setPower(firingSpeed);
-        mortar.setTargetPosition(mortarFreeState);
-        mortar_gate.setPosition(mortarGateDown);
+        robot.mortar.setPower(firingSpeed);
+        robot.mortar.setTargetPosition(mortarFreeState);
+        robot.mortar_gate.setPosition(mortarGateDown);
         sleep(500);
-        mortar_gate.setPosition(mortarGateUp);
+        robot.mortar_gate.setPosition(mortarGateUp);
         sleep(1000);
-        mortar_gate.setPosition(mortarGateDown);
-        mortar.setPower(firingSpeed);
-        mortar.setTargetPosition(mortarFreeState * 2);
+        robot.mortar_gate.setPosition(mortarGateDown);
+        robot.mortar.setPower(firingSpeed);
+        robot.mortar.setTargetPosition(mortarFreeState * 2);
     }
 
     public void capBall() {
-        while (right_drive1.getCurrentPosition() < (driveDistance * 3)
+        while (robot.right_drive1.getCurrentPosition() < (driveDistance * 3)
                 //note: if you think you need to set it to *2, make it *3 and if you want *3, make it *4, etc.
-                && left_drive2.getCurrentPosition() < (driveDistance * 3)&&opModeIsActive()) {
-            left_drive1.setPower(.15);
-            left_drive2.setPower(.15);
-            right_drive1.setPower(.15);
-            right_drive2.setPower(.15);
+                && robot.left_drive2.getCurrentPosition() < (driveDistance * 3)&&opModeIsActive()) {
+            robot.left_drive1.setPower(.15);
+            robot.left_drive2.setPower(.15);
+            robot.right_drive1.setPower(.15);
+            robot.right_drive2.setPower(.15);
            /* while(getRuntime() < 2 ) {
                 left_drive1.setPower(-1);
                 left_drive1.setMaxSpeed(-200);
@@ -187,12 +161,12 @@ public class AutoFarWait extends LinearOpMode {
 
 
     public void findWhiteLine() {
-        while (floor_seeker.blue() < 12) {
-            left_drive1.setPower(0.1);
-            left_drive2.setPower(0.1);
-            right_drive1.setPower(0.1);
-            right_drive2.setPower(0.1);
-            telemetry.addData("sensor", floor_seeker.blue());
+        while (robot.floor_seeker.blue() < 12) {
+            robot.left_drive1.setPower(0.1);
+            robot.left_drive2.setPower(0.1);
+            robot.right_drive1.setPower(0.1);
+            robot.right_drive2.setPower(0.1);
+            telemetry.addData("sensor", robot.floor_seeker.blue());
             //wallSense();
         }
         stopMotors();
@@ -266,58 +240,8 @@ public class AutoFarWait extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        telemetry.addData("Status first", "Initialized");
-        telemetry.update();
-        /*left_color = hardwareMap.colorSensor.get("left_color");
-        right_color = hardwareMap.colorSensor.get("right_color");
-        floor_seeker = hardwareMap.colorSensor.get("floor_seeker");
-        left_color.setI2cAddress(leftColorI2c);
-        right_color.setI2cAddress(rightColorI2c);
-        floor_seeker.setI2cAddress(floorI2c);
-        floor_seeker.enableLed(false);
-        floor_seeker.enableLed(true);
-        right_color.enableLed(false);
-        left_color.enableLed(false);
-        right_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "right_range");
-        left_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "left_range");
-        front_range = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "front_range");
-        front_range.setI2cAddress(frontRangeI2c);
-        left_range.setI2cAddress(leftRangeI2c);
-        right_range.setI2cAddress(rightRangeI2c);*/
-        left_drive1 = hardwareMap.dcMotor.get("left_drive1");
-        left_drive2 = hardwareMap.dcMotor.get("left_drive2");
-        right_drive1 = hardwareMap.dcMotor.get("right_drive1");
-        right_drive2 = hardwareMap.dcMotor.get("right_drive2");
-        right_drive2.setDirection(DcMotorSimple.Direction.REVERSE);
-        left_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
-        mortar = hardwareMap.dcMotor.get("mortar");
-        mortar.setDirection(DcMotorSimple.Direction.REVERSE);
-        mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        mortar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        mortar_gate = hardwareMap.servo.get("mortar_gate");
-        cap_ball_lift = hardwareMap.dcMotor.get("cap_ball_lift");
-        cap_ball_tilt = hardwareMap.dcMotor.get("cap_ball_tilt");
-        cap_ball_tilt.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        cap_ball_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        cap_ball_tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        cap_ball_lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        cap_ball_tilt.setPower(0.3);
-        left_beacon = hardwareMap.servo.get("left_beacon");
-        right_beacon = hardwareMap.servo.get("right_beacon");
-        right_beacon.setDirection(Servo.Direction.REVERSE);
-        left_beacon.setPosition(0.19);
-        right_beacon.setPosition(0.26);
-        particle_collector = hardwareMap.dcMotor.get("particle_collector");
-        collector_gate = hardwareMap.servo.get("collector_gate");
-        magazine_cam = hardwareMap.servo.get("magazine_cam");
-        gyro = hardwareMap.gyroSensor.get("gyro");
-        collector_gate.setPosition(PCGateDown);
-        mortar_gate.setPosition(mortarGateDown);
-        magazine_cam.setPosition(camZero);
-        gyro.calibrate();
-        while (gyro.isCalibrating()) {
-            sleep(40);
-        }
+        robot.init(hardwareMap);
+
 
         waitForStart();
         resetStartTime();
