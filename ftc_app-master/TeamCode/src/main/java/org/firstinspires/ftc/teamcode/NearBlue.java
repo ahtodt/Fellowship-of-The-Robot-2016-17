@@ -64,6 +64,7 @@ public class NearBlue extends LinearOpMode {
     int driveDistance = (470);
     boolean correctColor1 = false;
     boolean correctColor2 = false;
+    boolean firstPress =true;
 
 
 
@@ -101,7 +102,7 @@ public class NearBlue extends LinearOpMode {
 
     }
     public void detectColor(){
-        if (robot.right_color.blue() > robot.right_color.red()) {
+        if (robot.frontColor.blue() > robot.frontColor.red()) {
             correctColor1 =true;
         }
     }
@@ -204,30 +205,17 @@ public class NearBlue extends LinearOpMode {
 
         robot.stopMotors();
     }
-
-
-    public void wallSense(){
-        while(robot.left_range.cmUltrasonic()<20){
-            robot.right_drive1.setPower(.01);
-            robot.right_drive2.setPower(.01);
-            robot.left_drive1.setPower(.01);
-            robot.left_drive2.setPower(.01);
-        }while(robot.left_range.cmUltrasonic()>=20){
-            robot.left_drive1.setPower(.01);
-            robot.left_drive2.setPower(.01);
-            robot.right_drive1.setPower(.01);
-            robot.right_drive2.setPower(.01);
-        }
-    }
-
-
     public void firstBeaconPress() {
-        turnRight(85, .05);
+        turnRight(85, .03);
         sleep(500);
         while(!correctColor1) {
+            if(!firstPress){
+                sleep(4500);
+            }
             hitBeacon();
             detectColor();
             backUp();
+            firstPress = false;
         }
     }
     public void smallMove1(){
@@ -304,12 +292,12 @@ public class NearBlue extends LinearOpMode {
 
     public void turnToWall(){
         turnTolerance = 2;
-        turnRight(33, .05);
+        turnRight(47, .05);
         sleep(500);
     }
     public void turnNormal(){
         turnTolerance = 2;
-        turnLeft(5,.05);
+        turnLeft(8,.05);
         sleep(500);
     }
     @Override

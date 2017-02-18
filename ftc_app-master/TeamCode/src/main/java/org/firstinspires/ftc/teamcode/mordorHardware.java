@@ -39,7 +39,6 @@ public class mordorHardware
     GyroSensor gyro;
     ColorSensor floor_seeker;
     ColorSensor frontColor;
-    ModernRoboticsI2cRangeSensor left_range;
     I2cAddr leftRangeI2c = I2cAddr.create8bit(0x28);
     I2cAddr floorI2c = I2cAddr.create8bit(0x70);
     final double PCGateUp = .3;
@@ -86,8 +85,6 @@ public class mordorHardware
         left_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         right_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         right_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        left_range = hwMap.get(ModernRoboticsI2cRangeSensor.class, "left_range");
-        left_range.setI2cAddress(leftRangeI2c);
         /*cap_ball_lift = hardwareMap.dcMotor.get("cap_ball_lift");
         cap_ball_tilt = hardwareMap.dcMotor.get("cap_ball_tilt");*/
         particle_collector = hwMap.dcMotor.get("particle_collector");
@@ -111,7 +108,6 @@ public class mordorHardware
         left_beacon.setPosition(leftBeaconIn);
         right_beacon.setPosition(rightBeaconIn);
         collector_gate.setPosition(PCGateDown);
-        left_range = hwMap.get(ModernRoboticsI2cRangeSensor.class, "left_range");
         mortar_gate.setPosition(mortarGateDown);
         magazine_cam.setPosition(camDown);
          gyro=hwMap.gyroSensor.get("gyro");

@@ -63,11 +63,6 @@ public class AutoNear extends LinearOpMode {
     int mortarFreeState = 1440;
     int driveDistance = (525);
     double target = 20;
-    double rangeDistance = robot.left_range.cmUltrasonic();
-    double error = rangeDistance - target;
-    double differential = error * 0.1;
-    double rightVelocity = robot.right_drive1.getPower();
-    double leftVelocity = robot.left_drive1.getPower();
 
 
     public void positionToShoot() {
@@ -225,48 +220,15 @@ public class AutoNear extends LinearOpMode {
 
         }
     }
-
-        public void wallSense() {
-            while (robot.left_range.cmUltrasonic() < 20) {
-                robot.right_drive1.setPower(.01);
-                robot.right_drive2.setPower(.01);
-                robot.left_drive1.setPower(.01);
-                robot.left_drive2.setPower(.01);
-            }
-            while (robot.left_range.cmUltrasonic() >= 20) {
-                robot.left_drive1.setPower(.01);
-                robot.left_drive2.setPower(.01);
-                robot.right_drive1.setPower(.01);
-                robot.right_drive2.setPower(.01);
-            }
-            robot.stopMotors();
-        }
-            /* right_drive1.setPower(.2);
-               right_drive2.setPower(.2);
-               left_drive1.setPower(.2);
-               left_drive1.setPower(.2);*/
-    /*         right_drive1.setMaxSpeed(1680);
-               right_drive2.setMaxSpeed(1680);
-               left_drive1.setMaxSpeed(1680);
-               left_drive2.setMaxSpeed(1680);*/
-    /*      if(distance != target){
-               right_drive1.setPower(rightVelocityCorrection); //potentially reverse different motors in hardware map
-               right_drive2.setPower(rightVelocityCorrection);
-               left_drive1.setPower(leftVelocityCorrection);
-               left_drive2.setPower(leftVelocityCorrection);*/
-                //stopMotors();
-
-
-
         public void firstBeaconPress() {
             robot.stopMotors();
-            if (robot.left_color.red() > 1.5) {
+            if (robot.frontColor.red() > 1.5) {
                 robot.left_beacon.setPosition(robot.leftBeaconOut);
                smallMove1();
                 sleep(500);
                 robot.left_beacon.setPosition(robot.leftBeaconIn);
                 smallMove2();
-            } else if (robot.left_color.blue() > 1.5) {
+            } else if (robot.frontColor.blue() > 1.5) {
                 //add code for specific position/encoder ticks forward
                 smallMove1();
                 sleep(500);
@@ -399,21 +361,6 @@ public class AutoNear extends LinearOpMode {
 
 
     }
-    public void secondBeaconPress(){
-        robot.right_drive1.setMaxSpeed(0);
-        robot.right_drive2.setMaxSpeed(0);
-        robot.left_drive1.setMaxSpeed(0);
-        robot.left_drive2.setMaxSpeed(0);
-            if (robot.left_color.red() > 1.5) {
-                robot.left_beacon.setPosition(.15);
-        //park();
-            }
-            else if (robot.left_color.blue() > 1.5) {
-                //add code for specific position/encoder ticks forward
-                robot.left_beacon.setPosition(.15);
-                //park();
-            }
-        }
 
         public void park(){
             //enter some code about how to park
@@ -436,6 +383,5 @@ public class AutoNear extends LinearOpMode {
         //firstBeaconPress();
         //capBall();
         //shoot(30);
-        wallSense();
     }
 }
