@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.adafruit.BNO055IMU;
+import com.qualcomm.hardware.adafruit.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,6 +11,13 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 /**
  * This is NOT an opmode.
@@ -39,7 +48,6 @@ public class mordorHardware
     GyroSensor gyro;
     ColorSensor floor_seeker;
     ColorSensor frontColor;
-    I2cAddr leftRangeI2c = I2cAddr.create8bit(0x28);
     I2cAddr floorI2c = I2cAddr.create8bit(0x70);
     final double PCGateUp = .3;
     final double PCGateDown = .75;
@@ -73,6 +81,7 @@ public class mordorHardware
         frontColor = hwMap.colorSensor.get("frontColor");
         floor_seeker.setI2cAddress(floorI2c);
         frontColor.enableLed(false);
+        frontColor.enableLed(true);
         floor_seeker.enableLed(false);
         floor_seeker.enableLed(true);
         left_drive1=hwMap.dcMotor.get("left_drive1");
