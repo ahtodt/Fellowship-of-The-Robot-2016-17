@@ -49,40 +49,18 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous(name="AutoNear", group="Auto")
 public class AutoNear extends LinearOpMode {
     mordorHardware robot           = new mordorHardware();
-    private ElapsedTime runtime = new ElapsedTime();
-    double left;
-    double right;
     double turnTolerance;
-    double newHeading;
-    double oneRotation = 420;
     double currentHeading;
     double powerFloor;
     double floor = .015;
     double driveGain = .0003;
     int distance = 1450;
-    double directionAdjust;
-    double startHeading;
     double headingError;
     double driveSteering;
     double leftPower;
     double rightPower;
-    double engagePower = .2;
     double firingSpeed = .9;
-    double cockingSpeed = .5;
-    double mortarGateUp = .6;
-    double mortarGateDown = 1;
-    double camUp = 0;
-    double camMid = .3;
-    double camDown = .5;
-    double camZero = 1;
-    double PCGateUp = .3;
-    double PCGateDown = .75;
-    double leftBeaconOut = .34;
-    double rightBeaconOut = .41;
-    double leftBeaconIn = .19;
-    double rightBeaconIn = .26;
     int mortarFreeState = 1440;
-    int mortarEngagedState = 300;
     int driveDistance = (525);
     double target = 20;
     double rangeDistance = robot.left_range.cmUltrasonic();
@@ -90,42 +68,20 @@ public class AutoNear extends LinearOpMode {
     double differential = error * 0.1;
     double rightVelocity = robot.right_drive1.getPower();
     double leftVelocity = robot.left_drive1.getPower();
-    double leftVelocityCorrection = leftVelocity + differential;
-    double rightVelocityCorrection = rightVelocity + differential;
-    //int rightVelocityCorrectionInt = (int)Math.round(rightVelocityCorrection);
-    //int leftVelocityCorrectionInt = (int)Math.round(leftVelocityCorrection);
 
-
-
-    public void stopMotors() {
-        robot.right_drive1.setPower(0);
-        robot.left_drive1.setPower(0);
-        robot.right_drive2.setPower(0);
-        robot.left_drive2.setPower(0);
-    }
-
-    public void setPowerLeft(double power) {
-        robot.left_drive1.setPower(power);
-        robot.left_drive2.setPower(power);
-    }
-
-    public void setPowerRight(double power) {
-        robot.right_drive1.setPower(power);
-        robot.right_drive2.setPower(power);
-    }
 
     public void positionToShoot() {
         robot.right_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.left_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.right_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.left_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.magazine_cam.setPosition(camUp);
+        robot.magazine_cam.setPosition(robot.camUp);
         while (robot.right_drive1.getCurrentPosition() < driveDistance && robot.left_drive2.getCurrentPosition() < driveDistance&&opModeIsActive()) {
 
-            setPowerLeft(.2);
-            setPowerRight(.2);
+            robot.setPowerLeft(.2);
+            robot.setPowerRight(.2);
         }
-        stopMotors();
+        robot.stopMotors();
     }
 
 
@@ -137,11 +93,11 @@ public class AutoNear extends LinearOpMode {
     public void shootBall() {
         robot.mortar.setPower(firingSpeed);
         robot.mortar.setTargetPosition(mortarFreeState);
-        robot.mortar_gate.setPosition(mortarGateDown);
+        robot.mortar_gate.setPosition(robot.mortarGateDown);
         sleep(500);
-        robot.mortar_gate.setPosition(mortarGateUp);
+        robot.mortar_gate.setPosition(robot.mortarGateUp);
         sleep(1000);
-        robot.mortar_gate.setPosition(mortarGateDown);
+        robot.mortar_gate.setPosition(robot.mortarGateDown);
         robot.mortar.setPower(firingSpeed);
         robot.mortar.setTargetPosition(mortarFreeState * 2);
     }
@@ -170,7 +126,7 @@ public class AutoNear extends LinearOpMode {
                 right_drive2.setPower(0);
             }*/
         }
-        stopMotors();
+        robot.stopMotors();
 
     }
 
@@ -185,10 +141,9 @@ public class AutoNear extends LinearOpMode {
             robot.left_drive2.setPower(0.1);
             robot.right_drive1.setPower(0.1);
             robot.right_drive2.setPower(0.1);
-            telemetry.addData("sensor", robot.floor_seeker.blue());
             //wallSense();
         }
-        stopMotors();
+        robot.stopMotors();
 
     }
     public void gyroTurnLeft(double desiredAngle) {
@@ -221,18 +176,15 @@ public class AutoNear extends LinearOpMode {
             rightPower = -.2;
         }
 
-        setPowerLeft(leftPower);
-        setPowerRight(rightPower);
-
-        telemetry.addData("in turn loop", leftPower);
-            telemetry.addData("gyro", robot.gyro.getHeading());
+            robot.setPowerLeft(leftPower);
+            robot.setPowerRight(rightPower);
 
     } while (Math.abs(currentHeading-desiredAngle)>turnTolerance&&opModeIsActive());
 
-    stopMotors();
+        robot.stopMotors();
 }
     public void wallTurn(int target){
-        stopMotors();
+        robot.stopMotors();
         robot.right_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.left_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.right_drive2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -241,8 +193,8 @@ public class AutoNear extends LinearOpMode {
         robot.left_drive1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.right_drive2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.left_drive2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        setPowerLeft(.1);
-        setPowerRight(.1);
+        robot.setPowerLeft(.1);
+        robot.setPowerRight(.1);
         robot.left_drive1.setTargetPosition(-target);
         robot.left_drive2.setTargetPosition(-target);
         robot.right_drive1.setTargetPosition(target);
@@ -253,7 +205,7 @@ public class AutoNear extends LinearOpMode {
         }
     }
     public void lineTurn(int angle){
-        stopMotors();
+        robot.stopMotors();
         robot.right_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.left_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.right_drive2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -262,8 +214,8 @@ public class AutoNear extends LinearOpMode {
         robot.left_drive1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.right_drive2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.left_drive2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        setPowerLeft(.1);
-        setPowerRight(.1);
+        robot.setPowerLeft(.1);
+        robot.setPowerRight(.1);
         robot.left_drive1.setTargetPosition(-angle+20);
         robot.left_drive2.setTargetPosition(-angle+20);
         robot.right_drive1.setTargetPosition(angle+10);
@@ -287,7 +239,7 @@ public class AutoNear extends LinearOpMode {
                 robot.right_drive1.setPower(.01);
                 robot.right_drive2.setPower(.01);
             }
-            stopMotors();
+            robot.stopMotors();
         }
             /* right_drive1.setPower(.2);
                right_drive2.setPower(.2);
@@ -307,31 +259,31 @@ public class AutoNear extends LinearOpMode {
 
 
         public void firstBeaconPress() {
-            stopMotors();
+            robot.stopMotors();
             if (robot.left_color.red() > 1.5) {
-                robot.left_beacon.setPosition(leftBeaconOut);
+                robot.left_beacon.setPosition(robot.leftBeaconOut);
                smallMove1();
                 sleep(500);
-                robot.left_beacon.setPosition(leftBeaconIn);
+                robot.left_beacon.setPosition(robot.leftBeaconIn);
                 smallMove2();
             } else if (robot.left_color.blue() > 1.5) {
                 //add code for specific position/encoder ticks forward
                 smallMove1();
                 sleep(500);
-                robot.left_beacon.setPosition(leftBeaconOut);
+                robot.left_beacon.setPosition(robot.leftBeaconOut);
                 smallMove2();
                 sleep(500);
-                robot.left_beacon.setPosition(leftBeaconIn);
+                robot.left_beacon.setPosition(robot.leftBeaconIn);
             }else{
                 forward();
             }
-            stopMotors();
+            robot.stopMotors();
         }
     public void smallMove1(){
         int encoderStart1 = robot.right_drive1.getCurrentPosition();
         while(robot.right_drive1.getCurrentPosition()<encoderStart1+70&&opModeIsActive()){
-            setPowerLeft(.05);
-            setPowerRight(.05);
+            robot.setPowerLeft(.05);
+            robot.setPowerRight(.05);
         }
 
     }
@@ -339,8 +291,8 @@ public class AutoNear extends LinearOpMode {
 
         int encoderStart2 = robot.right_drive1.getCurrentPosition();
         while(robot.right_drive1.getCurrentPosition()<encoderStart2+70&&opModeIsActive()){
-            setPowerLeft(.05);
-            setPowerRight(.05);
+            robot.setPowerLeft(.05);
+            robot.setPowerRight(.05);
         }
 
     }
@@ -349,8 +301,8 @@ public class AutoNear extends LinearOpMode {
 
         int encoderStart = robot.right_drive1.getCurrentPosition();
         while(robot.right_drive1.getCurrentPosition()<encoderStart+100&&opModeIsActive()){
-            setPowerLeft(.1);
-            setPowerRight(.1);
+            robot.setPowerLeft(.1);
+            robot.setPowerRight(.1);
         }
     }
     public void turnToWhiteLine(double desiredAngle) {
@@ -383,15 +335,12 @@ public class AutoNear extends LinearOpMode {
                 rightPower = -.2;
             }
 
-            setPowerLeft(leftPower);
-            setPowerRight(rightPower);
-
-            telemetry.addData("in turn loop", leftPower);
-            telemetry.addData("gyro", robot.gyro.getHeading());
+            robot.setPowerLeft(leftPower);
+            robot.setPowerRight(rightPower);
 
         } while (Math.abs(currentHeading-desiredAngle)>turnTolerance&&opModeIsActive());
 
-        stopMotors();
+        robot.stopMotors();
     }
     public void driveStraight(){
         robot.right_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -423,10 +372,10 @@ public class AutoNear extends LinearOpMode {
                 right_drive1.setMaxSpeed(700);
                 right_drive2.setMaxSpeed(700);
             }*/
-            setPowerRight(.2);
-            setPowerLeft(.2);
+            robot.setPowerRight(.2);
+            robot.setPowerLeft(.2);
         }
-        stopMotors();
+        robot.stopMotors();
     }
     public void turnToWall(){
         turnTolerance = 1;

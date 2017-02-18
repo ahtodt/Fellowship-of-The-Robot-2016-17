@@ -14,17 +14,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * This is NOT an opmode.
  *
  * This class can be used to define all the specific hardware for a single robot.
- * In this case that robot is a Pushbot.
- * See PushbotTeleopTank_Iterative and others classes starting with "Pushbot" for usage examples.
+ * In this case that robot is Mordor
  *
- * This hardware class assumes the following device names have been configured on the robot:
- * Note:  All names are lower case and some have single spaces between words.
+ * Everything here is used in both auto and tele
  *
- * Motor channel:  Left  drive motor:        "left_drive"
- * Motor channel:  Right drive motor:        "right_drive"
- * Motor channel:  Manipulator drive motor:  "left_arm"
- * Servo channel:  Servo to open left claw:  "left_hand"
- * Servo channel:  Servo to open right claw: "right_hand"
+ * don't fuck this up
+ *
  */
 public class mordorHardware
 {
@@ -43,24 +38,22 @@ public class mordorHardware
     Servo left_beacon;
     GyroSensor gyro;
     ColorSensor floor_seeker;
-    ColorSensor left_color;
-    ColorSensor right_color;
+    ColorSensor frontColor;
     ModernRoboticsI2cRangeSensor left_range;
     I2cAddr leftRangeI2c = I2cAddr.create8bit(0x28);
-    I2cAddr leftColorI2c = I2cAddr.create8bit(0x4c);
     I2cAddr floorI2c = I2cAddr.create8bit(0x70);
-    I2cAddr rightColorI2c = I2cAddr.create8bit(0x3c);
-    double PCGateUp = .3;
-    double PCGateDown = .75;
-    double mortarGateUp = .6;
-    double mortarGateDown = 1;
-    double camUp = 1;
-    double camMid = .5;
-    double camDown = .3;
-    double leftBeaconOut = .34;
-    double rightBeaconOut = .41;
-    double leftBeaconIn = .19;
-    double rightBeaconIn = .26;
+    final double PCGateUp = .3;
+    final double PCGateDown = .75;
+    final double mortarGateUp = .6;
+    final double mortarGateDown = 1;
+    final double camUp = 1;
+    final double camMid = .5;
+    final double camDown = .3;
+    final double leftBeaconOut = .34;
+    final double rightBeaconOut = .41;
+    final double leftBeaconIn = .19;
+    final double rightBeaconIn = .26;
+    double currentHeading;
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -77,16 +70,12 @@ public class mordorHardware
         hwMap = ahwMap;
 
         // Define and Initialize Motors
-        left_color = hwMap.colorSensor.get("left_color");
-        right_color = hwMap.colorSensor.get("right_color");
         floor_seeker=hwMap.colorSensor.get("floor_seeker");
-        left_color.setI2cAddress(leftColorI2c);
-        right_color.setI2cAddress(rightColorI2c);
+        frontColor = hwMap.colorSensor.get("frontColor");
         floor_seeker.setI2cAddress(floorI2c);
+        frontColor.enableLed(false);
         floor_seeker.enableLed(false);
         floor_seeker.enableLed(true);
-        right_color.enableLed(false);
-        left_color.enableLed(false);
         left_drive1=hwMap.dcMotor.get("left_drive1");
         left_drive2=hwMap.dcMotor.get("left_drive2");
         right_drive1=hwMap.dcMotor.get("right_drive1");
@@ -156,5 +145,49 @@ public class mordorHardware
         // Reset the cycle clock for the next pass.
         period.reset();
     }
+    public void stopMotors() {
+        right_drive1.setPower(0);
+        left_drive1.setPower(0);
+        right_drive2.setPower(0);
+        left_drive2.setPower(0);
+    }
+
+    public void setPowerLeft(double power) {
+        left_drive1.setPower(power);
+        left_drive2.setPower(power);
+    }
+
+    public void setPowerRight(double power) {
+        right_drive1.setPower(power);
+        right_drive2.setPower(power);
+    }
+    public void turnLeft(int angle, double power){
+        do {
+
+            if (gyro.getHeading() > 180) {
+                currentHeading = gyro.getHeading() - 360;
+            } else {
+                currentHeading = gyro.getHeading();
+            }
+            setPowerRight(power);
+            setPowerLeft(-power);
+        } while(currentHeading>angle);
+        stopMotors();
+    }
+    public void turnRight(int angle, double power){
+        do {
+
+            if (gyro.getHeading() > 180) {
+                currentHeading = gyro.getHeading() - 360;
+            } else {
+                currentHeading = gyro.getHeading();
+            }
+            setPowerRight(-power);
+            setPowerLeft(power);
+        } while(currentHeading<angle);
+        stopMotors();
+    }
+
+
 }
 

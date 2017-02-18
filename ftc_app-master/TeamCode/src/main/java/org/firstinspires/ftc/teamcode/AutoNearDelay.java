@@ -49,65 +49,23 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous(name="AutoNearWait", group="Auto")
 public class AutoNearDelay extends LinearOpMode {
     mordorHardware robot           = new mordorHardware();
-    private ElapsedTime runtime = new ElapsedTime();
-    double left;
-    double right;
-    double turnTolerance = 1;
-    double newHeading;
-    double oneRotation = 420;
-    double currentHeading;
-    double driveGain = .007;
-    double directionAdjust;
-    double startHeading;
-    double headingError;
-    double driveSteering;
-    double leftPower;
-    double rightPower;
-    double engagePower = .2;
     double firingSpeed = .9;
-    double cockingSpeed = .5;
-    double mortarGateUp = .6;
-    double mortarGateDown = 1;
-    double camUp = 0;
-    double camMid = .3;
-    double camDown = .5;
-    double camZero = 1;
-    double PCGateUp = .3;
-    double PCGateDown = .75;
     int mortarFreeState = 1440;
-    int mortarEngagedState = 300;
     int driveDistance = (525);
 
-
-    public void stopMotors() {
-        robot.right_drive1.setPower(0);
-        robot.left_drive1.setPower(0);
-        robot.right_drive2.setPower(0);
-        robot.left_drive2.setPower(0);
-    }
-
-    public void setPowerLeft(double power) {
-        robot.left_drive1.setPower(power);
-        robot.left_drive2.setPower(power);
-    }
-
-    public void setPowerRight(double power) {
-        robot.right_drive1.setPower(power);
-        robot.right_drive2.setPower(power);
-    }
 
     public void positionToShoot() {
         robot.right_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.left_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.right_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.left_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.magazine_cam.setPosition(camUp);
+        robot.magazine_cam.setPosition(robot.camUp);
         while (robot.right_drive1.getCurrentPosition() < driveDistance && robot.left_drive2.getCurrentPosition() < driveDistance&&opModeIsActive()) {
 
-            setPowerLeft(.1);
-            setPowerRight(.1);
+            robot.setPowerLeft(.1);
+            robot.setPowerRight(.1);
         }
-        stopMotors();
+        robot.stopMotors();
     }
 
 
@@ -120,11 +78,11 @@ public class AutoNearDelay extends LinearOpMode {
     public void shootBall() {
         robot.mortar.setPower(firingSpeed);
         robot.mortar.setTargetPosition(mortarFreeState);
-        robot.mortar_gate.setPosition(mortarGateDown);
+        robot.mortar_gate.setPosition(robot.mortarGateDown);
         sleep(500);
-        robot.mortar_gate.setPosition(mortarGateUp);
+        robot.mortar_gate.setPosition(robot.mortarGateUp);
         sleep(1000);
-        robot.mortar_gate.setPosition(mortarGateDown);
+        robot.mortar_gate.setPosition(robot.mortarGateDown);
         robot.mortar.setPower(firingSpeed);
         robot.mortar.setTargetPosition(mortarFreeState * 2);
     }
@@ -153,7 +111,7 @@ public class AutoNearDelay extends LinearOpMode {
                 right_drive2.setPower(0);
             }*/
         }
-        stopMotors();
+        robot.stopMotors();
 
     }
 
@@ -164,10 +122,9 @@ public class AutoNearDelay extends LinearOpMode {
             robot.left_drive2.setPower(0.1);
             robot.right_drive1.setPower(0.1);
             robot.right_drive2.setPower(0.1);
-            telemetry.addData("sensor", robot.floor_seeker.blue());
             //wallSense();
         }
-        stopMotors();
+        robot.stopMotors();
         //redBeaconPress();
 
     }

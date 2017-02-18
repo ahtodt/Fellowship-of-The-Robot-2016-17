@@ -49,68 +49,62 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous(name="NearBlueNoWait", group="Auto")
 public class NearBlue extends LinearOpMode {
     mordorHardware robot           = new mordorHardware();
-    private ElapsedTime runtime = new ElapsedTime();
-    //DcMotor leftMotor = null;
-    //DcMotor rightMotor = null;
-    I2cAddr leftColorI2c = I2cAddr.create8bit(0x4c);
-    I2cAddr floorI2c = I2cAddr.create8bit(0x70);
-    I2cAddr rightColorI2c = I2cAddr.create8bit(0x3c);
-    double left;
-    double right;
     double turnTolerance;
-    double newHeading;
-    double oneRotation = 420;
     double currentHeading;
     double powerFloor;
     double floor = .06;
     double driveGain = .0000;
     int distance = 1450;
-    double directionAdjust;
-    double startHeading;
     double headingError;
     double driveSteering;
     double leftPower;
     double rightPower;
-    double engagePower = .2;
     double firingSpeed = .9;
-    double cockingSpeed = .5;
     int mortarFreeState = 1440;
-    int mortarEngagedState = 300;
     int driveDistance = (470);
+    boolean correctColor1 = false;
+    boolean correctColor2 = false;
 
 
 
-    public void stopMotors() {
-        robot.right_drive1.setPower(0);
-        robot.left_drive1.setPower(0);
-        robot.right_drive2.setPower(0);
-        robot.left_drive2.setPower(0);
-    }
 
-    public void setPowerLeft(double power) {
-        robot.left_drive1.setPower(power);
-        robot.left_drive2.setPower(power);
-    }
-
-    public void setPowerRight(double power) {
-        robot.right_drive1.setPower(power);
-        robot.right_drive2.setPower(power);
-    }
-
-    public void positionToShoot() {
+    public void resetEncoders(){
+        robot.right_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.left_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.right_drive2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.left_drive2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.right_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.left_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.right_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.left_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+    public void positionToShoot() {
         robot.magazine_cam.setPosition(robot.camUp);
         while (robot.right_drive1.getCurrentPosition() < driveDistance && robot.left_drive2.getCurrentPosition() < driveDistance&&opModeIsActive()) {
 
-            setPowerLeft(.2);
-            setPowerRight(.2);
+            robot.setPowerLeft(.2);
+            robot.setPowerRight(.2);
         }
-        stopMotors();
+        robot.stopMotors();
     }
+    public void hitBeacon(){
+        robot.setPowerLeft(.1);
+        robot.setPowerRight(.1);
+        sleep(1000);
+        robot.stopMotors();
+    }
+    public void backUp(){
+        robot.setPowerLeft(-.1);
+        robot.setPowerRight(-.1);
+        sleep(500);
+        robot.stopMotors();
 
+    }
+    public void detectColor(){
+        if (robot.right_color.blue() > robot.right_color.red()) {
+            correctColor1 =true;
+        }
+    }
     public void shootBall() {
         robot.mortar.setPower(firingSpeed);
         robot.mortar.setTargetPosition(mortarFreeState);
@@ -122,7 +116,33 @@ public class NearBlue extends LinearOpMode {
         robot.mortar.setPower(firingSpeed);
         robot.mortar.setTargetPosition(mortarFreeState * 2);
     }
+    public void turnLeft(int angle, double power){
+        do {
 
+            if (robot.gyro.getHeading() > 180) {
+                currentHeading = robot.gyro.getHeading() - 360;
+            } else {
+                currentHeading = robot.gyro.getHeading();
+            }
+            robot.setPowerRight(power);
+            robot.setPowerLeft(-power);
+        } while(currentHeading>angle);
+        robot.stopMotors();
+        robot.stopMotors();
+    }
+    public void turnRight(int angle, double power){
+        do {
+
+            if (robot.gyro.getHeading() > 180) {
+                currentHeading = robot.gyro.getHeading() - 360;
+            } else {
+                currentHeading = robot.gyro.getHeading();
+            }
+            robot.setPowerRight(-power);
+            robot.setPowerLeft(power);
+        } while(currentHeading<angle);
+        robot.stopMotors();
+    }
     public void capBall() {
         while (robot.right_drive1.getCurrentPosition() < (driveDistance * 2.25)
                 && robot.left_drive2.getCurrentPosition() < (driveDistance * 2.25)&&opModeIsActive()) {
@@ -130,42 +150,21 @@ public class NearBlue extends LinearOpMode {
             robot.left_drive2.setPower(.1);
             robot.right_drive1.setPower(.2);
             robot.right_drive2.setPower(.2);
-           /* while(getRuntime() < 2 ) {
-                left_drive1.setPower(-1);
-                left_drive1.setMaxSpeed(-200);
-                left_drive2.setPower(-1);
-                left_drive2.setMaxSpeed(-200);
-                right_drive1.setPower(0);
-                right_drive2.setPower(0);
-            }
-            while(gyro.getHeading() > 190) {
-                left_drive1.setPower(-1);
-                left_drive1.setMaxSpeed(-200);
-                left_drive2.setPower(-1);
-                left_drive2.setMaxSpeed(-200);
-                right_drive1.setPower(0);
-                right_drive2.setPower(0);
-            }*/
         }
-        stopMotors();
+        robot.stopMotors();
 
     }
 
 
     public void findWhiteLine() {
-        robot.right_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.left_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.right_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.left_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         while (robot.floor_seeker.green() < 6&&opModeIsActive()) {
             robot.left_drive1.setPower(0.1);
             robot.left_drive2.setPower(0.1);
             robot.right_drive1.setPower(0.1);
             robot.right_drive2.setPower(0.1);
-            telemetry.addData("sensor", robot.floor_seeker.blue());
             //wallSense();
         }
-        stopMotors();
+        robot.stopMotors();
 
     }
     public void gyroTurnLeft(double desiredAngle) {
@@ -198,42 +197,14 @@ public class NearBlue extends LinearOpMode {
                 rightPower = -.2;
             }
 
-            setPowerLeft(leftPower);
-            setPowerRight(rightPower);
-
-            telemetry.addData("in turn loop", leftPower);
-            telemetry.addData("gyro", robot.gyro.getHeading());
+            robot.setPowerLeft(leftPower);
+            robot.setPowerRight(rightPower);
 
         } while (Math.abs(currentHeading-desiredAngle)>turnTolerance&&opModeIsActive());
 
-        stopMotors();
+        robot.stopMotors();
     }
-    public void turnLeft(int angle, double power){
-        do {
 
-            if (robot.gyro.getHeading() > 180) {
-                currentHeading = robot.gyro.getHeading() - 360;
-            } else {
-                currentHeading = robot.gyro.getHeading();
-            }
-            setPowerRight(power);
-            setPowerLeft(-power);
-        } while(currentHeading>angle);
-        stopMotors();
-    }
-    public void turnRight(int angle, double power){
-        do {
-
-            if (robot.gyro.getHeading() > 180) {
-                currentHeading = robot.gyro.getHeading() - 360;
-            } else {
-                currentHeading = robot.gyro.getHeading();
-            }
-            setPowerRight(-power);
-            setPowerLeft(power);
-        } while(currentHeading<angle);
-        stopMotors();
-    }
 
     public void wallSense(){
         while(robot.left_range.cmUltrasonic()<20){
@@ -249,35 +220,21 @@ public class NearBlue extends LinearOpMode {
         }
     }
 
-    //stopMotors();
-
 
     public void firstBeaconPress() {
-        stopMotors();
-        if (robot.right_color.blue() > 1.5) {
-            robot.right_beacon.setPosition(robot.rightBeaconOut);
-            smallMove1();
-            sleep(500);
-            robot.right_beacon.setPosition(robot.rightBeaconIn);
-            smallMove2();
-        } else if (robot.right_color.red() > 1.5) {
-            //add code for specific position/encoder ticks forward
-            smallMove1();
-            sleep(500);
-            robot.right_beacon.setPosition(robot.rightBeaconOut);
-            smallMove2();
-            sleep(500);
-            robot.right_beacon.setPosition(robot.rightBeaconIn);
-        }else{
-            forward();
+        turnRight(85, .05);
+        sleep(500);
+        while(!correctColor1) {
+            hitBeacon();
+            detectColor();
+            backUp();
         }
-        stopMotors();
     }
     public void smallMove1(){
         int encoderStart1 = robot.right_drive1.getCurrentPosition();
         while(robot.right_drive1.getCurrentPosition()<encoderStart1+70&&opModeIsActive()){
-            setPowerLeft(.05);
-            setPowerRight(.05);
+            robot.setPowerLeft(.05);
+            robot.setPowerRight(.05);
         }
 
     }
@@ -285,8 +242,8 @@ public class NearBlue extends LinearOpMode {
 
         int encoderStart2 = robot.right_drive1.getCurrentPosition();
         while(robot.right_drive1.getCurrentPosition()<encoderStart2+70&&opModeIsActive()){
-            setPowerLeft(.05);
-            setPowerRight(.05);
+            robot.setPowerLeft(.05);
+            robot.setPowerRight(.05);
         }
 
     }
@@ -295,8 +252,8 @@ public class NearBlue extends LinearOpMode {
 
         int encoderStart = robot.right_drive1.getCurrentPosition();
         while(robot.right_drive1.getCurrentPosition()<encoderStart+100&&opModeIsActive()){
-            setPowerLeft(.1);
-            setPowerRight(.1);
+            robot.setPowerLeft(.1);
+            robot.setPowerRight(.1);
         }
     }
     public void turnToWhiteLine(double desiredAngle) {
@@ -329,60 +286,30 @@ public class NearBlue extends LinearOpMode {
                 rightPower = -.2;
             }
 
-            setPowerLeft(leftPower);
-            setPowerRight(rightPower);
-
-            telemetry.addData("in turn loop", leftPower);
-            telemetry.addData("gyro", robot.gyro.getHeading());
+            robot.setPowerLeft(leftPower);
+            robot.setPowerRight(rightPower);
 
         } while (Math.abs(currentHeading-desiredAngle)>turnTolerance&&opModeIsActive());
 
-        stopMotors();
+        robot.stopMotors();
     }
     public void driveStraight(){
-        robot.right_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.left_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.right_drive2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.left_drive2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.right_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.left_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.right_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.left_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        resetEncoders();
         while(robot.left_drive1.getCurrentPosition()<distance||robot.left_drive2.getCurrentPosition()<distance||robot.right_drive1.getCurrentPosition()<distance||robot.right_drive2.getCurrentPosition()<distance&&opModeIsActive()){
-            /*currentHeading = gyro.getHeading();
-                    if(gyro.getHeading()>180){
-                        currentHeading = gyro.getHeading()-360;
-                    }
-            if(currentHeading<-65){
-                setPowerLeft(.9);
-                setPowerRight(.9);
-                left_drive1.setMaxSpeed(700);
-                left_drive2.setMaxSpeed(700);
-                right_drive1.setMaxSpeed(400);
-                right_drive2.setMaxSpeed(400);
-
-            }else if(currentHeading>-65){
-                setPowerLeft(.9);
-                setPowerRight(.9);
-                left_drive1.setMaxSpeed(400);
-                left_drive2.setMaxSpeed(400);
-                right_drive1.setMaxSpeed(700);
-                right_drive2.setMaxSpeed(700);
-            }*/
-            setPowerRight(.2);
-            setPowerLeft(.2);
+            robot.setPowerRight(.2);
+            robot.setPowerLeft(.2);
         }
-        stopMotors();
+        robot.stopMotors();
     }
 
     public void turnToWall(){
         turnTolerance = 2;
-
+        turnRight(33, .05);
         sleep(500);
     }
     public void turnNormal(){
         turnTolerance = 2;
-        gyroTurnLeft(-5);
+        turnLeft(5,.05);
         sleep(500);
     }
     @Override
@@ -393,13 +320,15 @@ public class NearBlue extends LinearOpMode {
         resetStartTime();
         positionToShoot();
         sleep(1000);
-        shootBall();
+        //shootBall();
         turnToWall();
         driveStraight();
         turnNormal();
         findWhiteLine();
         sleep(1000);
         firstBeaconPress();
+        turnLeft(5, .05);
+
         //capBall();
 
         //shoot(30);
