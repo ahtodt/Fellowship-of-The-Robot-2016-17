@@ -1,13 +1,9 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.GyroSensor;
-import com.qualcomm.robotcore.hardware.I2cAddr;
-import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name = "TeleOp", group = "TeleOp")
 public class DrivingPractice extends OpMode {
@@ -15,10 +11,10 @@ public class DrivingPractice extends OpMode {
     double firingSpeed = .9;
     double cockingSpeed = .5;
     double engagePower = .2;
-    double camPosition = robot.magazine_cam.getPosition();
-    double particleCollectorPosition = robot.collector_gate.getPosition();
-    double mortarPosition = robot.mortar.getCurrentPosition();
-    double liftPosition = robot.cap_ball_lift.getCurrentPosition();
+    double camPosition;
+    double particleCollectorPosition;
+    double mortarPosition;
+    double liftPosition;
     final double triggerCutoff = .2;
     int mortarFreeState = 1440;
     int mortarEngagedState = 300;
@@ -118,6 +114,10 @@ public class DrivingPractice extends OpMode {
 
     @Override
     public void loop() {
+        camPosition = robot.magazine_cam.getPosition();
+        particleCollectorPosition = robot.collector_gate.getPosition();
+        mortarPosition = robot.mortar.getCurrentPosition();
+        liftPosition = robot.cap_ball_lift.getCurrentPosition();
         float throttle = gamepad1.left_stick_y;
         float direction = gamepad1.left_stick_x;
 
@@ -131,7 +131,6 @@ public class DrivingPractice extends OpMode {
                 backwardsMode = true;
             }
             bumperPressed = false;
-
         }
 
 

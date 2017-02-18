@@ -94,16 +94,12 @@ public class mordorHardware
         left_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         right_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         right_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        /*cap_ball_lift = hardwareMap.dcMotor.get("cap_ball_lift");
-        cap_ball_tilt = hardwareMap.dcMotor.get("cap_ball_tilt");*/
         particle_collector = hwMap.dcMotor.get("particle_collector");
         particle_collector.setDirection(DcMotorSimple.Direction.REVERSE);
         mortar = hwMap.dcMotor.get("mortar");
         mortar.setDirection(DcMotorSimple.Direction.REVERSE);
         mortar.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         mortar.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        // mortar.setPower(engagePower);
-        // mortar.setTargetPosition(mortarEngagedState);
         cap_ball_lift = hwMap.dcMotor.get("cap_ball_lift");
         cap_ball_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -176,6 +172,7 @@ public class mordorHardware
             }
             setPowerRight(power);
             setPowerLeft(-power);
+            waitForTick(10);
         } while(currentHeading>angle);
         stopMotors();
     }
@@ -189,6 +186,7 @@ public class mordorHardware
             }
             setPowerRight(-power);
             setPowerLeft(power);
+            waitForTick(10);
         } while(currentHeading<angle);
         stopMotors();
     }
