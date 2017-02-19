@@ -84,7 +84,6 @@ public class mordorHardware
         frontColor = hwMap.colorSensor.get("frontColor");
         floor_seeker.setI2cAddress(floorI2c);
         frontColor.enableLed(false);
-        frontColor.enableLed(true);
         floor_seeker.enableLed(false);
         floor_seeker.enableLed(true);
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();

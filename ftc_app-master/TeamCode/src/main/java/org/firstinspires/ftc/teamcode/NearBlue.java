@@ -53,14 +53,14 @@ public class NearBlue extends LinearOpMode {
     double powerFloor;
     double floor = .06;
     double driveGain = .0000;
-    int distance = 1300;
+    int distance = 1200;
     double headingError;
     double driveSteering;
     double leftPower;
     double rightPower;
     double firingSpeed = .9;
     int mortarFreeState = 1440;
-    int driveDistance = (470);
+    int driveDistance = (433);
     boolean correctColor1 = false;
     boolean correctColor2 = false;
     boolean firstPress =true;
@@ -125,7 +125,7 @@ public class NearBlue extends LinearOpMode {
     public void backUp(){
         robot.setPowerLeft(-.1);
         robot.setPowerRight(-.1);
-        sleep(500);
+        sleep(900);
         robot.stopMotors();
 
     }
@@ -160,30 +160,30 @@ public class NearBlue extends LinearOpMode {
 
     public void findWhiteLine() {
         while (robot.floor_seeker.green() < 6&&opModeIsActive()) {
-            robot.left_drive1.setPower(-0.1);
-            robot.left_drive2.setPower(-0.1);
-            robot.right_drive1.setPower(-0.1);
-            robot.right_drive2.setPower(-0.1);
+            robot.left_drive1.setPower(0.17);
+            robot.left_drive2.setPower(0.17);
+            robot.right_drive1.setPower(0.17);
+            robot.right_drive2.setPower(0.17);
         }
         robot.stopMotors();
     }
 
     public void firstBeaconPress() {
-        turnRight(80, .1);
+        turnRight(80, .17);
         sleep(500);
         while(!correctColor1&&opModeIsActive()) {
             if(!firstPress){
-                sleep(4000);
+                sleep(3300);
             }
             hitBeacon();
-            sleep(500);
+            sleep(1000);
             detectColor();
             backUp();
             firstPress = false;
         }
     }
     public void secondBeaconPress(){
-        turnRight(80, .1);
+        turnRight(80, .17);
         sleep(500);
         firstPress =true;
         while(!correctColor2&&opModeIsActive()) {
@@ -202,20 +202,18 @@ public class NearBlue extends LinearOpMode {
     public void driveStraight(){
         resetEncoders();
         while(robot.left_drive1.getCurrentPosition()<distance||robot.left_drive2.getCurrentPosition()<distance||robot.right_drive1.getCurrentPosition()<distance||robot.right_drive2.getCurrentPosition()<distance&&opModeIsActive()){
-            robot.setPowerRight(.2);
-            robot.setPowerLeft(.2);
+            robot.setPowerRight(.25);
+            robot.setPowerLeft(.25);
             robot.waitForTick(10);
         }
         robot.stopMotors();
     }
 
     public void turnToWall(){
-        turnTolerance = 2;
-        turnRight(45, .1);
+        turnRight(46, .13);
         sleep(500);
     }
     public void turnNormal(){
-        turnTolerance = 2;
         turnLeft(10,.1);
         sleep(500);
     }
@@ -226,17 +224,17 @@ public class NearBlue extends LinearOpMode {
         waitForStart();
         resetStartTime();
         positionToShoot();
-        sleep(500);
+        sleep(100);
         shootBall();
-        sleep(500);
+        sleep(100);
         turnToWall();
         driveStraight();
         //turnNormal();
         findWhiteLine();
-        sleep(500);
+        sleep(100);
         firstBeaconPress();
         backUp();
-        turnLeft(10, .05);
+        turnLeft(15, .05);
         driveStraight();
         findWhiteLine();
         secondBeaconPress();
