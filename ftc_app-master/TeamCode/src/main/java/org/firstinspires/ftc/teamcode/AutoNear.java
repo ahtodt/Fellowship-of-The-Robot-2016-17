@@ -104,22 +104,6 @@ public class AutoNear extends LinearOpMode {
             robot.left_drive2.setPower(.1);
             robot.right_drive1.setPower(.2);
             robot.right_drive2.setPower(.2);
-           /* while(getRuntime() < 2 ) {
-                left_drive1.setPower(-1);
-                left_drive1.setMaxSpeed(-200);
-                left_drive2.setPower(-1);
-                left_drive2.setMaxSpeed(-200);
-                right_drive1.setPower(0);
-                right_drive2.setPower(0);
-            }
-            while(gyro.getHeading() > 190) {
-                left_drive1.setPower(-1);
-                left_drive1.setMaxSpeed(-200);
-                left_drive2.setPower(-1);
-                left_drive2.setMaxSpeed(-200);
-                right_drive1.setPower(0);
-                right_drive2.setPower(0);
-            }*/
         }
         robot.stopMotors();
 
@@ -141,43 +125,6 @@ public class AutoNear extends LinearOpMode {
         robot.stopMotors();
 
     }
-    public void gyroTurnLeft(double desiredAngle) {
-        do {
-
-            if (robot.gyro.getHeading() > 180) {
-                currentHeading = robot.gyro.getHeading() - 360;
-            }else{
-                currentHeading = robot.gyro.getHeading();
-            }
-        headingError = desiredAngle - currentHeading;
-            if(headingError<0){
-                powerFloor = -floor;
-            }else{
-                powerFloor = floor;
-            }
-        driveSteering = (headingError * driveGain)+powerFloor;
-
-        leftPower = driveSteering;
-        if(leftPower>.2){
-            leftPower = .2;
-        }else if(leftPower<-.2){
-            leftPower = -.2;
-        }
-
-        rightPower = -driveSteering;
-        if(rightPower>.2){
-            rightPower = .2;
-        }else if(rightPower < -.2) {
-            rightPower = -.2;
-        }
-
-            robot.setPowerLeft(leftPower);
-            robot.setPowerRight(rightPower);
-
-    } while (Math.abs(currentHeading-desiredAngle)>turnTolerance&&opModeIsActive());
-
-        robot.stopMotors();
-}
     public void wallTurn(int target){
         robot.stopMotors();
         robot.right_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -266,43 +213,6 @@ public class AutoNear extends LinearOpMode {
             robot.setPowerLeft(.1);
             robot.setPowerRight(.1);
         }
-    }
-    public void turnToWhiteLine(double desiredAngle) {
-        do {
-
-            if (robot.gyro.getHeading() > 180) {
-                currentHeading = robot.gyro.getHeading() - 360;
-            }else{
-                currentHeading = robot.gyro.getHeading();
-            }
-            headingError = desiredAngle - currentHeading;
-            if(headingError<0){
-                powerFloor = -floor;
-            }else{
-                powerFloor = floor;
-            }
-            driveSteering = (headingError * driveGain)+powerFloor;
-
-            leftPower = driveSteering;
-            if(leftPower>.2){
-                leftPower = .2;
-            }else if(leftPower<-.2){
-                leftPower = -.2;
-            }
-
-            rightPower = -driveSteering*.9;
-            if(rightPower>.2){
-                rightPower = .2;
-            }else if(rightPower < -.2) {
-                rightPower = -.2;
-            }
-
-            robot.setPowerLeft(leftPower);
-            robot.setPowerRight(rightPower);
-
-        } while (Math.abs(currentHeading-desiredAngle)>turnTolerance&&opModeIsActive());
-
-        robot.stopMotors();
     }
     public void driveStraight(){
         robot.right_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

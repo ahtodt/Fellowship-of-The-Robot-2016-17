@@ -39,7 +39,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -54,7 +53,7 @@ public class NearBlue extends LinearOpMode {
     double powerFloor;
     double floor = .06;
     double driveGain = .0000;
-    int distance = 1450;
+    int distance = 1300;
     double headingError;
     double driveSteering;
     double leftPower;
@@ -68,7 +67,34 @@ public class NearBlue extends LinearOpMode {
 
 
 
+    public void turnLeft(int angle, double power){
+        do {
 
+            if (robot.getAdafruitHeading() > 180) {
+                currentHeading = robot.getAdafruitHeading() - 360;
+            } else {
+                currentHeading = robot.getAdafruitHeading();
+            }
+            robot.setPowerRight(power);
+            robot.setPowerLeft(-power);
+            robot.waitForTick(10);
+        } while(currentHeading>angle&&opModeIsActive());
+        robot.stopMotors();
+    }
+    public void turnRight(int angle, double power){
+        do {
+
+            if (robot.getAdafruitHeading() > 180) {
+                currentHeading = robot.getAdafruitHeading() - 360;
+            } else {
+                currentHeading = robot.getAdafruitHeading();
+            }
+            robot.setPowerRight(-power);
+            robot.setPowerLeft(power);
+            robot.waitForTick(10);
+        } while(currentHeading<angle&&opModeIsActive());
+        robot.stopMotors();
+    }
     public void resetEncoders(){
         robot.right_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.left_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -134,18 +160,16 @@ public class NearBlue extends LinearOpMode {
 
     public void findWhiteLine() {
         while (robot.floor_seeker.green() < 6&&opModeIsActive()) {
-            robot.left_drive1.setPower(0.2);
-            robot.left_drive2.setPower(0.2);
-            robot.right_drive1.setPower(0.2);
-            robot.right_drive2.setPower(0.2);
-            //wallSense();
+            robot.left_drive1.setPower(-0.1);
+            robot.left_drive2.setPower(-0.1);
+            robot.right_drive1.setPower(-0.1);
+            robot.right_drive2.setPower(-0.1);
         }
         robot.stopMotors();
-
     }
 
     public void firstBeaconPress() {
-        robot.turnRight(75, .03);
+        turnRight(80, .1);
         sleep(500);
         while(!correctColor1&&opModeIsActive()) {
             if(!firstPress){
@@ -159,7 +183,7 @@ public class NearBlue extends LinearOpMode {
         }
     }
     public void secondBeaconPress(){
-        robot.turnRight(80, .03);
+        turnRight(80, .1);
         sleep(500);
         firstPress =true;
         while(!correctColor2&&opModeIsActive()) {
@@ -187,12 +211,12 @@ public class NearBlue extends LinearOpMode {
 
     public void turnToWall(){
         turnTolerance = 2;
-        robot.turnRight(47, .1);
+        turnRight(45, .1);
         sleep(500);
     }
     public void turnNormal(){
         turnTolerance = 2;
-        robot.turnLeft(10,.05);
+        turnLeft(10,.1);
         sleep(500);
     }
     @Override
@@ -203,15 +227,16 @@ public class NearBlue extends LinearOpMode {
         resetStartTime();
         positionToShoot();
         sleep(500);
-        //shootBall();
+        shootBall();
         sleep(500);
         turnToWall();
         driveStraight();
-        turnNormal();
+        //turnNormal();
         findWhiteLine();
         sleep(500);
         firstBeaconPress();
-        robot.turnLeft(10, .05);
+        backUp();
+        turnLeft(10, .05);
         driveStraight();
         findWhiteLine();
         secondBeaconPress();

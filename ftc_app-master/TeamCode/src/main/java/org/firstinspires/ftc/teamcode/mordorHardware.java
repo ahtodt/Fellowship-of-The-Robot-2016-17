@@ -3,10 +3,11 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.adafruit.BNO055IMU;
 import com.qualcomm.hardware.adafruit.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -45,10 +46,12 @@ public class mordorHardware
     Servo magazine_cam;
     Servo right_beacon;
     Servo left_beacon;
-    GyroSensor gyro;
     ColorSensor floor_seeker;
     ColorSensor frontColor;
     I2cAddr floorI2c = I2cAddr.create8bit(0x70);
+    BNO055IMU imu;
+    Orientation angles;
+    Acceleration gravity;
     final double PCGateUp = .3;
     final double PCGateDown = .75;
     final double mortarGateUp = .6;
@@ -84,6 +87,16 @@ public class mordorHardware
         frontColor.enableLed(true);
         floor_seeker.enableLed(false);
         floor_seeker.enableLed(true);
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "AdafruitIMUCalibration.json"; // see the calibration sample opmode
+        parameters.loggingEnabled      = true;
+        parameters.loggingTag          = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+        imu = hwMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
         left_drive1=hwMap.dcMotor.get("left_drive1");
         left_drive2=hwMap.dcMotor.get("left_drive2");
         right_drive1=hwMap.dcMotor.get("right_drive1");
@@ -115,11 +128,6 @@ public class mordorHardware
         collector_gate.setPosition(PCGateDown);
         mortar_gate.setPosition(mortarGateDown);
         magazine_cam.setPosition(camDown);
-         gyro=hwMap.gyroSensor.get("gyro");
-        // Wait for the game to start (driver presses PLAY)
-        gyro.calibrate();
-        while (gyro.isCalibrating()) {
-        }
     }
 
     /***
@@ -162,34 +170,11 @@ public class mordorHardware
         right_drive1.setPower(power);
         right_drive2.setPower(power);
     }
-    public void turnLeft(int angle, double power){
-        do {
-
-            if (gyro.getHeading() > 180) {
-                currentHeading = gyro.getHeading() - 360;
-            } else {
-                currentHeading = gyro.getHeading();
-            }
-            setPowerRight(power);
-            setPowerLeft(-power);
-            waitForTick(10);
-        } while(currentHeading>angle);
-        stopMotors();
+    public double getAdafruitHeading(){
+        angles   = imu.getAngularOrientation().toAxesReference(AxesReference.INTRINSIC).toAxesOrder(AxesOrder.ZYX);
+        return -angles.firstAngle;
     }
-    public void turnRight(int angle, double power){
-        do {
 
-            if (gyro.getHeading() > 180) {
-                currentHeading = gyro.getHeading() - 360;
-            } else {
-                currentHeading = gyro.getHeading();
-            }
-            setPowerRight(-power);
-            setPowerLeft(power);
-            waitForTick(10);
-        } while(currentHeading<angle);
-        stopMotors();
-    }
 
 
 }
