@@ -105,6 +105,12 @@ public class NearBlue extends LinearOpMode {
         robot.right_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.left_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+    public void resetMaxSpeed(){
+        robot.left_drive1.setMaxSpeed(4000);
+        robot.left_drive2.setMaxSpeed(4000);
+        robot.right_drive1.setMaxSpeed(4000);
+        robot.right_drive2.setMaxSpeed(4000);
+    }
     public void positionToShoot() {
         resetEncoders();
         robot.magazine_cam.setPosition(robot.camUp);
@@ -119,13 +125,13 @@ public class NearBlue extends LinearOpMode {
     public void hitBeacon(){
         robot.setPowerLeft(.15);
         robot.setPowerRight(.15);
-        sleep(1500);
+        sleep(1100);
         robot.stopMotors();
     }
     public void backUp(){
-        robot.setPowerLeft(-.1);
-        robot.setPowerRight(-.1);
-        sleep(900);
+        robot.setPowerLeft(-.15);
+        robot.setPowerRight(-.15);
+        sleep(500);
         robot.stopMotors();
 
     }
@@ -160,38 +166,43 @@ public class NearBlue extends LinearOpMode {
 
     public void findWhiteLine() {
         while (robot.floor_seeker.green() < 6&&opModeIsActive()) {
-            robot.left_drive1.setPower(0.17);
-            robot.left_drive2.setPower(0.17);
-            robot.right_drive1.setPower(0.17);
-            robot.right_drive2.setPower(0.17);
+            robot.left_drive1.setPower(0.8);
+            robot.left_drive2.setPower(0.8);
+            robot.right_drive1.setPower(0.8);
+            robot.right_drive2.setPower(0.8);
+            robot.left_drive1.setMaxSpeed(500);
+            robot.left_drive2.setMaxSpeed(500);
+            robot.right_drive1.setMaxSpeed(500);
+            robot.right_drive2.setMaxSpeed(500);
         }
+        sleep(150);
         robot.stopMotors();
     }
 
     public void firstBeaconPress() {
-        turnRight(80, .17);
-        sleep(500);
+        resetMaxSpeed();
+        turnRight(75, .17);
         while(!correctColor1&&opModeIsActive()) {
             if(!firstPress){
-                sleep(3300);
+                sleep(3000);
             }
             hitBeacon();
-            sleep(1000);
+            sleep(900);
             detectColor();
             backUp();
             firstPress = false;
         }
     }
     public void secondBeaconPress(){
-        turnRight(80, .17);
-        sleep(500);
+        resetMaxSpeed();
+        turnRight(75, .17);
         firstPress =true;
         while(!correctColor2&&opModeIsActive()) {
             if(!firstPress){
-                sleep(4000);
+                sleep(3000);
             }
             hitBeacon();
-            sleep(500);
+            sleep(900);
             detectColor();
             backUp();
             firstPress = false;
@@ -202,20 +213,24 @@ public class NearBlue extends LinearOpMode {
     public void driveStraight(){
         resetEncoders();
         while(robot.left_drive1.getCurrentPosition()<distance||robot.left_drive2.getCurrentPosition()<distance||robot.right_drive1.getCurrentPosition()<distance||robot.right_drive2.getCurrentPosition()<distance&&opModeIsActive()){
-            robot.setPowerRight(.25);
-            robot.setPowerLeft(.25);
+            robot.setPowerRight(.8);
+            robot.setPowerLeft(.8);
+            robot.left_drive1.setMaxSpeed(1000);
+            robot.left_drive2.setMaxSpeed(1000);
+            robot.right_drive1.setMaxSpeed(1000);
+            robot.right_drive2.setMaxSpeed(1000);
             robot.waitForTick(10);
         }
         robot.stopMotors();
     }
 
     public void turnToWall(){
-        turnRight(46, .13);
-        sleep(500);
+        turnRight(47, .13);
+        robot.waitForTick(10);
     }
     public void turnNormal(){
         turnLeft(10,.1);
-        sleep(500);
+        robot.waitForTick(10);
     }
     @Override
     public void runOpMode() {
@@ -224,18 +239,17 @@ public class NearBlue extends LinearOpMode {
         waitForStart();
         resetStartTime();
         positionToShoot();
-        sleep(100);
+        robot.waitForTick(10);
         shootBall();
-        sleep(100);
+        sleep(400);
         turnToWall();
         driveStraight();
-        //turnNormal();
+        resetMaxSpeed();
+        turnLeft(36, .22);
         findWhiteLine();
-        sleep(100);
         firstBeaconPress();
         backUp();
-        turnLeft(15, .05);
-        driveStraight();
+        turnLeft(20, .17);
         findWhiteLine();
         secondBeaconPress();
         //capBall();

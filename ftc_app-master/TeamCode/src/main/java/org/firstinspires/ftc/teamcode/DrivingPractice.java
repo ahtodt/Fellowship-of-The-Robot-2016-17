@@ -197,7 +197,7 @@ public class DrivingPractice extends OpMode {
             //ejecting mode
             robot.particle_collector.setPower(-1);
             robot.collector_gate.setPosition(robot.PCGateUp);
-            robot.magazine_cam.setPosition(robot.camMid);
+            vibrateCam();
             robot.mortar_gate.setPosition(robot.mortarGateDown);
 
         } else {
