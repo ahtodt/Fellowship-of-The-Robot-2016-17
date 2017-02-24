@@ -284,11 +284,11 @@ public class AutoNear extends LinearOpMode {
         resetStartTime();
         positionToShoot();
         sleep(1000);
-        //shootBall();
-        turnToWall();
-        driveStraight();
-        turnNormal();
-        findWhiteLine();
+        shootBall();
+        //turnToWall();
+        //driveStraight();
+        //turnNormal();
+        //findWhiteLine();
         //sleep(1000);
         //firstBeaconPress();
         //capBall();

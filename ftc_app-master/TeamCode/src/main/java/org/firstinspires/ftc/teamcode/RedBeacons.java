@@ -45,8 +45,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 //delay, longer drive before shoot, turn for square after shoot, only shoot one or fix the mortar
-@Autonomous(name="BlueBeacons", group="Auto")
-public class BlueBeacons extends LinearOpMode {
+@Autonomous(name="RedBeacons", group="Auto")
+public class RedBeacons extends LinearOpMode {
     mordorHardware robot           = new mordorHardware();
     double turnTolerance;
     double currentHeading;
@@ -146,12 +146,12 @@ public class BlueBeacons extends LinearOpMode {
 
     }
     public void detectColor1(){
-        if (robot.frontColor.blue() > robot.frontColor.red()) {
+        if (robot.frontColor.blue() < robot.frontColor.red()) {
             correctColor1 =true;
         }
     }
     public void detectColor2(){
-        if (robot.frontColor.blue() > robot.frontColor.red()) {
+        if (robot.frontColor.blue() < robot.frontColor.red()) {
             correctColor2 =true;
         }
     }
@@ -227,7 +227,7 @@ public class BlueBeacons extends LinearOpMode {
         robot.stopMotors();
     }
     public void firstBeaconPress() {
-        turnRight(40, .21);
+        turnLeft(-40, .21);
         sleep(500);
         while(!correctColor1&&opModeIsActive()) {
             if(!firstPress){
@@ -242,7 +242,7 @@ public class BlueBeacons extends LinearOpMode {
         }
     }
     public void secondBeaconPress(){
-        turnRight(40, .21);
+        turnLeft(-40, .21);
         sleep(500);
         firstPress =true;
         while(!correctColor2&&opModeIsActive()) {
@@ -290,8 +290,8 @@ public class BlueBeacons extends LinearOpMode {
         sleep(100);
         firstBeaconPress();
         backUp();
-        turnLeft(5, .1);
-        findWhiteLine1(-13, .22);
+        turnRight(5, .1);
+        findWhiteLine1(13, .22);
         resetMaxSpeed();
         secondBeaconPress();
         //capBall();

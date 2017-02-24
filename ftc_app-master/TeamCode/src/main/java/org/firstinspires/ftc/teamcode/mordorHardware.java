@@ -31,8 +31,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
  * don't fuck this up
  *
  */
-public class mordorHardware
-{
+public class mordorHardware {
     /* Public OpMode members. */
     DcMotor left_drive1;
     DcMotor left_drive2;
@@ -66,11 +65,11 @@ public class mordorHardware
     double currentHeading;
 
     /* local OpMode members. */
-    HardwareMap hwMap           =  null;
-    private ElapsedTime period  = new ElapsedTime();
+    HardwareMap hwMap = null;
+    private ElapsedTime period = new ElapsedTime();
 
     /* Constructor */
-    public mordorHardware(){
+    public mordorHardware() {
 
     }
 
@@ -80,26 +79,26 @@ public class mordorHardware
         hwMap = ahwMap;
 
         // Define and Initialize Motors
-        floor_seeker=hwMap.colorSensor.get("floor_seeker");
+        floor_seeker = hwMap.colorSensor.get("floor_seeker");
         frontColor = hwMap.colorSensor.get("frontColor");
         floor_seeker.setI2cAddress(floorI2c);
         frontColor.enableLed(false);
         floor_seeker.enableLed(false);
         floor_seeker.enableLed(true);
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.calibrationDataFile = "AdafruitIMUCalibration.json"; // see the calibration sample opmode
-        parameters.loggingEnabled      = true;
-        parameters.loggingTag          = "IMU";
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
         imu = hwMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
-        left_drive1=hwMap.dcMotor.get("left_drive1");
-        left_drive2=hwMap.dcMotor.get("left_drive2");
-        right_drive1=hwMap.dcMotor.get("right_drive1");
-        right_drive2=hwMap.dcMotor.get("right_drive2");
+        left_drive1 = hwMap.dcMotor.get("left_drive1");
+        left_drive2 = hwMap.dcMotor.get("left_drive2");
+        right_drive1 = hwMap.dcMotor.get("right_drive1");
+        right_drive2 = hwMap.dcMotor.get("right_drive2");
         left_drive1.setDirection(DcMotorSimple.Direction.REVERSE);
         right_drive2.setDirection(DcMotorSimple.Direction.REVERSE);
         left_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -116,10 +115,10 @@ public class mordorHardware
         cap_ball_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         cap_ball_lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         left_beacon = hwMap.servo.get("left_beacon");
-        right_beacon=hwMap.servo.get("right_beacon");
+        right_beacon = hwMap.servo.get("right_beacon");
         right_beacon.setDirection(Servo.Direction.REVERSE);
-        collector_gate=hwMap.servo.get("collector_gate");
-        mortar_gate=hwMap.servo.get("mortar_gate");
+        collector_gate = hwMap.servo.get("collector_gate");
+        mortar_gate = hwMap.servo.get("mortar_gate");
         magazine_cam = hwMap.servo.get("magazine_cam");
         magazine_cam.setDirection(Servo.Direction.REVERSE);
         left_beacon.setPosition(leftBeaconIn);
@@ -130,16 +129,15 @@ public class mordorHardware
     }
 
     /***
-     *
      * waitForTick implements a periodic delay. However, this acts like a metronome with a regular
      * periodic tick.  This is used to compensate for varying processing times for each cycle.
      * The function looks at the elapsed cycle time, and sleeps for the remaining time interval.
      *
-     * @param periodMs  Length of wait cycle in mSec.
+     * @param periodMs Length of wait cycle in mSec.
      */
     public void waitForTick(long periodMs) {
 
-        long  remaining = periodMs - (long)period.milliseconds();
+        long remaining = periodMs - (long) period.milliseconds();
 
         // sleep for the remaining portion of the regular cycle period.
         if (remaining > 0) {
@@ -153,6 +151,7 @@ public class mordorHardware
         // Reset the cycle clock for the next pass.
         period.reset();
     }
+
     public void stopMotors() {
         right_drive1.setPower(0);
         left_drive1.setPower(0);
@@ -169,12 +168,14 @@ public class mordorHardware
         right_drive1.setPower(power);
         right_drive2.setPower(power);
     }
-    public double getAdafruitHeading(){
-        angles   = imu.getAngularOrientation().toAxesReference(AxesReference.INTRINSIC).toAxesOrder(AxesOrder.ZYX);
-        return -angles.firstAngle;
+
+    public double getAdafruitHeading() {
+        angles = imu.getAngularOrientation().toAxesReference(AxesReference.INTRINSIC).toAxesOrder(AxesOrder.ZYX);
+            return -angles.firstAngle;
+
     }
-
-
-
 }
+
+
+
 

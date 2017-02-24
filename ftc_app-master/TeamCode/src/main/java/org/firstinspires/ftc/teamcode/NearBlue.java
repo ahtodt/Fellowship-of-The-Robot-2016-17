@@ -241,17 +241,17 @@ public class NearBlue extends LinearOpMode {
         positionToShoot();
         robot.waitForTick(10);
         shootBall();
-        sleep(400);
-        turnToWall();
-        driveStraight();
-        resetMaxSpeed();
-        turnLeft(36, .22);
-        findWhiteLine();
-        firstBeaconPress();
-        backUp();
-        turnLeft(20, .17);
-        findWhiteLine();
-        secondBeaconPress();
+        //sleep(400);
+        //turnToWall();
+        //driveStraight();
+        //resetMaxSpeed();
+        //turnLeft(36, .22);
+        //findWhiteLine();
+        //firstBeaconPress();
+        //backUp();
+        //turnLeft(20, .17);
+        //findWhiteLine();
+        //secondBeaconPress();
         //capBall();
     }
 }
