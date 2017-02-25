@@ -179,13 +179,13 @@ public class RedBeacons extends LinearOpMode {
     }
 
     public void predrive(){
-        robot.setPowerLeft(.4);
-        robot.setPowerRight(.4);
-        robot.left_drive1.setMaxSpeed(1600);
-        robot.left_drive2.setMaxSpeed(1600);
-        robot.right_drive1.setMaxSpeed(1600);
-        robot.right_drive2.setMaxSpeed(1600);
-        sleep(2000);
+        robot.setPowerLeft(.8);
+        robot.setPowerRight(.8);
+        robot.left_drive1.setMaxSpeed(1000);
+        robot.left_drive2.setMaxSpeed(1000);
+        robot.right_drive1.setMaxSpeed(1000);
+        robot.right_drive2.setMaxSpeed(1000);
+        sleep(800);
         robot.stopMotors();
     }
 
@@ -220,14 +220,14 @@ public class RedBeacons extends LinearOpMode {
     }
     public void findWhiteLine2() {
         //speed this up
-        while (robot.floor_seeker.green() < 6&&opModeIsActive()) {
+        while (robot.floor_seeker.green() < 10&&robot.floor_seeker.red() < 10&&robot.floor_seeker.blue() < 10&&opModeIsActive()) {
             robot.setPowerLeft(.1);
             robot.setPowerRight(.1);
         }
         robot.stopMotors();
     }
     public void firstBeaconPress() {
-        turnLeft(-40, .21);
+        turnLeft(-15, .21);
         sleep(500);
         while(!correctColor1&&opModeIsActive()) {
             if(!firstPress){
@@ -242,7 +242,7 @@ public class RedBeacons extends LinearOpMode {
         }
     }
     public void secondBeaconPress(){
-        turnLeft(-40, .21);
+        turnLeft(-15, .21);
         sleep(500);
         firstPress =true;
         while(!correctColor2&&opModeIsActive()) {
@@ -290,8 +290,10 @@ public class RedBeacons extends LinearOpMode {
         sleep(100);
         firstBeaconPress();
         backUp();
-        turnRight(5, .1);
-        findWhiteLine1(13, .22);
+        turnRight(20, .1);
+        predrive();
+        resetMaxSpeed();
+        findWhiteLine1(30, .13);
         resetMaxSpeed();
         secondBeaconPress();
         //capBall();
