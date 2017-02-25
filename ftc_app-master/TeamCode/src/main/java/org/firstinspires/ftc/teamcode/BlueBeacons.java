@@ -291,7 +291,9 @@ public class BlueBeacons extends LinearOpMode {
         firstBeaconPress();
         backUp();
         turnLeft(5, .1);
-        findWhiteLine1(-13, .22);
+        predrive();
+        resetMaxSpeed();
+        findWhiteLine1(-30, .13);
         resetMaxSpeed();
         secondBeaconPress();
         //capBall();
