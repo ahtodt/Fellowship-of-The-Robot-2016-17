@@ -191,7 +191,7 @@ public class BlueBeacons extends LinearOpMode {
 
     public void findWhiteLine1(int angle, double basePower) {
         //speed this up
-        while (robot.floor_seeker.green() < 6&&opModeIsActive()) {
+        while (robot.floor_seeker.green() < 20&&opModeIsActive()) {
             if (robot.getAdafruitHeading() > 180) {
                 drivingHeading = robot.getAdafruitHeading() - 360;
             } else {
@@ -285,7 +285,7 @@ public class BlueBeacons extends LinearOpMode {
         waitForStart();
         //predrive();
         //resetMaxSpeed();
-        findWhiteLine1(0, .22);
+        findWhiteLine1(0, .13);
         resetMaxSpeed();
         sleep(100);
         firstBeaconPress();
