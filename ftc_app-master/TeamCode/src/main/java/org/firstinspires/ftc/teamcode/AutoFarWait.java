@@ -93,8 +93,8 @@ public class AutoFarWait extends LinearOpMode {
                 && robot.left_drive2.getCurrentPosition() < (driveDistance * 3)&&opModeIsActive()) {
             robot.left_drive1.setPower(.15);
             robot.left_drive2.setPower(.15);
-            robot.right_drive1.setPower(.15);
-            robot.right_drive2.setPower(.15);
+            robot.right_drive1.setPower(.165);
+            robot.right_drive2.setPower(.165);
            /* while(getRuntime() < 2 ) {
                 left_drive1.setPower(-1);
                 left_drive1.setMaxSpeed(-200);
