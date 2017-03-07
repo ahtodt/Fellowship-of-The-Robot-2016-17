@@ -74,7 +74,7 @@ public class AutoNear extends LinearOpMode {
         while (robot.right_drive1.getCurrentPosition() < driveDistance && robot.left_drive2.getCurrentPosition() < driveDistance&&opModeIsActive()) {
 
             robot.setPowerLeft(.2);
-            robot.setPowerRight(.2);
+            robot.setPowerRight(.22);
         }
         robot.stopMotors();
     }

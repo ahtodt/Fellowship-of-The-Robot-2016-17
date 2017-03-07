@@ -62,7 +62,7 @@ public class AutoFar extends LinearOpMode {
         while ((robot.right_drive1.getCurrentPosition() < driveDistance) && (robot.left_drive2.getCurrentPosition() < driveDistance)&&opModeIsActive()) {
 
             robot.setPowerLeft(.1);
-            robot.setPowerRight(.1);
+            robot.setPowerRight(.11);
         }
         robot.stopMotors();
     }
