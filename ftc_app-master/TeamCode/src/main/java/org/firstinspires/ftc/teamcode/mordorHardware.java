@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -33,6 +34,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
  */
 public class mordorHardware {
     /* Public OpMode members. */
+    DeviceInterfaceModule leftDim;
+    DeviceInterfaceModule rightDim;
     DcMotor left_drive1;
     DcMotor left_drive2;
     DcMotor right_drive1;
@@ -62,7 +65,6 @@ public class mordorHardware {
     final double rightBeaconOut = .41;
     final double leftBeaconIn = .19;
     final double rightBeaconIn = .26;
-    double currentHeading;
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -79,12 +81,11 @@ public class mordorHardware {
         hwMap = ahwMap;
 
         // Define and Initialize Motors
+        leftDim = hwMap.deviceInterfaceModule.get("leftDim");
+        rightDim = hwMap.deviceInterfaceModule.get("rightDim");
         floor_seeker = hwMap.colorSensor.get("floor_seeker");
         frontColor = hwMap.colorSensor.get("frontColor");
-        floor_seeker.setI2cAddress(floorI2c);
         frontColor.enableLed(false);
-        floor_seeker.enableLed(false);
-        floor_seeker.enableLed(true);
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
@@ -169,6 +170,22 @@ public class mordorHardware {
         right_drive2.setPower(power);
     }
 
+    public void motorsRunUsingEncoder(){
+        right_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        right_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        left_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        left_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+    public void motorsStopAndReset(){
+        right_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        left_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        right_drive2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        left_drive2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+    public void resetEncoders(){
+        motorsStopAndReset();
+        motorsRunUsingEncoder();
+    }
     public double getAdafruitHeading() {
         angles = imu.getAngularOrientation().toAxesReference(AxesReference.INTRINSIC).toAxesOrder(AxesOrder.ZYX);
             return -angles.firstAngle;

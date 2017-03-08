@@ -98,16 +98,6 @@ public class RedBeacons extends LinearOpMode {
         } while(currentHeading<angle&&opModeIsActive());
         robot.stopMotors();
     }
-    public void resetEncoders(){
-        robot.right_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.left_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.right_drive2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.left_drive2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.right_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.left_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.right_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.left_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
     public void resetMaxSpeed(){
 
         robot.left_drive1.setMaxSpeed(9000);
@@ -116,7 +106,7 @@ public class RedBeacons extends LinearOpMode {
         robot.right_drive2.setMaxSpeed(9000);
     }
     public void positionToShoot() {
-        resetEncoders();
+        robot.resetEncoders();
         robot.magazine_cam.setPosition(robot.camUp);
         while (robot.left_drive1.getCurrentPosition()<driveDistance||robot.left_drive2.getCurrentPosition()<driveDistance||robot.right_drive1.getCurrentPosition()<driveDistance||robot.right_drive2.getCurrentPosition()<driveDistance&&opModeIsActive()) {
 
@@ -260,7 +250,7 @@ public class RedBeacons extends LinearOpMode {
 
     }
     public void driveStraight(){
-        resetEncoders();
+        robot.resetEncoders();
         while(robot.left_drive1.getCurrentPosition()<distance||robot.left_drive2.getCurrentPosition()<distance||robot.right_drive1.getCurrentPosition()<distance||robot.right_drive2.getCurrentPosition()<distance&&opModeIsActive()){
             robot.setPowerRight(.25);
             robot.setPowerLeft(.25);

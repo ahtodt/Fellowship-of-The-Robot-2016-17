@@ -61,6 +61,9 @@ public class BlueBeacons extends LinearOpMode {
     double rightPower;
     double firingSpeed = .9;
     double difference;
+    double angleDelta;
+    double newPower;
+    double adjustment;
     double correctionFactor = .005;
     int mortarFreeState = 1440;
     int driveDistance = (433);
@@ -78,6 +81,13 @@ public class BlueBeacons extends LinearOpMode {
             } else {
                 currentHeading = robot.getAdafruitHeading();
             }
+            angleDelta = currentHeading-angle;
+            adjustment = angleDelta*correctionFactor;
+            if(adjustment>.1){
+                adjustment=.1;
+            }
+            newPower = power+adjustment;
+
             robot.setPowerRight(power);
             robot.setPowerLeft(-power);
             robot.waitForTick(10);
@@ -98,16 +108,7 @@ public class BlueBeacons extends LinearOpMode {
         } while(currentHeading<angle&&opModeIsActive());
         robot.stopMotors();
     }
-    public void resetEncoders(){
-        robot.right_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.left_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.right_drive2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.left_drive2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.right_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.left_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.right_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.left_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
+
     public void resetMaxSpeed(){
 
         robot.left_drive1.setMaxSpeed(9000);
@@ -116,7 +117,7 @@ public class BlueBeacons extends LinearOpMode {
         robot.right_drive2.setMaxSpeed(9000);
     }
     public void positionToShoot() {
-        resetEncoders();
+        robot.resetEncoders();
         robot.magazine_cam.setPosition(robot.camUp);
         while (robot.left_drive1.getCurrentPosition()<driveDistance||robot.left_drive2.getCurrentPosition()<driveDistance||robot.right_drive1.getCurrentPosition()<driveDistance||robot.right_drive2.getCurrentPosition()<driveDistance&&opModeIsActive()) {
 
@@ -191,7 +192,8 @@ public class BlueBeacons extends LinearOpMode {
 
     public void findWhiteLine1(int angle, double basePower) {
         //speed this up
-        while (robot.floor_seeker.green() < 20&&opModeIsActive()) {
+        double rightBasePower = 1.1*basePower;
+        while (robot.floor_seeker.green() < 1200&&opModeIsActive()) {
             if (robot.getAdafruitHeading() > 180) {
                 drivingHeading = robot.getAdafruitHeading() - 360;
             } else {
@@ -206,14 +208,14 @@ public class BlueBeacons extends LinearOpMode {
             if(difference>0){
                 //less power from right
                 robot.setPowerLeft(basePower);
-                robot.setPowerRight(basePower-(difference*basePower*correctionFactor));
+                robot.setPowerRight(rightBasePower-(difference*rightBasePower*correctionFactor));
             }else if(difference<0){
                 //less power from left
                 robot.setPowerLeft(basePower+(difference*basePower*correctionFactor));
-                robot.setPowerRight(basePower);
+                robot.setPowerRight(rightBasePower);
             }else{
                 robot.setPowerLeft(basePower);
-                robot.setPowerRight(basePower);
+                robot.setPowerRight(rightBasePower);
             }
         }
         robot.stopMotors();
@@ -227,7 +229,7 @@ public class BlueBeacons extends LinearOpMode {
         robot.stopMotors();
     }
     public void firstBeaconPress() {
-        turnRight(40, .21);
+        turnRight(40, .13);
         sleep(500);
         while(!correctColor1&&opModeIsActive()) {
             if(!firstPress){
@@ -242,7 +244,7 @@ public class BlueBeacons extends LinearOpMode {
         }
     }
     public void secondBeaconPress(){
-        turnRight(40, .21);
+        turnRight(40, .13);
         sleep(500);
         firstPress =true;
         while(!correctColor2&&opModeIsActive()) {
@@ -260,7 +262,7 @@ public class BlueBeacons extends LinearOpMode {
 
     }
     public void driveStraight(){
-        resetEncoders();
+        robot.resetEncoders();
         while(robot.left_drive1.getCurrentPosition()<distance||robot.left_drive2.getCurrentPosition()<distance||robot.right_drive1.getCurrentPosition()<distance||robot.right_drive2.getCurrentPosition()<distance&&opModeIsActive()){
             robot.setPowerRight(.25);
             robot.setPowerLeft(.25);

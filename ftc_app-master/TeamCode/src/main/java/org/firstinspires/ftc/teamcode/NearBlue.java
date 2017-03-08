@@ -64,6 +64,7 @@ public class NearBlue extends LinearOpMode {
     boolean correctColor1 = false;
     boolean correctColor2 = false;
     boolean firstPress =true;
+    int counter = 0;
 
 
 
@@ -78,6 +79,7 @@ public class NearBlue extends LinearOpMode {
             robot.setPowerRight(power);
             robot.setPowerLeft(-power);
             robot.waitForTick(10);
+            counter++;
         } while(currentHeading>angle&&opModeIsActive());
         robot.stopMotors();
     }
@@ -238,10 +240,16 @@ public class NearBlue extends LinearOpMode {
 
         waitForStart();
         resetStartTime();
-        positionToShoot();
-        robot.waitForTick(10);
-        shootBall();
-        //sleep(400);
+       // positionToShoot();
+        //robot.waitForTick(10);
+        //shootBall();
+
+        turnLeft(-47, .13);
+        sleep(1000);
+        while(opModeIsActive()){
+            telemetry.update();
+            telemetry.addData("counter", counter);
+        }
         //turnToWall();
         //driveStraight();
         //resetMaxSpeed();
