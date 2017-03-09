@@ -182,6 +182,23 @@ public class DrivingPractice extends OpMode {
         }
         telemetry.addData("backwards", backwardsMode);
 
+        if(gamepad1.dpad_left) {
+            robot.setPowerLeft(-1);
+            robot.left_drive1.setMaxSpeed(400);
+            robot.left_drive2.setMaxSpeed(400);
+            robot.setPowerRight(1);
+            robot.right_drive1.setMaxSpeed(400);
+            robot.right_drive2.setMaxSpeed(400);
+        }
+
+        if(gamepad1.dpad_right) {
+            robot.setPowerLeft(1);
+            robot.left_drive1.setMaxSpeed(400);
+            robot.left_drive2.setMaxSpeed(400);
+            robot.setPowerRight(-1);
+            robot.right_drive1.setMaxSpeed(400);
+            robot.right_drive2.setMaxSpeed(400);
+        }
 
 
         /*
