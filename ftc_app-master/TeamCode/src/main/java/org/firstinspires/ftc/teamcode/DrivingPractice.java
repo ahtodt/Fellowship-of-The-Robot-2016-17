@@ -138,11 +138,11 @@ public class DrivingPractice extends OpMode {
         driving code
          */
         if (!backwardsMode) {
-            float right = -throttle - direction;
-            float left = -throttle + direction;
+            double right = -(throttle*1.2) - (direction*.7);
+            double left = -(throttle*1.2) + (direction*.7);
 
-            int leftSpeed = (int) (800 * left);
-            int rightSpeed = (int) (800 * right);
+            int leftSpeed = (int) (1300 * left);
+            int rightSpeed = (int) (1300 * right);
 
             if (leftSpeed > 0) {
                 robot.setPowerLeft(1);
@@ -160,10 +160,10 @@ public class DrivingPractice extends OpMode {
             robot.right_drive2.setMaxSpeed(Math.abs(rightSpeed));
 
         } else if (backwardsMode) {
-            float right = throttle - direction;
-            float left = throttle + direction;
-            int leftSpeed = (int) (800 * left);
-            int rightSpeed = (int) (800 * right);
+            double right = (throttle*1.2) - (direction*.7);
+            double left = (throttle*1.2) + (direction*.7);
+            int leftSpeed = (int) (1300 * left);
+            int rightSpeed = (int) (1300 * right);
 
             if (leftSpeed > 0) {
                 robot.setPowerLeft(1);
