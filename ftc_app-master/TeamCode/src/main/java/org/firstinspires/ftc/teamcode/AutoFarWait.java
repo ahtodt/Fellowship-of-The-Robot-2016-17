@@ -51,7 +51,7 @@ public class AutoFarWait extends LinearOpMode {
     mordorHardware robot           = new mordorHardware();
     double firingSpeed = .9;
     int mortarFreeState = 1440;
-    int driveDistance = (525);
+    int driveDistance = (675);
 
 
     public void positionToShoot() {
@@ -63,7 +63,7 @@ public class AutoFarWait extends LinearOpMode {
         while (robot.right_drive1.getCurrentPosition() < driveDistance && robot.left_drive2.getCurrentPosition() < driveDistance&&opModeIsActive()) {
 
             robot.setPowerLeft(.1);
-            robot.setPowerRight(.11);
+            robot.setPowerRight(.1);
         }
         robot.stopMotors();
     }
@@ -91,10 +91,10 @@ public class AutoFarWait extends LinearOpMode {
         while (robot.right_drive1.getCurrentPosition() < (driveDistance * 3)
                 //note: if you think you need to set it to *2, make it *3 and if you want *3, make it *4, etc.
                 && robot.left_drive2.getCurrentPosition() < (driveDistance * 3)&&opModeIsActive()) {
-            robot.left_drive1.setPower(.15);
-            robot.left_drive2.setPower(.15);
-            robot.right_drive1.setPower(.165);
-            robot.right_drive2.setPower(.165);
+            robot.left_drive1.setPower(.3);
+            robot.left_drive2.setPower(.3);
+            robot.right_drive1.setPower(.3);
+            robot.right_drive2.setPower(.3);
            /* while(getRuntime() < 2 ) {
                 left_drive1.setPower(-1);
                 left_drive1.setMaxSpeed(-200);

@@ -29,6 +29,7 @@ public class DrivingPractice extends OpMode {
     boolean cocked = false;
     boolean backwardsMode = false;
     boolean bumperPressed = false;
+    boolean slowturning = false;
 
     public void vibrateCam() {
 
@@ -121,6 +122,12 @@ public class DrivingPractice extends OpMode {
         float throttle = gamepad1.left_stick_y;
         float direction = gamepad1.left_stick_x;
 
+        if(gamepad1.dpad_right||gamepad1.dpad_left||gamepad1.dpad_up||gamepad1.dpad_down){
+            slowturning = true;
+        }else{
+            slowturning=false;
+        }
+
         if (gamepad1.right_bumper) {
             bumperPressed = true;
         }
@@ -137,7 +144,7 @@ public class DrivingPractice extends OpMode {
         /*
         driving code
          */
-        if (!backwardsMode) {
+        if (!backwardsMode&&!slowturning) {
             double right = -(throttle*1.2) - (direction*.7);
             double left = -(throttle*1.2) + (direction*.7);
 
@@ -159,7 +166,7 @@ public class DrivingPractice extends OpMode {
             robot.right_drive1.setMaxSpeed(Math.abs(rightSpeed));
             robot.right_drive2.setMaxSpeed(Math.abs(rightSpeed));
 
-        } else if (backwardsMode) {
+        } else if (backwardsMode&&!slowturning) {
             double right = (throttle*1.2) - (direction*.7);
             double left = (throttle*1.2) + (direction*.7);
             int leftSpeed = (int) (1300 * left);
@@ -182,27 +189,11 @@ public class DrivingPractice extends OpMode {
         }
         telemetry.addData("backwards", backwardsMode);
 
-        if(gamepad1.dpad_left) {
-            robot.setPowerLeft(-1);
-            robot.left_drive1.setMaxSpeed(400);
-            robot.left_drive2.setMaxSpeed(400);
-            robot.setPowerRight(1);
-            robot.right_drive1.setMaxSpeed(400);
-            robot.right_drive2.setMaxSpeed(400);
-        }
 
-        if(gamepad1.dpad_right) {
-            robot.setPowerLeft(1);
-            robot.left_drive1.setMaxSpeed(400);
-            robot.left_drive2.setMaxSpeed(400);
-            robot.setPowerRight(-1);
-            robot.right_drive1.setMaxSpeed(400);
-            robot.right_drive2.setMaxSpeed(400);
-        }
 
 
         /*
-        code for gate sytem
+        code for gate system
         */
         if (gamepad2.right_trigger > triggerCutoff) {
             //collecting mode
@@ -225,8 +216,37 @@ public class DrivingPractice extends OpMode {
             vibrateCam(); // + vibrate
         }
 
-
-
+        if(slowturning) {
+            if (gamepad1.dpad_left) {
+                robot.left_drive1.setMaxSpeed(400);
+                robot.left_drive2.setMaxSpeed(400);
+                robot.right_drive1.setMaxSpeed(400);
+                robot.right_drive2.setMaxSpeed(400);
+                robot.setPowerLeft(-.9);
+                robot.setPowerRight(.9);
+            } else if (gamepad1.dpad_right) {
+                robot.left_drive1.setMaxSpeed(400);
+                robot.left_drive2.setMaxSpeed(400);
+                robot.right_drive1.setMaxSpeed(400);
+                robot.right_drive2.setMaxSpeed(400);
+                robot.setPowerLeft(.9);
+                robot.setPowerRight(-.9);
+            }else if (gamepad1.dpad_up) {
+                robot.left_drive1.setMaxSpeed(400);
+                robot.left_drive2.setMaxSpeed(400);
+                robot.right_drive1.setMaxSpeed(400);
+                robot.right_drive2.setMaxSpeed(400);
+                robot.setPowerLeft(.9);
+                robot.setPowerRight(.9);
+            }else if (gamepad1.dpad_down) {
+                robot.left_drive1.setMaxSpeed(400);
+                robot.left_drive2.setMaxSpeed(400);
+                robot.right_drive1.setMaxSpeed(400);
+                robot.right_drive2.setMaxSpeed(400);
+                robot.setPowerLeft(-.9);
+                robot.setPowerRight(-.9);
+            }
+        }
                      /*
                      mortar shooting controls
                       */
