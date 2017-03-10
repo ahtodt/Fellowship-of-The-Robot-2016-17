@@ -61,12 +61,16 @@ public class RedBeacons extends LinearOpMode {
     double rightPower;
     double firingSpeed = .9;
     double difference;
-    double correctionFactor = .005;
     int mortarFreeState = 1440;
     int driveDistance = (433);
     boolean correctColor1 = false;
     boolean correctColor2 = false;
     boolean firstPress =true;
+    double angleDelta;
+    double newPower;
+    double adjustment;
+    double correctionFactor = .005;
+    double turnCorrectionFactor = .005;
 
 
 
@@ -78,8 +82,15 @@ public class RedBeacons extends LinearOpMode {
             } else {
                 currentHeading = robot.getAdafruitHeading();
             }
-            robot.setPowerRight(power);
-            robot.setPowerLeft(-power);
+            angleDelta = currentHeading-angle;
+            adjustment = angleDelta*turnCorrectionFactor;
+            if(adjustment>.1){
+                adjustment=.1;
+            }
+            newPower = power+adjustment;
+
+            robot.setPowerRight(newPower);
+            robot.setPowerLeft(-newPower);
             robot.waitForTick(10);
         } while(currentHeading>angle&&opModeIsActive());
         robot.stopMotors();
@@ -181,7 +192,7 @@ public class RedBeacons extends LinearOpMode {
 
     public void findWhiteLine1(int angle, double basePower) {
         //speed this up
-        while (robot.floor_seeker.green() < 20&&opModeIsActive()) {
+        while (robot.floor_seeker.green() < 15&&robot.floor_seeker.red()<15&&robot.floor_seeker.blue()<15&&opModeIsActive()) {
             if (robot.getAdafruitHeading() > 180) {
                 drivingHeading = robot.getAdafruitHeading() - 360;
             } else {
@@ -217,7 +228,7 @@ public class RedBeacons extends LinearOpMode {
         robot.stopMotors();
     }
     public void firstBeaconPress() {
-        turnLeft(-15, .21);
+        turnLeft(-20, .21);
         sleep(500);
         while(!correctColor1&&opModeIsActive()) {
             if(!firstPress){
@@ -275,15 +286,15 @@ public class RedBeacons extends LinearOpMode {
         waitForStart();
         //predrive();
         //resetMaxSpeed();
-        findWhiteLine1(0, .13);
+        findWhiteLine1(0, .23);
         resetMaxSpeed();
         sleep(100);
         firstBeaconPress();
         backUp();
-        turnRight(5, .1);
+        turnRight(8, .1);
         predrive();
         resetMaxSpeed();
-        findWhiteLine1(30, .13);
+        findWhiteLine1(30, .23);
         resetMaxSpeed();
         secondBeaconPress();
         //capBall();
