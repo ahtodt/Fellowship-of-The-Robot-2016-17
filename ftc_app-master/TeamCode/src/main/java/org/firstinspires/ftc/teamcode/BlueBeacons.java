@@ -65,6 +65,8 @@ public class BlueBeacons extends LinearOpMode {
     double newPower;
     double adjustment;
     double correctionFactor = .005;
+    double turnCorrectionFactor = .005;
+    double maxGreen;
     int mortarFreeState = 1440;
     int driveDistance = (433);
     boolean correctColor1 = false;
@@ -82,7 +84,7 @@ public class BlueBeacons extends LinearOpMode {
                 currentHeading = robot.getAdafruitHeading();
             }
             angleDelta = currentHeading-angle;
-            adjustment = angleDelta*correctionFactor;
+            adjustment = angleDelta*turnCorrectionFactor;
             if(adjustment>.1){
                 adjustment=.1;
             }
@@ -186,14 +188,12 @@ public class BlueBeacons extends LinearOpMode {
         robot.left_drive2.setMaxSpeed(1600);
         robot.right_drive1.setMaxSpeed(1600);
         robot.right_drive2.setMaxSpeed(1600);
-        sleep(2000);
-        robot.stopMotors();
+        sleep(1000);
     }
 
     public void findWhiteLine1(int angle, double basePower) {
         //speed this up
-        double rightBasePower = 1.1*basePower;
-        while (robot.floor_seeker.green() < 1200&&opModeIsActive()) {
+        while (robot.floor_seeker.green() < 15&&robot.floor_seeker.red()<15&&robot.floor_seeker.blue()<15&&opModeIsActive()) {
             if (robot.getAdafruitHeading() > 180) {
                 drivingHeading = robot.getAdafruitHeading() - 360;
             } else {
@@ -208,14 +208,14 @@ public class BlueBeacons extends LinearOpMode {
             if(difference>0){
                 //less power from right
                 robot.setPowerLeft(basePower);
-                robot.setPowerRight(rightBasePower-(difference*rightBasePower*correctionFactor));
+                robot.setPowerRight(basePower-(difference*basePower*correctionFactor));
             }else if(difference<0){
                 //less power from left
                 robot.setPowerLeft(basePower+(difference*basePower*correctionFactor));
-                robot.setPowerRight(rightBasePower);
+                robot.setPowerRight(basePower);
             }else{
                 robot.setPowerLeft(basePower);
-                robot.setPowerRight(rightBasePower);
+                robot.setPowerRight(basePower);
             }
         }
         robot.stopMotors();
@@ -287,7 +287,7 @@ public class BlueBeacons extends LinearOpMode {
         waitForStart();
         //predrive();
         //resetMaxSpeed();
-        findWhiteLine1(0, .13);
+        findWhiteLine1(0, .23);
         resetMaxSpeed();
         sleep(100);
         firstBeaconPress();
@@ -295,7 +295,7 @@ public class BlueBeacons extends LinearOpMode {
         turnLeft(5, .1);
         predrive();
         resetMaxSpeed();
-        findWhiteLine1(-30, .13);
+        findWhiteLine1(-30, .23);
         resetMaxSpeed();
         secondBeaconPress();
         //capBall();
