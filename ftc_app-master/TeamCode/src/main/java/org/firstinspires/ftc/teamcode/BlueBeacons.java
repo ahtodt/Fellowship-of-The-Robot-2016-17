@@ -88,8 +88,8 @@ public class BlueBeacons extends LinearOpMode {
             }
             newPower = power+adjustment;
 
-            robot.setPowerRight(power);
-            robot.setPowerLeft(-power);
+            robot.setPowerRight(newPower);
+            robot.setPowerLeft(-newPower);
             robot.waitForTick(10);
         } while(currentHeading>angle&&opModeIsActive());
         robot.stopMotors();
