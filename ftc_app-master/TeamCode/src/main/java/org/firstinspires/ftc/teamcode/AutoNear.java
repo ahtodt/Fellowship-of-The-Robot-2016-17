@@ -120,161 +120,10 @@ public class AutoNear extends LinearOpMode {
             robot.left_drive2.setPower(0.1);
             robot.right_drive1.setPower(0.1);
             robot.right_drive2.setPower(0.1);
-            //wallSense();
         }
         robot.stopMotors();
 
     }
-    public void wallTurn(int target){
-        robot.stopMotors();
-        robot.right_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.left_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.right_drive2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.left_drive2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.right_drive1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.left_drive1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.right_drive2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.left_drive2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.setPowerLeft(.1);
-        robot.setPowerRight(.1);
-        robot.left_drive1.setTargetPosition(-target);
-        robot.left_drive2.setTargetPosition(-target);
-        robot.right_drive1.setTargetPosition(target);
-        robot.right_drive2.setTargetPosition(target);
-            while (robot.left_drive1.getCurrentPosition() > -target && opModeIsActive()) {
-
-
-        }
-    }
-    public void lineTurn(int angle){
-        robot.stopMotors();
-        robot.right_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.left_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.right_drive2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.left_drive2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.right_drive1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.left_drive1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.right_drive2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.left_drive2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.setPowerLeft(.1);
-        robot.setPowerRight(.1);
-        robot.left_drive1.setTargetPosition(-angle+20);
-        robot.left_drive2.setTargetPosition(-angle+20);
-        robot.right_drive1.setTargetPosition(angle+10);
-        robot.right_drive2.setTargetPosition(angle+10);
-        while (robot.left_drive1.getCurrentPosition() < (-angle+20) && opModeIsActive()) {
-
-
-        }
-    }
-        public void firstBeaconPress() {
-            robot.stopMotors();
-            if (robot.frontColor.red() > 1.5) {
-                robot.left_beacon.setPosition(robot.leftBeaconOut);
-               smallMove1();
-                sleep(500);
-                robot.left_beacon.setPosition(robot.leftBeaconIn);
-                smallMove2();
-            } else if (robot.frontColor.blue() > 1.5) {
-                //add code for specific position/encoder ticks forward
-                smallMove1();
-                sleep(500);
-                robot.left_beacon.setPosition(robot.leftBeaconOut);
-                smallMove2();
-                sleep(500);
-                robot.left_beacon.setPosition(robot.leftBeaconIn);
-            }else{
-                forward();
-            }
-            robot.stopMotors();
-        }
-    public void smallMove1(){
-        int encoderStart1 = robot.right_drive1.getCurrentPosition();
-        while(robot.right_drive1.getCurrentPosition()<encoderStart1+70&&opModeIsActive()){
-            robot.setPowerLeft(.05);
-            robot.setPowerRight(.05);
-        }
-
-    }
-    public void smallMove2(){
-
-        int encoderStart2 = robot.right_drive1.getCurrentPosition();
-        while(robot.right_drive1.getCurrentPosition()<encoderStart2+70&&opModeIsActive()){
-            robot.setPowerLeft(.05);
-            robot.setPowerRight(.05);
-        }
-
-    }
-
-    public void forward(){
-
-        int encoderStart = robot.right_drive1.getCurrentPosition();
-        while(robot.right_drive1.getCurrentPosition()<encoderStart+100&&opModeIsActive()){
-            robot.setPowerLeft(.1);
-            robot.setPowerRight(.1);
-        }
-    }
-    public void driveStraight(){
-        robot.right_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.left_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.right_drive2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.left_drive2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.right_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.left_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.right_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.left_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        while(robot.left_drive1.getCurrentPosition()<distance||robot.left_drive2.getCurrentPosition()<distance||robot.right_drive1.getCurrentPosition()<distance||robot.right_drive2.getCurrentPosition()<distance&&opModeIsActive()){
-            /*currentHeading = gyro.getHeading();
-                    if(gyro.getHeading()>180){
-                        currentHeading = gyro.getHeading()-360;
-                    }
-            if(currentHeading<-65){
-                setPowerLeft(.9);
-                setPowerRight(.9);
-                left_drive1.setMaxSpeed(700);
-                left_drive2.setMaxSpeed(700);
-                right_drive1.setMaxSpeed(400);
-                right_drive2.setMaxSpeed(400);
-
-            }else if(currentHeading>-65){
-                setPowerLeft(.9);
-                setPowerRight(.9);
-                left_drive1.setMaxSpeed(400);
-                left_drive2.setMaxSpeed(400);
-                right_drive1.setMaxSpeed(700);
-                right_drive2.setMaxSpeed(700);
-            }*/
-            robot.setPowerRight(.2);
-            robot.setPowerLeft(.2);
-        }
-        robot.stopMotors();
-    }
-    public void turnToWall(){
-        turnTolerance = 1;
-        wallTurn(98);
-        sleep(500);
-    }
-    public void turnNormal(){
-        turnTolerance = 1;
-        lineTurn(-98);
-        sleep(500);
-    }
-    public void driveToWall(){
-        robot.right_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.left_drive1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.right_drive2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.left_drive2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.right_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.left_drive1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.right_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.left_drive2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-
-    }
-
-        public void park(){
-            //enter some code about how to park
-        }
 
     @Override
     public void runOpMode() {
@@ -285,13 +134,7 @@ public class AutoNear extends LinearOpMode {
         positionToShoot();
         sleep(1000);
         shootBall();
-        //turnToWall();
-        //driveStraight();
-        //turnNormal();
-        //findWhiteLine();
-        //sleep(1000);
-        //firstBeaconPress();
-        //capBall();
-        //shoot(30);
+        sleep(3500);
+        capBall();
     }
 }

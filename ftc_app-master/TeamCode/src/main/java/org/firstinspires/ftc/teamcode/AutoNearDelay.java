@@ -63,7 +63,7 @@ public class AutoNearDelay extends LinearOpMode {
         while (robot.right_drive1.getCurrentPosition() < driveDistance && robot.left_drive2.getCurrentPosition() < driveDistance&&opModeIsActive()) {
 
             robot.setPowerLeft(.1);
-            robot.setPowerRight(.11);
+            robot.setPowerRight(.1);
         }
         robot.stopMotors();
     }
@@ -88,28 +88,12 @@ public class AutoNearDelay extends LinearOpMode {
     }
 
     public void capBall() {
-        while (robot.right_drive1.getCurrentPosition() < (driveDistance * 2.25)
-                && robot.left_drive2.getCurrentPosition() < (driveDistance * 2.25)&&opModeIsActive()) {
+        while (robot.right_drive1.getCurrentPosition() < (driveDistance * 2.5)
+                && robot.left_drive2.getCurrentPosition() < (driveDistance * 2.5)&&opModeIsActive()) {
             robot.left_drive1.setPower(.1);
             robot.left_drive2.setPower(.1);
-            robot.right_drive1.setPower(.22);
-            robot.right_drive2.setPower(.22);
-           /* while(getRuntime() < 2 ) {
-                left_drive1.setPower(-1);
-                left_drive1.setMaxSpeed(-200);
-                left_drive2.setPower(-1);
-                left_drive2.setMaxSpeed(-200);
-                right_drive1.setPower(0);
-                right_drive2.setPower(0);
-            }
-            while(gyro.getHeading() > 190) {
-                left_drive1.setPower(-1);
-                left_drive1.setMaxSpeed(-200);
-                left_drive2.setPower(-1);
-                left_drive2.setMaxSpeed(-200);
-                right_drive1.setPower(0);
-                right_drive2.setPower(0);
-            }*/
+            robot.right_drive1.setPower(.1);
+            robot.right_drive2.setPower(.1);
         }
         robot.stopMotors();
 
@@ -122,76 +106,12 @@ public class AutoNearDelay extends LinearOpMode {
             robot.left_drive2.setPower(0.1);
             robot.right_drive1.setPower(0.1);
             robot.right_drive2.setPower(0.1);
-            //wallSense();
         }
         robot.stopMotors();
-        //redBeaconPress();
 
     }
 
 
-        /*public void wallSense(){
-            while(right_range.cmUltrasonic()<20){
-                right_drive1.setPower(.01);
-                right_drive2.setPower(.01);
-                left_drive1.setPower(.01);
-                left_drive2.setPower(.01);
-            }while(right_range.cmUltrasonic()>=20){
-                left_drive1.setPower(.01);
-                left_drive2.setPower(.01);
-                right_drive1.setPower(.01);
-                right_drive2.setPower(.01);
-            }
-        }
-
-    //stopMotors();
-
-}
-
-        /*public void redBeaconPress(){
-            right_drive1.setMaxSpeed(0);
-            right_drive2.setMaxSpeed(0);
-            left_drive1.setMaxSpeed(0);
-            left_drive2.setMaxSpeed(0);
-            if (right_color.red() > 1.5) {
-                right_beacon.setPosition(.15);
-                //continueForward();
-            }
-            else if (right_color.blue() > 1.5) {
-                //add code for specific position/encoder ticks forward
-                right_beacon.setPosition(.15);
-                //continueForward();
-            }
-    */
-
-        /*public void continueForward(){
-            if(floor_seeker.red()<5){
-                wallSense();
-            }
-            else if (floor_seeker.red()>5){
-                secondBeaconPress();
-            }
-        }*/
-
-    /* public void secondBeaconPress(){
-            right_drive1.setMaxSpeed(0);
-            right_drive2.setMaxSpeed(0);
-            left_drive1.setMaxSpeed(0);
-            left_drive2.setMaxSpeed(0);
-            if (right_color.red() > 1.5) {
-                right_beacon.setPosition(.15);
-                //park();
-            }
-            else if (right_color.blue() > 1.5) {
-                //add code for specific position/encoder ticks forward
-                right_beacon.setPosition(.15);
-                //park();
-            }
-        }*/
-
-        /*public void park(){
-            //enter some code about how to park
-        }*/
 
     @Override
     public void runOpMode() {
@@ -199,11 +119,11 @@ public class AutoNearDelay extends LinearOpMode {
 
         waitForStart();
         resetStartTime();
-        sleep(18000);
+        sleep(10000);
         positionToShoot();
         shootBall();
-        waitForTen();
-        //capBall();
+        sleep(10000);
+        capBall();
 
         //shoot(30);
 
